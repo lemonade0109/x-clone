@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen grid grid-cols-2">
+    <div className="grid grid-cols-2">
       <div className="flex items-center justify-center p-6 md:p-8 lg:p-10 mt-60">
         <div className="relative w-[clamp(260px,72vw,430px)] h-[clamp(220px,60vw,360px)] md:w-[clamp(320px,38vw,610px)] md:h-[clamp(280px,32vw,500px)]">
           <Image
