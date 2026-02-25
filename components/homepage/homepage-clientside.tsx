@@ -4,9 +4,9 @@ import HomepageLinks from "@/components/homepage/homepage-links";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
-import SignUpModal from "./(auth)/signup/signup-modal";
+import SignUpModal from "@/app/(auth)/signup/signup-modal";
 
-export default function HomePage() {
+const HomePageClientSide: React.FC = () => {
   const [isSignUpOpen, setIsSignUpOpen] = React.useState(false);
   return (
     <>
@@ -58,10 +58,16 @@ export default function HomePage() {
 
               <Button
                 variant="outline"
-                className="text-xl w-full bg-black text-white rounded-full py-6 hover:bg-gray-800 hover:text-white"
+                className="w-full bg-black text-white rounded-full py-6 hover:bg-gray-800 hover:text-white"
                 onClick={() => setIsSignUpOpen(true)}
+                asChild
               >
-                Create account
+                <Link
+                  href="/signup"
+                  className="w-full text-center text-xl font-semibold"
+                >
+                  Create account
+                </Link>
               </Button>
 
               <p className="text-sm text-gray-500 text-center">
@@ -103,4 +109,6 @@ export default function HomePage() {
       </div>
     </>
   );
-}
+};
+
+export default HomePageClientSide;
