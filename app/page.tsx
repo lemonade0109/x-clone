@@ -4,13 +4,10 @@ import HomepageLinks from "@/components/homepage/homepage-links";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
-import SignUpModal from "./(auth)/signup/signup-modal";
 
 export default function HomePage() {
-  const [isSignUpOpen, setIsSignUpOpen] = React.useState(false);
   return (
     <>
-      <SignUpModal open={isSignUpOpen} onOpenChange={setIsSignUpOpen} />
       <div className="grid grid-cols-2">
         <div className="flex items-center justify-center p-6 md:p-8 lg:p-10">
           <div className="relative w-[clamp(260px,72vw,430px)] h-[clamp(220px,60vw,360px)] md:w-[clamp(320px,38vw,610px)] md:h-[clamp(280px,32vw,500px)]">
@@ -35,7 +32,7 @@ export default function HomePage() {
                 className="w-full border border-gray-300 rounded-full py-6 hover:bg-gray-100"
                 asChild
               >
-                <Link href="/signup" className="w-full text-center text-xl">
+                <Link href="#" className="w-full text-center text-xl">
                   O-Auth Google TODO
                 </Link>
               </Button>
@@ -45,7 +42,7 @@ export default function HomePage() {
                 className="w-full border border-gray-300 rounded-full py-6 hover:bg-gray-100"
                 asChild
               >
-                <Link href="/signup" className="w-full text-center text-xl">
+                <Link href="#" className="w-full text-center text-xl">
                   O-Auth Apple TODO
                 </Link>
               </Button>
@@ -59,9 +56,10 @@ export default function HomePage() {
               <Button
                 variant="outline"
                 className="text-xl w-full bg-black text-white rounded-full py-6 hover:bg-gray-800 hover:text-white"
-                onClick={() => setIsSignUpOpen(true)}
               >
-                Create account
+                <Link href="/i/flow/signup" className="">
+                  Create account
+                </Link>
               </Button>
 
               <p className="text-sm text-gray-500 text-center">

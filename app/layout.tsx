@@ -19,8 +19,10 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({
+  auth,
   children,
 }: Readonly<{
+  auth: React.ReactNode;
   children: React.ReactNode;
 }>) {
   return (
@@ -28,6 +30,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-white text-black dark:bg-black dark:text-white`}
       >
+        {auth}
         {children}
       </body>
     </html>
