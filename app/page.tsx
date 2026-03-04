@@ -56,8 +56,9 @@ export default function HomePage() {
               <Button
                 variant="outline"
                 className="text-xl w-full bg-black text-white rounded-full py-6 hover:bg-gray-800 hover:text-white"
+                asChild
               >
-                <Link href="/i/flow/signup" className="">
+                <Link href="/i/flow/signup" className="w-full text-center">
                   Create account
                 </Link>
               </Button>
@@ -84,7 +85,7 @@ export default function HomePage() {
                   asChild
                 >
                   <Link
-                    href="/login"
+                    href="/i/flow/signin"
                     className="w-full text-center text-xl font-semibold"
                   >
                     Sign In

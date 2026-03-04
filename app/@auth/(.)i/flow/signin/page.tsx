@@ -1,5 +1,19 @@
-import React from "react";
+"use client";
+
+import SignInModal from "@/components/auth/signin-modal";
+import { useRouter } from "next/navigation";
 
 export default function SignInPage() {
-  return <div>SignInPage</div>;
+  const router = useRouter();
+
+  return (
+    <SignInModal
+      open={true}
+      onOpenChange={(open) => {
+        if (!open) {
+          router.back();
+        }
+      }}
+    />
+  );
 }
