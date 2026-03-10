@@ -1,5 +1,4 @@
 "use client";
-import React from "react";
 import HomepageLinks from "@/components/homepage/homepage-links";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
