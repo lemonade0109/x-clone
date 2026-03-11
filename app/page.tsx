@@ -84,7 +84,7 @@ export default function HomePage() {
                   asChild
                 >
                   <Link
-                    href="/i/flow/signin"
+                    href="/i/flow/login"
                     className="w-full text-center text-xl font-semibold"
                   >
                     Sign In

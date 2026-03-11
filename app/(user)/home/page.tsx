@@ -1,3 +1,5 @@
+import MoreDropdownMenu from "@/components/homepage/more-dropdown-menu";
+import ProfileDropdownMenu from "@/components/homepage/profile-dropdown-menu";
 import {
   Bell,
   Bookmark,
@@ -97,21 +99,14 @@ export default function Homepage() {
               </Link>
             ))}
 
+            <MoreDropdownMenu userId={"@jubril4593"} />
+
             <button className="mt-10 hidden w-full rounded-full bg-black px-8 py-3 text-[15px] font-bold text-white transition hover:bg-zinc-800 xl:block">
               Post
             </button>
           </div>
 
-          <button className="mb-1 flex items-center gap-3 rounded-full px-3 py-3 text-left transition hover:bg-zinc-100">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-200 font-semibold">
-              J
-            </div>
-            <div className="hidden leading-tight xl:block">
-              <p className="text-sm font-semibold">Jubril</p>
-              <p className="text-sm text-zinc-500">@jubril</p>
-            </div>
-            <Ellipsis className="ml-auto hidden h-5 w-5 xl:block" />
-          </button>
+          <ProfileDropdownMenu />
         </div>
       </aside>
 
