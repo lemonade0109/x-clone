@@ -1,4 +1,4 @@
-import HomeSection from "@/components/homepage/home-section";
+import HomeSection from "@/components/page/sections/home-section";
 import NavLayoutTemplate from "@/components/shared/nav-layout-template";
 import TrendingSideBar from "@/components/shared/trending-sidebar";
 
