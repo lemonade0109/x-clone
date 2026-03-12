@@ -42,12 +42,7 @@ const NavLayoutTemplate = ({ userId }: { userId: string }) => {
       href: "/i/bookmarks",
       isActive: pathname.startsWith("/i/bookmarks"),
     },
-    {
-      icon: Users,
-      label: "Communities",
-      href: `/${userId}/communities`,
-      isActive: pathname.startsWith(`/${userId}/communities`),
-    },
+
     {
       icon: User,
       label: "Profile",
