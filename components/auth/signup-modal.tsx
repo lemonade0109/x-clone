@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import SignUpForm from "@/components/auth/signup-form";
 import Image from "next/image";
 
+type Step = 1 | 2 | 3 | 4;
+
 type SignUpModalProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
