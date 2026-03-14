@@ -15,6 +15,8 @@ import ModalStep3 from "./multistep-signup-modal/modal-step-3";
 import ModalStep4 from "./multistep-signup-modal/modal-step-4";
 import { useRouter } from "next/navigation";
 import { signIn } from "@/auth";
+import { requestCodeAction } from "@/lib/actions/signup-actions/request-code-action";
+import { verifyRequestCodeAction } from "@/lib/actions/signup-actions/verify-request-code";
 
 type SignUpModalProps = {
   open: boolean;
@@ -56,7 +58,7 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ open, onOpenChange }) => {
 
       setLoading(true);
       const email = form.getValues("email");
-      const res = await requestSignupCodeAction({ email });
+      const res = await requestCodeAction({ email });
       setLoading(false);
 
       if (!res?.success) {
@@ -75,7 +77,7 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ open, onOpenChange }) => {
       setLoading(true);
       const email = form.getValues("email");
       const verificationCode = form.getValues("verification_code");
-      const res = await verifySignupCodeAction({
+      const res = await verifyRequestCodeAction({
         email,
         code: verificationCode,
       });
@@ -97,7 +99,7 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ open, onOpenChange }) => {
       setLoading(true);
       const values = form.getValues();
       const res = await signUpAction(values);
-      if (!res.sucess) {
+      if (!res.success) {
         setLoading(false);
         setServerError(res?.error ?? "Signup failed.");
       }

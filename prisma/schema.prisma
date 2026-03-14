@@ -17,7 +17,8 @@ model User {
   id                  String    @id @default(auto()) @map("_id") @db.ObjectId
   name                String
   email               String    @unique
-  username            String    @unique
+  username            String?   @unique
+  dateOfBirth         DateTime?
   emailVerified       DateTime?
   image               String?
   bio                 String?
@@ -67,10 +68,12 @@ model Session {
 }
 
 model VerificationToken {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
   identifier String
-  token      String   @unique
+  token      String    @unique
   expires    DateTime
+  attempts   Int       @default(0)
+  verifiedAt DateTime?
 
   @@index([identifier, token])
 }
