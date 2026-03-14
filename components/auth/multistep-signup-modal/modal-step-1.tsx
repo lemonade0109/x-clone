@@ -1,5 +1,6 @@
 //Name, DOB Modal
 "use client";
+import FloatingInputLabel from "@/components/shared/floating-input-label";
 import {
   FormControl,
   FormField,
@@ -48,15 +49,14 @@ const ModalStep1: React.FC<Props> = ({ form }) => {
       <FormField
         control={form.control}
         name="name"
-        render={({ field }) => (
+        render={({ field, fieldState }) => (
           <FormItem>
             <FormLabel className="x-label">Name</FormLabel>
             <FormControl>
-              <input
-                type="text"
-                placeholder="Name"
+              <FloatingInputLabel
+                label="Name"
                 maxLength={50}
-                className="w-full rounded-md border border-gray-300 px-4 py-6 text-xl outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                error={!!fieldState.error}
                 {...field}
               />
             </FormControl>
@@ -72,16 +72,16 @@ const ModalStep1: React.FC<Props> = ({ form }) => {
       <FormField
         control={form.control}
         name="email"
-        render={({ field }) => (
+        render={({ field, fieldState }) => (
           <FormItem>
             <FormLabel className="x-label">Email</FormLabel>
             <FormControl>
-              <input
+              <FloatingInputLabel
                 type="email"
-                placeholder="Email"
+                label="Email"
                 maxLength={64}
+                error={!!fieldState.error}
                 {...field}
-                className="w-full rounded-md border border-gray-300 px-4 py-6 text-xl outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
               />
             </FormControl>
             <FormMessage />

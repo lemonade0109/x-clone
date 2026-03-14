@@ -1,4 +1,5 @@
 //Verification Modal
+import FloatingInputLabel from "@/components/shared/floating-input-label";
 import {
   FormControl,
   FormField,
@@ -26,14 +27,16 @@ const ModalStep2Verification: React.FC<Props> = ({ form, email }) => {
       <FormField
         control={form.control}
         name="verification_code"
-        render={({ field }) => (
+        render={({ field, fieldState }) => (
           <FormItem className="mb-56 mt-5">
             <FormControl>
-              <input
+              <FloatingInputLabel
                 type="text"
+                inputMode="numeric"
                 maxLength={6}
-                placeholder="Verification code"
-                className="w-full rounded-md border border-gray-300 px-4 py-6 text-xl outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                label="Verification code"
+                className="text-center tracking-[0.25em]"
+                error={!!fieldState.error}
                 {...field}
               />
             </FormControl>

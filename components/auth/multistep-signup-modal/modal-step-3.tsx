@@ -1,5 +1,6 @@
 // Password Modal
 "use client";
+import FloatingInputLabel from "@/components/shared/floating-input-label";
 import {
   FormControl,
   FormField,
@@ -29,7 +30,7 @@ const ModalStep3Password: React.FC<Props> = ({ form }) => {
       <FormField
         control={form.control}
         name="password"
-        render={({ field }) => (
+        render={({ field, fieldState }) => (
           <FormItem>
             <FormLabel className="x-label">Password</FormLabel>
             <FormControl>
@@ -40,6 +41,15 @@ const ModalStep3Password: React.FC<Props> = ({ form }) => {
                   autoComplete="new-password"
                   {...field}
                   className="w-full rounded-md border border-gray-300 px-4 py-6 text-xl outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                />
+
+                <FloatingInputLabel
+                  type={show ? "text" : "password"}
+                  label="Password"
+                  className="pr-10"
+                  autoComplete="new-password"
+                  error={!!fieldState.error}
+                  {...field}
                 />
                 <button
                   type="button"

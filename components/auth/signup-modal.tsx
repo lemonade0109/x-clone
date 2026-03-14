@@ -131,7 +131,7 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ open, onOpenChange }) => {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="w-[94vw]! max-w-180 sm:max-w-180! max-h-[90vh] rounded-2xl px-4 overflow-hidden">
         <div className="flex h-full max-h-[90vh] flex-col">
-          <div className="shrink-0 px-8 pt-8 pb-4">
+          <div className="shrink-0 px-8 pt-4 pb-4">
             <Image
               alt="x image"
               src="/image.jpg"
@@ -166,11 +166,11 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ open, onOpenChange }) => {
             </Form>
           </div>
 
-          <div className="shrink-0 w-full max-w-md mx-auto flex flex-col p-4">
+          <div className="shrink-0 w-full max-w-lg mx-auto flex flex-col mb-8 p-5">
             <Button
               onClick={next}
               disabled={loading}
-              className="w-full rounded-full py-6 text-[15px] font-bold bg-black text-white hover:bg-gray-800 disabled:opacity-70"
+              className="w-full rounded-full py-8 text-[15px] font-bold bg-black text-white hover:bg-gray-800 disabled:opacity-70"
             >
               {step === 3 ? "Create account" : "Next"}
             </Button>
