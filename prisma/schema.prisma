@@ -14,16 +14,17 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(auto()) @map("_id") @db.ObjectId
-  name          String
-  email         String    @unique
-  username      String    @unique
-  emailVerified DateTime?
-  image         String?
-  bio           String?
-  password      String
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id                  String    @id @default(auto()) @map("_id") @db.ObjectId
+  name                String
+  email               String    @unique
+  username            String    @unique
+  emailVerified       DateTime?
+  image               String?
+  bio                 String?
+  password            String
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+  onboardingCompleted Boolean   @default(false)
 
   accounts Account[]
   sessions Session[]
