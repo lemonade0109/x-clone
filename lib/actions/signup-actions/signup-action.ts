@@ -48,8 +48,15 @@ export const signUpAction = async (input: SignUpData) => {
         name: input.name.trim(),
         email,
         password: hashedPassword,
+        dateOfBirth: dob,
       },
     });
+
+    await db.verificationToken.deleteMany({
+      where: { identifier: email },
+    });
+
+    return { success: true };
   } catch (error) {
     return {
       success: false,

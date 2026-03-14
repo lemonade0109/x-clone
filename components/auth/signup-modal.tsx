@@ -17,6 +17,7 @@ import { useRouter } from "next/navigation";
 import { signIn } from "@/auth";
 import { requestCodeAction } from "@/lib/actions/signup-actions/request-code-action";
 import { verifyRequestCodeAction } from "@/lib/actions/signup-actions/verify-request-code";
+import { signUpAction } from "@/lib/actions/signup-actions/signup-action";
 
 type SignUpModalProps = {
   open: boolean;
