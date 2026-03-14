@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/db/db";
-import { sendSignupCodeEmail } from "@/lib/mail/send-signup-code-email";
+import { sendSignupCodeEmail } from "@/lib/mail/templates/send-signup-code-email";
 import {
   CODE_TTL_MINUTES,
   generate6DigitCode,

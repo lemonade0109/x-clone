@@ -1,6 +1,7 @@
 //Name, DOB Modal
 "use client";
 import FloatingInputLabel from "@/components/shared/floating-input-label";
+import FloatingLabelSelect from "@/components/shared/floating-label-select";
 import {
   FormControl,
   FormField,
@@ -101,24 +102,22 @@ const ModalStep1: React.FC<Props> = ({ form }) => {
         <FormField
           control={form.control}
           name="dob_month"
-          render={({ field }) => (
+          render={({ field, fieldState }) => (
             <FormItem>
-              <FormLabel className="x-label">Month</FormLabel>
-              <Select onValueChange={field.onChange} value={field.value}>
-                <FormControl>
-                  <SelectTrigger className="x-field">
-                    <SelectValue placeholder="Month" />
-                  </SelectTrigger>
-                </FormControl>
-
-                <SelectContent>
+              <FormControl>
+                <FloatingLabelSelect
+                  label="Month"
+                  value={field.value}
+                  onValueChange={field.onChange}
+                  error={!!fieldState.error}
+                >
                   {MONTHS.map((m, i) => (
                     <SelectItem key={m} value={String(i + 1)}>
                       {m}
                     </SelectItem>
                   ))}
-                </SelectContent>
-              </Select>
+                </FloatingLabelSelect>
+              </FormControl>
 
               <FormMessage />
             </FormItem>
@@ -128,23 +127,22 @@ const ModalStep1: React.FC<Props> = ({ form }) => {
         <FormField
           control={form.control}
           name="dob_day"
-          render={({ field }) => (
+          render={({ field, fieldState }) => (
             <FormItem>
-              <FormLabel className="x-label">Day</FormLabel>
-              <Select onValueChange={field.onChange} value={field.value}>
-                <FormControl>
-                  <SelectTrigger className="x-field">
-                    <SelectValue placeholder="Day" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
+              <FormControl>
+                <FloatingLabelSelect
+                  label="Day"
+                  value={field.value}
+                  onValueChange={field.onChange}
+                  error={!!fieldState.error}
+                >
                   {DAYS.map((d) => (
                     <SelectItem key={d} value={d}>
                       {d}
                     </SelectItem>
                   ))}
-                </SelectContent>
-              </Select>
+                </FloatingLabelSelect>
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}
@@ -153,23 +151,22 @@ const ModalStep1: React.FC<Props> = ({ form }) => {
         <FormField
           control={form.control}
           name="dob_year"
-          render={({ field }) => (
+          render={({ field, fieldState }) => (
             <FormItem>
-              <FormLabel className="x-label">Year</FormLabel>
-              <Select onValueChange={field.onChange} value={field.value}>
-                <FormControl>
-                  <SelectTrigger className="x-field">
-                    <SelectValue placeholder="Year" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
+              <FormControl>
+                <FloatingLabelSelect
+                  label="Year"
+                  value={field.value}
+                  onValueChange={field.onChange}
+                  error={!!fieldState.error}
+                >
                   {YEARS.map((y) => (
                     <SelectItem key={y} value={y}>
                       {y}
                     </SelectItem>
                   ))}
-                </SelectContent>
-              </Select>
+                </FloatingLabelSelect>
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}
