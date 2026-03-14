@@ -7,7 +7,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -45,15 +44,21 @@ type Props = {
 
 const ModalStep1: React.FC<Props> = ({ form }) => {
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-5">
       <FormField
         control={form.control}
         name="name"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Name</FormLabel>
+            <FormLabel className="x-label">Name</FormLabel>
             <FormControl>
-              <Input placeholder="Enter your name" maxLength={50} {...field} />
+              <input
+                type="text"
+                placeholder="Name"
+                maxLength={50}
+                className="w-full rounded-md border border-gray-300 px-4 py-6 text-xl outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                {...field}
+              />
             </FormControl>
 
             <div className="flex justify-end text-xs text-muted-foreground">
@@ -69,99 +74,106 @@ const ModalStep1: React.FC<Props> = ({ form }) => {
         name="email"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Email</FormLabel>
+            <FormLabel className="x-label">Email</FormLabel>
             <FormControl>
-              <Input placeholder="Enter your email" {...field} />
+              <input
+                type="email"
+                placeholder="Email"
+                maxLength={64}
+                {...field}
+                className="w-full rounded-md border border-gray-300 px-4 py-6 text-xl outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+              />
             </FormControl>
             <FormMessage />
           </FormItem>
         )}
       />
 
-      <div>
-        <p className="text-sm font-medium mb-1">Date of Birth</p>
-        <p className="text-xs text-muted-foreground mb-3">
+      <div className="pt-6">
+        <p className="text-xl font-semibold">Date of birth</p>
+        <p className="mt-1 text-lg text-gray-500">
           This will not be shown publicly. Confirm your own age, even if this
           account is for a business, a pet, or something else.
         </p>
+      </div>
 
-        <div className="grid grid-cols-3 gap-3">
-          <FormField
-            control={form.control}
-            name="dob_month"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Month</FormLabel>
-                <Select onValueChange={field.onChange} value={field.value}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Month" />
-                    </SelectTrigger>
-                  </FormControl>
+      <div className="grid grid-cols-3 gap-3">
+        <FormField
+          control={form.control}
+          name="dob_month"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="x-label">Month</FormLabel>
+              <Select onValueChange={field.onChange} value={field.value}>
+                <FormControl>
+                  <SelectTrigger className="x-field">
+                    <SelectValue placeholder="Month" />
+                  </SelectTrigger>
+                </FormControl>
 
-                  <SelectContent>
-                    {MONTHS.map((m, i) => (
-                      <SelectItem key={m} value={String(i + 1)}>
-                        {m}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <SelectContent>
+                  {MONTHS.map((m, i) => (
+                    <SelectItem key={m} value={String(i + 1)}>
+                      {m}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
 
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-          <FormField
-            control={form.control}
-            name="dob_day"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Day</FormLabel>
-                <Select onValueChange={field.onChange} value={field.value}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Day" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {DAYS.map((d) => (
-                      <SelectItem key={d} value={d}>
-                        {d}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="dob_year"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Year</FormLabel>
-                <Select onValueChange={field.onChange} value={field.value}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Year" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {YEARS.map((y) => (
-                      <SelectItem key={y} value={y}>
-                        {y}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
+        <FormField
+          control={form.control}
+          name="dob_day"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="x-label">Day</FormLabel>
+              <Select onValueChange={field.onChange} value={field.value}>
+                <FormControl>
+                  <SelectTrigger className="x-field">
+                    <SelectValue placeholder="Day" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {DAYS.map((d) => (
+                    <SelectItem key={d} value={d}>
+                      {d}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="dob_year"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="x-label">Year</FormLabel>
+              <Select onValueChange={field.onChange} value={field.value}>
+                <FormControl>
+                  <SelectTrigger className="x-field">
+                    <SelectValue placeholder="Year" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {YEARS.map((y) => (
+                    <SelectItem key={y} value={y}>
+                      {y}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
       </div>
     </div>
   );
