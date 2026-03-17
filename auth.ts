@@ -21,38 +21,43 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
 
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) return null;
+        try {
+          if (!credentials?.email || !credentials?.password) return null;
 
-        const email = String(credentials.email).trim().toLowerCase();
+          const email = String(credentials.email).trim().toLowerCase();
 
-        const user = await db.user.findUnique({
-          where: { email },
-        });
-        if (!user) return null;
+          const user = await db.user.findUnique({
+            where: { email },
+          });
+          if (!user) return null;
 
-        const plainPassword = String(credentials.password);
-        const hashedPassword = String(user.password);
+          const plainPassword = String(credentials.password);
+          const hashedPassword = String(user.password);
 
-        // Check if password matches
-        const isPasswordValid = await verifyPassword(
-          plainPassword,
-          hashedPassword,
-        );
+          // Check if password matches
+          const isPasswordValid = await verifyPassword(
+            plainPassword,
+            hashedPassword,
+          );
 
-        if (!isPasswordValid) return null;
-        return {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-          username: user.name,
-          image: user.image || undefined,
-        };
+          if (!isPasswordValid) return null;
+          return {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            username: user.name,
+            image: user.image || undefined,
+          };
+        } catch (error) {
+          console.error("authorize error:", error);
+          return null;
+        }
       },
     }),
   ],
   callbacks: {
     async jwt({ token, user }) {
-      if (user) {
+      if (user && user.id) {
         token.id = user.id;
       }
 

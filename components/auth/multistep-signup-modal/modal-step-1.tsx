@@ -51,8 +51,7 @@ const ModalStep1: React.FC<Props> = ({ form }) => {
         control={form.control}
         name="name"
         render={({ field, fieldState }) => (
-          <FormItem>
-            <FormLabel className="x-label">Name</FormLabel>
+          <FormItem className="mt-5">
             <FormControl>
               <FloatingInputLabel
                 label="Name"
@@ -75,7 +74,6 @@ const ModalStep1: React.FC<Props> = ({ form }) => {
         name="email"
         render={({ field, fieldState }) => (
           <FormItem>
-            <FormLabel className="x-label">Email</FormLabel>
             <FormControl>
               <FloatingInputLabel
                 type="email"

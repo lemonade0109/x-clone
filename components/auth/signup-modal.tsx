@@ -142,7 +142,7 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ open, onOpenChange }) => {
           </div>
 
           <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-11 pb-8">
-            <DialogTitle className="text-5xl text-start font-bold mb-4">
+            <DialogTitle className="text-5xl text-start font-semibold mb-4">
               {step === 1 && "Create your account"}
               {step === 2 && "We sent you a code"}
               {step === 3 && "You'll need a password"}

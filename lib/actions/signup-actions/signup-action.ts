@@ -4,6 +4,7 @@ import { db } from "@/db/db";
 import { hashPassword } from "@/lib/auth/password";
 import { normalizeEmail, renderError } from "@/lib/utils";
 import { SignUpData } from "@/types";
+import { Prisma } from "@prisma/client";
 
 export const signUpAction = async (input: SignUpData) => {
   try {
@@ -49,6 +50,9 @@ export const signUpAction = async (input: SignUpData) => {
         email,
         password: hashedPassword,
         dateOfBirth: dob,
+        username: null,
+        image: null,
+        onboardingCompleted: false,
       },
     });
 
@@ -58,6 +62,13 @@ export const signUpAction = async (input: SignUpData) => {
 
     return { success: true };
   } catch (error) {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "P2002"
+    ) {
+      return { success: false, error: "Account already exists." };
+    }
+
     return {
       success: false,
       error: renderError(error).message || "Signup failed. Please try again.",

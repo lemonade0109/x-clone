@@ -8,11 +8,11 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { SignUpData } from "@/types";
 import { Eye, EyeOff } from "lucide-react";
 import React from "react";
 import { UseFormReturn } from "react-hook-form";
+import Link from "next/link";
 
 type Props = {
   form: UseFormReturn<SignUpData>;
@@ -23,7 +23,7 @@ const ModalStep3Password: React.FC<Props> = ({ form }) => {
 
   return (
     <div className="flex flex-col gap-5">
-      <p className="text-sm text-muted-foreground">
+      <p className="text-md text-muted-foreground">
         Make sure it's 8 characters or more.
       </p>
 
@@ -31,18 +31,9 @@ const ModalStep3Password: React.FC<Props> = ({ form }) => {
         control={form.control}
         name="password"
         render={({ field, fieldState }) => (
-          <FormItem>
-            <FormLabel className="x-label">Password</FormLabel>
+          <FormItem className="mb-56 mt-5">
             <FormControl>
               <div className="relative">
-                <input
-                  type={show ? "text" : "password"}
-                  placeholder="Password"
-                  autoComplete="new-password"
-                  {...field}
-                  className="w-full rounded-md border border-gray-300 px-4 py-6 text-xl outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
-                />
-
                 <FloatingInputLabel
                   type={show ? "text" : "password"}
                   label="Password"
