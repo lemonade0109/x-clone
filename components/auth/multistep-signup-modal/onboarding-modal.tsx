@@ -204,7 +204,7 @@ const OnboardingModal: React.FC<Props> = ({
                   spellCheck={false}
                   maxLength={15}
                   prefix="@"
-                  prefixClassName="top-1/2 -translate-y-1/2 text-[18px]"
+                  prefixClassName="top-1/2 -translate-y-1/2 text-[17px]"
                   labelClassName="left-[34px]"
                   className="pl-11 pr-10"
                   error={!!error}
@@ -256,7 +256,7 @@ const OnboardingModal: React.FC<Props> = ({
           <div className="shrink-0 w-full max-w-lg mx-auto flex flex-col  p-5">
             <Button
               variant="outline"
-              className="w-full border border-gray-300 rounded-full py-6 hover:bg-gray-100 text-md"
+              className="w-full border border-gray-300 rounded-full py-6 hover:bg-gray-100 text-lg"
               onClick={onNext}
               disabled={loading}
             >

@@ -14,9 +14,9 @@ import ModalStep2Verification from "./multistep-signup-modal/modal-step-2";
 import ModalStep3 from "./multistep-signup-modal/modal-step-3";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
-import { requestCodeAction } from "@/lib/actions/signup-actions/request-code-action";
-import { verifyRequestCodeAction } from "@/lib/actions/signup-actions/verify-request-code";
-import { signUpAction } from "@/lib/actions/signup-actions/signup-action";
+import { requestCodeAction } from "@/lib/auth/signup-actions/request-code-action";
+import { verifyRequestCodeAction } from "@/lib/auth/signup-actions/verify-request-code";
+import { signUpAction } from "@/lib/auth/signup-actions/signup-action";
 
 type SignUpModalProps = {
   open: boolean;

@@ -2,6 +2,7 @@
 
 import { auth } from "@/auth";
 import { db } from "@/db/db";
+import { revalidatePath } from "next/cache";
 
 function normalizeUsername(value: string) {
   return value.trim().toLowerCase().replace(/^@+/, "");
@@ -22,7 +23,8 @@ export const completeOnboardingAction = async (input: {
   if (!/^[a-z0-9_]{4,15}$/.test(username)) {
     return {
       success: false,
-      error: "Username must be 4-15 characters and use only letters, numbers, or underscores.",
+      error:
+        "Username must be 4-15 characters and use only letters, numbers, or underscores.",
     };
   }
 
@@ -46,6 +48,8 @@ export const completeOnboardingAction = async (input: {
       onboardingCompleted: true,
     },
   });
+
+  revalidatePath("/home");
 
   return { success: true };
 };

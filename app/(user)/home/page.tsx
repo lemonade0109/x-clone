@@ -4,6 +4,7 @@ import TrendingSideBar from "@/components/shared/trending-sidebar";
 import { auth } from "@/auth";
 import { db } from "@/db/db";
 import OnboardingModal from "@/components/auth/multistep-signup-modal/onboarding-modal";
+import { unstable_noStore as noStore } from "next/cache";
 
 const posts = [
   {
@@ -36,6 +37,7 @@ const posts = [
 ];
 
 export default async function Homepage() {
+  noStore();
   const session = await auth();
 
   let showOnboarding = false;

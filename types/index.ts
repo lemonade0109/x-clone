@@ -11,7 +11,7 @@ export type SignUpData = {
   dob_year: string;
   verification_code: string;
   password: string;
-  username: string;
+  username?: string;
 };
 
 export type FullSignUpSchema = z.infer<typeof fullSignUpSchema>;
