@@ -7,6 +7,7 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import FloatingInputLabel from "@/components/shared/floating-input-label";
 import { completeOnboardingAction } from "@/lib/actions/onboarding-action";
+import { cn } from "@/lib/utils";
 
 type Props = {
   open: boolean;
@@ -24,11 +25,22 @@ const CameraIcon = () => (
   </svg>
 );
 
-const BackIcon = () => (
-  <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5 fill-current">
-    <path d="M13.53 7.47a.75.75 0 0 1 0 1.06L10.06 12l3.47 3.47a.75.75 0 1 1-1.06 1.06l-4-4a.75.75 0 0 1 0-1.06l4-4a.75.75 0 0 1 1.06 0Z" />
+const CheckIcon = () => (
+  <svg
+    aria-hidden="true"
+    viewBox="0 0 24 24"
+    className="h-3.5 w-3.5 fill-white"
+  >
+    <path d="M9.96 18.1 4.87 13l1.41-1.41 3.68 3.68 7.76-7.77 1.42 1.42-9.18 9.18Z" />
   </svg>
 );
+
+const normalizeUsername = (value: string) =>
+  value
+    .toLowerCase()
+    .replace(/^@+/, "")
+    .replace(/[^a-z0-9_]/g, "")
+    .slice(0, 15);
 
 const OnboardingModal: React.FC<Props> = ({
   open,
@@ -41,8 +53,35 @@ const OnboardingModal: React.FC<Props> = ({
   const [step, setStep] = useState<1 | 2>(1);
   const [image, setImage] = useState(initialImage ?? "");
   const [username, setUsername] = useState(initialUsername ?? "");
+  const [usernameFocused, setUsernameFocused] = useState(false);
+  const [showAllSuggestions, setShowAllSuggestions] = useState(false);
+  const cleanUsername = normalizeUsername(username);
+  const isUsernameValid = /^[a-z0-9_]{4,15}$/.test(cleanUsername);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const suggestedUsernames = React.useMemo(() => {
+    const seed =
+      (cleanUsername || initialUsername || "")
+        .replace(/^@+/, "")
+        .replace(/[^a-zA-Z0-9]/g, "")
+        .toLowerCase()
+        .slice(0, 10) || "";
+
+    return Array.from(
+      new Set([
+        `@${seed}`,
+        `@${seed}_`,
+        `@${seed}01`,
+        `@the${seed}`,
+        `@real${seed}`,
+      ]),
+    );
+  }, [cleanUsername, initialUsername]);
+
+  const visibleSuggestions = showAllSuggestions
+    ? suggestedUsernames
+    : suggestedUsernames.slice(0, 2);
 
   const hasImage = image.trim().length > 0;
 
@@ -72,7 +111,7 @@ const OnboardingModal: React.FC<Props> = ({
     setLoading(true);
 
     const res = await completeOnboardingAction({
-      username,
+      username: cleanUsername,
       image: image || undefined,
     });
 
@@ -103,13 +142,15 @@ const OnboardingModal: React.FC<Props> = ({
 
           <div className="px-8 pt-1 pb-5">
             <DialogTitle className="text-[28px] font-bold leading-9 tracking-tight text-black">
-              {step === 1 ? "Pick a profile picture" : "Choose a username"}
+              {step === 1
+                ? "Pick a profile picture"
+                : "What should we call you?"}
             </DialogTitle>
 
             <p className="mt-4 max-w-115 text-[15px] leading-5 text-zinc-500 ">
               {step === 1
                 ? "Have a favorite selfie? Upload it now."
-                : "People will use this to mention you. You can change it later."}
+                : " Your @username is unique. You can always change it later."}
             </p>
           </div>
 
@@ -150,52 +191,66 @@ const OnboardingModal: React.FC<Props> = ({
               </div>
             ) : (
               <div className="pt-1">
-                <div className="mb-6 flex items-center gap-4">
-                  <div className="h-16 w-16 overflow-hidden rounded-full bg-zinc-200">
-                    {hasImage ? (
-                      <img
-                        src={image}
-                        alt="Profile preview"
-                        className="h-full w-full object-cover"
-                      />
-                    ) : (
-                      <div className="flex h-full w-full items-center justify-center text-xs text-zinc-400">
-                        No photo
-                      </div>
-                    )}
+                <FloatingInputLabel
+                  label="Username"
+                  value={cleanUsername}
+                  onChange={(e) =>
+                    setUsername(normalizeUsername(e.target.value))
+                  }
+                  onFocus={() => setUsernameFocused(true)}
+                  onBlur={() => setUsernameFocused(false)}
+                  autoCapitalize="none"
+                  autoCorrect="off"
+                  spellCheck={false}
+                  maxLength={15}
+                  prefix="@"
+                  prefixClassName="top-1/2 -translate-y-1/2 text-[18px]"
+                  labelClassName="left-[34px]"
+                  className="pl-11 pr-10"
+                  error={!!error}
+                  suffix={
+                    isUsernameValid ? (
+                      <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-[#00ba7c]">
+                        <CheckIcon />
+                      </span>
+                    ) : null
+                  }
+                />
+
+                <div className="mt-7 space-y-4">
+                  <div className="flex flex-wrap gap-x-2 gap-y-3">
+                    {visibleSuggestions.map((item) => (
+                      <button
+                        key={item}
+                        type="button"
+                        onClick={() => {
+                          setUsername(item.replace(/^@/, ""));
+                          setError("");
+                        }}
+                        className="text-[15px] font-medium text-[#1d9bf0] hover:underline"
+                      >
+                        {item}
+                      </button>
+                    ))}
                   </div>
 
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setError("");
-                      setStep(1);
-                    }}
-                    className="text-[14px] font-medium text-[#1d9bf0] hover:underline"
-                  >
-                    Change photo
-                  </button>
+                  {!showAllSuggestions &&
+                  suggestedUsernames.length > visibleSuggestions.length ? (
+                    <button
+                      type="button"
+                      onClick={() => setShowAllSuggestions(true)}
+                      className="text-[15px] font-medium text-[#1d9bf0] hover:underline"
+                    >
+                      Show more
+                    </button>
+                  ) : null}
                 </div>
 
-                <div className="space-y-2">
-                  <FloatingInputLabel
-                    label="Username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    maxLength={20}
-                    autoCapitalize="none"
-                    autoCorrect="off"
-                  />
-                  <p className="text-[13px] leading-4 text-zinc-500">
-                    Your username is unique. You can always change it later.
-                  </p>
-                </div>
+                {error ? (
+                  <p className="mt-4 text-sm text-red-500">{error}</p>
+                ) : null}
               </div>
             )}
-
-            {error ? (
-              <p className="mt-4 text-sm text-red-500">{error}</p>
-            ) : null}
           </div>
 
           <div className="shrink-0 w-full max-w-lg mx-auto flex flex-col  p-5">

@@ -101,6 +101,7 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ open, onOpenChange }) => {
 
       const values = form.getValues();
       const res = await signUpAction(values);
+      console.log("signUpAction result:", res);
 
       if (!res?.success) {
         setLoading(false);
@@ -108,25 +109,13 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ open, onOpenChange }) => {
         return;
       }
 
-      const login = await signIn("credentials", {
+      await signIn("credentials", {
         email: values.email,
         password: values.password,
-        redirect: false,
+        redirect: true,
+        callbackUrl: "/home",
       });
 
-      if (!login || login.error) {
-        setLoading(false);
-        setServerError(login?.error ?? "Account created, but sign in failed.");
-        return;
-      }
-
-      onOpenChange(false);
-      form.reset();
-      setStep(1);
-      setLoading(false);
-
-      router.replace("/home");
-      router.refresh();
       return;
     }
   };
