@@ -3,16 +3,30 @@
 import { auth } from "@/auth";
 import { db } from "@/db/db";
 
-export async function completeOnboardingAction(input: {
+function normalizeUsername(value: string) {
+  return value.trim().toLowerCase().replace(/^@+/, "");
+}
+
+export const completeOnboardingAction = async (input: {
   username: string;
-  image?: string;
-}) {
+  image?: string | null;
+}) => {
   const session = await auth();
-  if (!session?.user?.id) return { error: "Unauthorized" };
 
-  const username = input.username.trim().toLowerCase();
+  if (!session?.user?.id) {
+    return { success: false, error: "Unauthorized." };
+  }
 
-  const existing = await db.user.findFirst({
+  const username = normalizeUsername(input.username);
+
+  if (!/^[a-z0-9_]{4,15}$/.test(username)) {
+    return {
+      success: false,
+      error: "Username must be 4-15 characters and use only letters, numbers, or underscores.",
+    };
+  }
+
+  const existingUsername = await db.user.findFirst({
     where: {
       username,
       NOT: { id: session.user.id },
@@ -20,16 +34,18 @@ export async function completeOnboardingAction(input: {
     select: { id: true },
   });
 
-  if (existing) return { error: "Username is already taken." };
+  if (existingUsername) {
+    return { success: false, error: "Username is already taken." };
+  }
 
   await db.user.update({
     where: { id: session.user.id },
     data: {
       username,
-      image: input.image || undefined,
+      image: input.image ?? null,
       onboardingCompleted: true,
     },
   });
 
   return { success: true };
-}
+};

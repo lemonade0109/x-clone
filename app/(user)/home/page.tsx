@@ -1,6 +1,9 @@
 import HomeSection from "@/components/page/sections/home-section";
 import NavLayoutTemplate from "@/components/shared/nav-layout-template";
 import TrendingSideBar from "@/components/shared/trending-sidebar";
+import { auth } from "@/auth";
+import { db } from "@/db/db";
+import OnboardingModal from "@/components/auth/multistep-signup-modal/onboarding-modal";
 
 const posts = [
   {
@@ -32,7 +35,28 @@ const posts = [
   },
 ];
 
-export default function Homepage() {
+export default async function Homepage() {
+  const session = await auth();
+
+  let showOnboarding = false;
+  let initialUsername: string | null = null;
+  let initialImage: string | null = null;
+
+  if (session?.user?.id) {
+    const user = await db.user.findUnique({
+      where: { id: session.user.id },
+      select: {
+        onboardingCompleted: true,
+        username: true,
+        image: true,
+      },
+    });
+
+    showOnboarding = !user?.onboardingCompleted;
+    initialUsername = user?.username ?? null;
+    initialImage = user?.image ?? null;
+  }
+
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-7xl bg-white text-black">
       <NavLayoutTemplate userId={"@jubril1234"} />
@@ -40,6 +64,14 @@ export default function Homepage() {
       <HomeSection posts={posts} />
 
       <TrendingSideBar />
+
+      {showOnboarding ? (
+        <OnboardingModal
+          open={true}
+          initialUsername={initialUsername}
+          initialImage={initialImage}
+        />
+      ) : null}
     </main>
   );
 }

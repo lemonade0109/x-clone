@@ -97,10 +97,12 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ open, onOpenChange }) => {
       if (!ok) return;
 
       setLoading(true);
+      setServerError(null);
+
       const values = form.getValues();
       const res = await signUpAction(values);
 
-      if (!res.success) {
+      if (!res?.success) {
         setLoading(false);
         setServerError(res?.error ?? "Signup failed.");
         return;
@@ -112,18 +114,20 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ open, onOpenChange }) => {
         redirect: false,
       });
 
-      setLoading(false);
-
-      if (login?.error) {
-        setServerError("Account created. Please sign in.");
+      if (!login || login.error) {
+        setLoading(false);
+        setServerError(login?.error ?? "Account created, but sign in failed.");
         return;
       }
 
       onOpenChange(false);
       form.reset();
       setStep(1);
-      router.push("/home");
+      setLoading(false);
+
+      router.replace("/home");
       router.refresh();
+      return;
     }
   };
 

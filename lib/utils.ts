@@ -44,6 +44,7 @@ export function renderError(error: unknown): { message: string } {
 
 // Provide user-friendly error messages based on error types or codes
 export function getFriendlyErrorMessage(error: unknown): string {
+  console.log(error);
   if (
     typeof error === "object" &&
     error !== null &&

@@ -2,7 +2,7 @@
 
 import { db } from "@/db/db";
 import { hashPassword } from "@/lib/auth/password";
-import { normalizeEmail, renderError } from "@/lib/utils";
+import { getFriendlyErrorMessage, normalizeEmail } from "@/lib/utils";
 import { SignUpData } from "@/types";
 import { Prisma } from "@prisma/client";
 
@@ -50,6 +50,7 @@ export const signUpAction = async (input: SignUpData) => {
         email,
         password: hashedPassword,
         dateOfBirth: dob,
+        emailVerified: new Date(),
         username: null,
         image: null,
         onboardingCompleted: false,
@@ -71,7 +72,8 @@ export const signUpAction = async (input: SignUpData) => {
 
     return {
       success: false,
-      error: renderError(error).message || "Signup failed. Please try again.",
+      error:
+        getFriendlyErrorMessage(error) || "Signup failed. Please try again.",
     };
   }
 };
