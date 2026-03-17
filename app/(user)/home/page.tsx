@@ -3,8 +3,8 @@ import NavLayoutTemplate from "@/components/shared/nav-layout-template";
 import TrendingSideBar from "@/components/shared/trending-sidebar";
 import { auth } from "@/auth";
 import { db } from "@/db/db";
-import OnboardingModal from "@/components/auth/multistep-signup-modal/onboarding-modal";
 import { unstable_noStore as noStore } from "next/cache";
+import OnboardingModal from "@/components/auth/multistep-signup-modal/onboarding-modal";
 
 const posts = [
   {

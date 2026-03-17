@@ -6,8 +6,10 @@ import { useRouter } from "next/navigation";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import FloatingInputLabel from "@/components/shared/floating-input-label";
-import { completeOnboardingAction } from "@/lib/actions/onboarding-action";
-import { cn } from "@/lib/utils";
+import {
+  checkUsernameAvailabilityAction,
+  completeOnboardingAction,
+} from "@/lib/actions/onboarding-action";
 
 type Props = {
   open: boolean;
@@ -35,6 +37,16 @@ const CheckIcon = () => (
   </svg>
 );
 
+const WrongIcon = () => (
+  <svg
+    aria-hidden="true"
+    viewBox="0 0 24 24"
+    className="h-3.5 w-3.5 fill-white"
+  >
+    <path d="m13.41 12 4.3-4.29-1.42-1.42-4.29 4.3-4.29-4.3-1.42 1.42L10.59 12l-4.3 4.29 1.42 1.42 4.29-4.3 4.29 4.3 1.42-1.42z" />
+  </svg>
+);
+
 const normalizeUsername = (value: string) =>
   value
     .toLowerCase()
@@ -50,15 +62,20 @@ const OnboardingModal: React.FC<Props> = ({
   const router = useRouter();
   const fileRef = useRef<HTMLInputElement | null>(null);
 
-  const [step, setStep] = useState<1 | 2>(1);
-  const [image, setImage] = useState(initialImage ?? "");
-  const [username, setUsername] = useState(initialUsername ?? "");
-  const [usernameFocused, setUsernameFocused] = useState(false);
-  const [showAllSuggestions, setShowAllSuggestions] = useState(false);
+  const [step, setStep] = React.useState<1 | 2>(1);
+  const [image, setImage] = React.useState(initialImage ?? "");
+  const [username, setUsername] = React.useState(initialUsername ?? "");
+  const [usernameFocused, setUsernameFocused] = React.useState(false);
+  const [showAllSuggestions, setShowAllSuggestions] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState("");
+  const [usernameStatus, setUsernameStatus] = React.useState<
+    "idle" | "checking" | "available" | "taken" | "invalid"
+  >("idle");
+
   const cleanUsername = normalizeUsername(username);
   const isUsernameValid = /^[a-z0-9_]{4,15}$/.test(cleanUsername);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const shouldShowSuggestions = cleanUsername.length >= 4;
 
   const suggestedUsernames = React.useMemo(() => {
     const seed =
@@ -67,6 +84,10 @@ const OnboardingModal: React.FC<Props> = ({
         .replace(/[^a-zA-Z0-9]/g, "")
         .toLowerCase()
         .slice(0, 10) || "";
+
+    if (seed.length < 4) {
+      return [];
+    }
 
     return Array.from(
       new Set([
@@ -84,6 +105,33 @@ const OnboardingModal: React.FC<Props> = ({
     : suggestedUsernames.slice(0, 2);
 
   const hasImage = image.trim().length > 0;
+
+  React.useEffect(() => {
+    let active = true;
+
+    if (step !== 2) return;
+    if (!cleanUsername) {
+      setUsernameStatus("idle");
+      return;
+    }
+
+    if (!isUsernameValid) {
+      setUsernameStatus("invalid");
+      return;
+    }
+
+    setUsernameStatus("checking");
+
+    const timer = setTimeout(async () => {
+      const res = await checkUsernameAvailabilityAction(cleanUsername);
+      if (!active) return;
+      setUsernameStatus(res.available ? "available" : "taken");
+    }, 350);
+    return () => {
+      active = false;
+      clearTimeout(timer);
+    };
+  }, [cleanUsername, isUsernameValid, step]);
 
   const onPickImage = (file?: File) => {
     if (!file) return;
@@ -103,8 +151,13 @@ const OnboardingModal: React.FC<Props> = ({
       return;
     }
 
-    if (!username.trim()) {
+    if (!isUsernameValid) {
       setError("Username is required.");
+      return;
+    }
+
+    if (usernameStatus === "taken") {
+      setError("Username not available");
       return;
     }
 
@@ -140,14 +193,14 @@ const OnboardingModal: React.FC<Props> = ({
             />
           </div>
 
-          <div className="px-8 pt-1 pb-5">
+          <div className="px-8 pt-1 pb-2">
             <DialogTitle className="text-[28px] font-bold leading-9 tracking-tight text-black">
               {step === 1
                 ? "Pick a profile picture"
                 : "What should we call you?"}
             </DialogTitle>
 
-            <p className="mt-4 max-w-115 text-[15px] leading-5 text-zinc-500 ">
+            <p className="mt-2 max-w-115 text-[13px] leading-5 text-zinc-500 ">
               {step === 1
                 ? "Have a favorite selfie? Upload it now."
                 : " Your @username is unique. You can always change it later."}
@@ -190,7 +243,7 @@ const OnboardingModal: React.FC<Props> = ({
                 />
               </div>
             ) : (
-              <div className="pt-1">
+              <div className="pt-1 mb-32">
                 <FloatingInputLabel
                   label="Username"
                   value={cleanUsername}
@@ -209,7 +262,11 @@ const OnboardingModal: React.FC<Props> = ({
                   className="pl-11 pr-10"
                   error={!!error}
                   suffix={
-                    isUsernameValid ? (
+                    usernameStatus === "taken" ? (
+                      <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-red-500">
+                        <WrongIcon />
+                      </span>
+                    ) : usernameStatus === "available" ? (
                       <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-[#00ba7c]">
                         <CheckIcon />
                       </span>
@@ -217,38 +274,48 @@ const OnboardingModal: React.FC<Props> = ({
                   }
                 />
 
-                <div className="mt-7 space-y-4">
-                  <div className="flex flex-wrap gap-x-2 gap-y-3">
-                    {visibleSuggestions.map((item) => (
-                      <button
-                        key={item}
-                        type="button"
-                        onClick={() => {
-                          setUsername(item.replace(/^@/, ""));
-                          setError("");
-                        }}
-                        className="text-[15px] font-medium text-[#1d9bf0] hover:underline"
-                      >
-                        {item}
-                      </button>
-                    ))}
-                  </div>
+                {usernameStatus === "taken" ? (
+                  <p className="mt-2 text-sm text-red-500">
+                    Username not available
+                  </p>
+                ) : null}
 
-                  {!showAllSuggestions &&
-                  suggestedUsernames.length > visibleSuggestions.length ? (
-                    <button
-                      type="button"
-                      onClick={() => setShowAllSuggestions(true)}
-                      className="text-[15px] font-medium text-[#1d9bf0] hover:underline"
-                    >
-                      Show more
-                    </button>
+                <div className="mt-2 space-y-4">
+                  {shouldShowSuggestions ? (
+                    <div className="mt-7 mb-40 space-y-4">
+                      <div className="flex flex-wrap gap-x-2 gap-y-3">
+                        {visibleSuggestions.map((item) => (
+                          <button
+                            key={item}
+                            type="button"
+                            onClick={() => {
+                              setUsername(item.replace(/^@/, ""));
+                              setError("");
+                            }}
+                            className="text-[15px] font-medium text-[#1d9bf0] hover:underline"
+                          >
+                            {item}
+                          </button>
+                        ))}
+                      </div>
+
+                      {!showAllSuggestions &&
+                      suggestedUsernames.length > visibleSuggestions.length ? (
+                        <button
+                          type="button"
+                          onClick={() => setShowAllSuggestions(true)}
+                          className="text-[15px] font-medium text-[#1d9bf0] hover:underline"
+                        >
+                          Show more
+                        </button>
+                      ) : null}
+                    </div>
+                  ) : null}
+
+                  {error ? (
+                    <p className="mt-4 text-sm text-red-500">{error}</p>
                   ) : null}
                 </div>
-
-                {error ? (
-                  <p className="mt-4 text-sm text-red-500">{error}</p>
-                ) : null}
               </div>
             )}
           </div>

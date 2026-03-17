@@ -8,13 +8,35 @@ function normalizeUsername(value: string) {
   return value.trim().toLowerCase().replace(/^@+/, "");
 }
 
+export const checkUsernameAvailabilityAction = async (rawUsername: string) => {
+  const session = await auth();
+  if (!session?.user.email) {
+    return { available: false, error: "Unauthorized." };
+  }
+
+  const username = normalizeUsername(rawUsername);
+
+  if (!/^[a-z0-9_]{4,15}$/.test(username)) {
+    return {
+      available: false,
+    };
+  }
+
+  const existingUser = await db.user.findFirst({
+    where: { username, NOT: { id: session.user.id } },
+    select: { id: true },
+  });
+
+  return { available: !existingUser };
+};
+
 export const completeOnboardingAction = async (input: {
   username: string;
   image?: string | null;
 }) => {
   const session = await auth();
 
-  if (!session?.user?.id) {
+  if (!session?.user?.email) {
     return { success: false, error: "Unauthorized." };
   }
 
@@ -28,10 +50,26 @@ export const completeOnboardingAction = async (input: {
     };
   }
 
+  const currentUser =
+    (session.user.id
+      ? await db.user.findUnique({
+          where: { id: session.user.id },
+          select: { id: true },
+        })
+      : null) ??
+    (await db.user.findUnique({
+      where: { email: session.user.email },
+      select: { id: true },
+    }));
+
+  if (!currentUser) {
+    return { success: false, error: "User not found." };
+  }
+
   const existingUsername = await db.user.findFirst({
     where: {
       username,
-      NOT: { id: session.user.id },
+      NOT: { id: currentUser.id },
     },
     select: { id: true },
   });

@@ -1,3 +1,4 @@
 {
-  "cSpell.words": ["jubril", "multistep", "reposts"]
+  "cSpell.words": ["jubril", "multistep", "reposts"],
+  "files.autoSave": "onFocusChange"
 }

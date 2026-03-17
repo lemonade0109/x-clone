@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import * as React from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,7 +19,15 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
-const MoreDropdownMenu = ({ userId }: { userId: string }) => {
+export default function MoreDropdownMenu({ userId }: { userId: string }) {
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
+
   const dropdownLinks = [
     {
       href: `/${userId}/lists`,
@@ -65,7 +75,7 @@ const MoreDropdownMenu = ({ userId }: { userId: string }) => {
       </DropdownMenuTrigger>
 
       <DropdownMenuContent
-        sideOffset={-20}
+        sideOffset={-9}
         align="start"
         className="w-80 rounded-2xl border border-zinc-200/90 bg-white p-1.5 shadow-[0_8px_24px_rgba(15,20,25,0.18)]"
       >
@@ -94,6 +104,4 @@ const MoreDropdownMenu = ({ userId }: { userId: string }) => {
       </DropdownMenuContent>
     </DropdownMenu>
   );
-};
-
-export default MoreDropdownMenu;
+}
