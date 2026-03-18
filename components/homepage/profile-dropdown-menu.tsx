@@ -22,7 +22,6 @@ export default function ProfileDropdownMenu({
   }, []);
 
   if (!mounted) {
-    // keep layout stable before hydration
     return (
       <button
         type="button"
@@ -45,7 +44,11 @@ export default function ProfileDropdownMenu({
       <DropdownMenuTrigger asChild>
         <button className="mb-1 flex items-center gap-3 rounded-full px-3 py-3 text-left transition hover:bg-zinc-100">
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-200 font-semibold">
-            J
+            {image ? (
+              <img src={image} alt={name} className="h-10 w-10 rounded-full" />
+            ) : (
+              name.charAt(0)
+            )}
           </div>
           <div className="hidden leading-tight xl:block">
             <p className="text-md font-bold">{name}</p>
