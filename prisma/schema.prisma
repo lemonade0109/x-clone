@@ -22,7 +22,7 @@ model User {
   emailVerified       DateTime?
   image               String?
   bio                 String?
-  password            String
+  password            String?
   createdAt           DateTime  @default(now())
   updatedAt           DateTime  @updatedAt
   onboardingCompleted Boolean   @default(false)

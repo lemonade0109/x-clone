@@ -1,4 +1,5 @@
 "use client";
+import OAuthButtons from "@/components/auth/oauth-buttons";
 import HomepageLinks from "@/components/homepage/homepage-links";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
@@ -26,7 +27,7 @@ export default function HomePage() {
             <h2 className="text-4xl font-extrabold mt-20 ml-12">Join today.</h2>
 
             <div className="w-md ml-12 mt-12 flex flex-col gap-4 p-4">
-              <Button
+              {/* <Button
                 variant="outline"
                 className="w-full border border-gray-300 rounded-full py-6 hover:bg-gray-100"
                 asChild
@@ -44,7 +45,9 @@ export default function HomePage() {
                 <Link href="#" className="w-full text-center text-xl">
                   O-Auth Apple TODO
                 </Link>
-              </Button>
+              </Button> */}
+
+              <OAuthButtons callbackUrl="/home" />
 
               <div className="flex items-center">
                 <div className="border border-gray-100 flex-1" />

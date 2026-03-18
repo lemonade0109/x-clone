@@ -3,6 +3,7 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { db } from "./db/db";
 import { verifyPassword } from "./lib/auth/password";
+import Google from "next-auth/providers/google";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(db),
@@ -13,6 +14,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     signIn: "/i/flow/login",
   },
   providers: [
+    Google({
+      clientId: process.env.AUTH_GOOGLE_ID!,
+      clientSecret: process.env.AUTH_GOOGLE_SECRET!,
+    }),
     Credentials({
       name: "Credentials",
       credentials: {

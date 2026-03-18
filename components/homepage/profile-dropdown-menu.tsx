@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import * as React from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,7 +10,28 @@ import { Ellipsis } from "lucide-react";
 import { Button } from "../ui/button";
 import Link from "next/link";
 
-const ProfileDropdownMenu = () => {
+export default function ProfileDropdownMenu() {
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    // keep layout stable before hydration
+    return (
+      <button
+        type="button"
+        className="mb-1 flex items-center gap-3 rounded-full px-3 py-3 text-left"
+        aria-hidden
+      >
+        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-200 font-semibold">
+          J
+        </div>
+      </button>
+    );
+  }
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -49,6 +72,4 @@ const ProfileDropdownMenu = () => {
       </DropdownMenuContent>
     </DropdownMenu>
   );
-};
-
-export default ProfileDropdownMenu;
+}
