@@ -27,26 +27,6 @@ export default function HomePage() {
             <h2 className="text-4xl font-extrabold mt-20 ml-12">Join today.</h2>
 
             <div className="w-md ml-12 mt-12 flex flex-col gap-4 p-4">
-              {/* <Button
-                variant="outline"
-                className="w-full border border-gray-300 rounded-full py-6 hover:bg-gray-100"
-                asChild
-              >
-                <Link href="#" className="w-full text-center text-xl">
-                  O-Auth Google TODO
-                </Link>
-              </Button>
-
-              <Button
-                variant="outline"
-                className="w-full border border-gray-300 rounded-full py-6 hover:bg-gray-100"
-                asChild
-              >
-                <Link href="#" className="w-full text-center text-xl">
-                  O-Auth Apple TODO
-                </Link>
-              </Button> */}
-
               <OAuthButtons callbackUrl="/home" />
 
               <div className="flex items-center">

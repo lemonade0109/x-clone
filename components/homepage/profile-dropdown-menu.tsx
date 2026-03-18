@@ -7,10 +7,14 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Ellipsis } from "lucide-react";
-import { Button } from "../ui/button";
 import Link from "next/link";
+import { UserProfile } from "../shared/nav-layout-template";
 
-export default function ProfileDropdownMenu() {
+export default function ProfileDropdownMenu({
+  username,
+  name,
+  image,
+}: UserProfile) {
   const [mounted, setMounted] = React.useState(false);
 
   React.useEffect(() => {
@@ -26,7 +30,11 @@ export default function ProfileDropdownMenu() {
         aria-hidden
       >
         <div className="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-200 font-semibold">
-          J
+          {image ? (
+            <img src={image} alt={name} className="h-10 w-10 rounded-full" />
+          ) : (
+            name.charAt(0)
+          )}
         </div>
       </button>
     );
@@ -40,8 +48,8 @@ export default function ProfileDropdownMenu() {
             J
           </div>
           <div className="hidden leading-tight xl:block">
-            <p className="text-sm font-semibold">Jubril</p>
-            <p className="text-sm text-zinc-500">@jubril</p>
+            <p className="text-md font-bold">{name}</p>
+            <p className="text-sm text-zinc-500">@{username}</p>
           </div>
           <Ellipsis className="ml-auto hidden h-5 w-5 xl:block" />
         </button>
@@ -51,7 +59,9 @@ export default function ProfileDropdownMenu() {
         align="start"
         className="w-80 rounded-2xl border border-zinc-200/90 bg-white p-1.5 shadow-[0_8px_24px_rgba(15,20,25,0.18)]"
       >
-        <p className="px-4 py-2 text-sm text-zinc-500">Signed in as @jubril</p>
+        <p className="px-4 py-2 text-sm text-zinc-500">
+          Signed in as @{username}
+        </p>
         <hr className="my-1 border-zinc-200" />
 
         <div className="flex flex-col ml-1 my-2 space-y-3">
@@ -63,10 +73,10 @@ export default function ProfileDropdownMenu() {
           </Link>
 
           <Link
-            href="/i/flow/logout"
+            href="/logout"
             className="w-full text-left px-4 py-2 rounded-md text-md font-semibold transition hover:bg-zinc-100"
           >
-            Logout @jubril
+            Logout @{username}
           </Link>
         </div>
       </DropdownMenuContent>

@@ -5,6 +5,7 @@ import { auth } from "@/auth";
 import { db } from "@/db/db";
 import { unstable_noStore as noStore } from "next/cache";
 import OnboardingModal from "@/components/auth/multistep-signup-modal/onboarding-modal";
+import { getProfileAction } from "@/lib/actions/profile/get-profile";
 
 const posts = [
   {
@@ -59,9 +60,16 @@ export default async function Homepage() {
     initialImage = user?.image ?? null;
   }
 
+  const userProfile = await getProfileAction();
+
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-7xl bg-white text-black">
-      <NavLayoutTemplate userId={"@jubril1234"} />
+      <NavLayoutTemplate
+        name={userProfile?.name ?? ""}
+        email={userProfile?.email ?? ""}
+        username={userProfile?.username ?? ""}
+        image={userProfile?.image ?? ""}
+      />
 
       <HomeSection posts={posts} />
 

@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
-export default function MoreDropdownMenu({ userId }: { userId: string }) {
+export default function MoreDropdownMenu({ username }: { username: string }) {
   const [mounted, setMounted] = React.useState(false);
 
   React.useEffect(() => {
@@ -30,12 +30,12 @@ export default function MoreDropdownMenu({ userId }: { userId: string }) {
 
   const dropdownLinks = [
     {
-      href: `/${userId}/lists`,
+      href: `/${username}/lists`,
       name: "List",
       icon: List,
     },
     {
-      href: `/${userId}/communities`,
+      href: `/${username}/communities`,
       name: "Communities",
       icon: Users,
     },

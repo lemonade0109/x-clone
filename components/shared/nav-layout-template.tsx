@@ -8,7 +8,14 @@ import { Home, Search, Bell, Mail, Bookmark, Users, User } from "lucide-react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 
-const NavLayoutTemplate = ({ userId }: { userId: string }) => {
+export type UserProfile = {
+  name: string;
+  email?: string;
+  username: string;
+  image: string;
+};
+
+const NavLayoutTemplate = ({ username, name, image }: UserProfile) => {
   const pathname = usePathname();
 
   const navItems = [
@@ -46,12 +53,12 @@ const NavLayoutTemplate = ({ userId }: { userId: string }) => {
     {
       icon: User,
       label: "Profile",
-      href: `/${userId}`,
+      href: `/${username}`,
       isActive:
-        pathname === `/${userId}` ||
-        pathname.startsWith(`/${userId}/lists`) ||
-        pathname.startsWith(`/${userId}/compose`) ||
-        pathname.startsWith(`/${userId}/premium_sign_up`),
+        pathname === `/${username}` ||
+        pathname.startsWith(`/${username}/lists`) ||
+        pathname.startsWith(`/${username}/compose`) ||
+        pathname.startsWith(`/${username}/premium_sign_up`),
     },
   ];
 
@@ -91,14 +98,14 @@ const NavLayoutTemplate = ({ userId }: { userId: string }) => {
             </Link>
           ))}
 
-          <MoreDropdownMenu userId={userId} />
+          <MoreDropdownMenu username={username} />
 
           <button className="mt-10 hidden w-full rounded-full bg-black px-8 py-3 text-[15px] font-bold text-white transition hover:bg-zinc-800 xl:block">
             Post
           </button>
         </div>
 
-        <ProfileDropdownMenu />
+        <ProfileDropdownMenu username={username} name={name} image={image} />
       </div>
     </aside>
   );

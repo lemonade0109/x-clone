@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/db/db";
-import { hashPassword } from "@/lib/auth/password";
+import { hashPassword } from "@/lib/actions/auth/password";
 import { getFriendlyErrorMessage, normalizeEmail } from "@/lib/utils";
 import { SignUpData } from "@/types";
 
