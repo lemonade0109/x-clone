@@ -4,7 +4,15 @@ import { db } from "@/db/db";
 import { hashPassword } from "@/lib/auth/password";
 import { getFriendlyErrorMessage, normalizeEmail } from "@/lib/utils";
 import { SignUpData } from "@/types";
-import { Prisma } from "@prisma/client";
+
+const isPrismaKnownError = (error: unknown): error is { code: string } => {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "code" in error &&
+    typeof (error as { code: unknown }).code === "string"
+  );
+};
 
 export const signUpAction = async (input: SignUpData) => {
   try {
@@ -63,10 +71,7 @@ export const signUpAction = async (input: SignUpData) => {
 
     return { success: true };
   } catch (error) {
-    if (
-      error instanceof Prisma.PrismaClientKnownRequestError &&
-      error.code === "P2002"
-    ) {
+    if (isPrismaKnownError(error) && error.code === "P2002") {
       return { success: false, error: "Account already exists." };
     }
 
