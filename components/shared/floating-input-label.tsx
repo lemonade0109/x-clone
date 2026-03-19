@@ -72,7 +72,7 @@ const FloatingInputLabel = React.forwardRef<
           className={cn(
             "pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[17px] text-zinc-500 transition-all duration-200",
 
-            "peer-focus:top-2 peer-focus:translate-y-0 peer-focus:text-[10px] peer-focus:text-[#1d9bf0]",
+            "peer-focus:top-2 peer-focus:translate-y-0 peer-focus:text-[13px] peer-focus:text-[#1d9bf0]",
             "peer-[:not(:placeholder-shown)]:top-2 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-[12px]",
             error && "text-red-500 peer-focus:text-red-500",
             labelClassName,

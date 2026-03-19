@@ -12,7 +12,6 @@ import { SignUpData } from "@/types";
 import { Eye, EyeOff } from "lucide-react";
 import React from "react";
 import { UseFormReturn } from "react-hook-form";
-import Link from "next/link";
 
 type Props = {
   form: UseFormReturn<SignUpData>;

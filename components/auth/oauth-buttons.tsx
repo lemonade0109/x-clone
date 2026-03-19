@@ -8,18 +8,27 @@ import { FaApple } from "react-icons/fa";
 
 type Props = {
   callbackUrl?: string;
+  mode?: "signin" | "signup";
 };
 
-export default function OAuthButtons({ callbackUrl = "/home" }: Props) {
+export default function OAuthButtons({
+  callbackUrl = "/home",
+  mode = "signup",
+}: Props) {
   const [loadingProvider, setLoadingProvider] = useState<string | null>(null);
 
   async function handleOAuth(provider: "google" | "apple") {
-    setLoadingProvider(provider);
-    await signIn(provider, {
-      callbackUrl,
-    });
+    try {
+      setLoadingProvider(provider);
+      await signIn(provider, {
+        callbackUrl,
+      });
+    } finally {
+      setLoadingProvider(null);
+    }
   }
 
+  const verb = mode === "signup" ? "Sign up" : "Sign in";
   return (
     <div className="space-y-3">
       <Button
@@ -33,7 +42,7 @@ export default function OAuthButtons({ callbackUrl = "/home" }: Props) {
           <FcGoogle className="size-8" />
           {loadingProvider === "google"
             ? "Connecting..."
-            : "Sign up with Google"}
+            : `${verb} with Google`}
         </span>
       </Button>
 
@@ -46,7 +55,7 @@ export default function OAuthButtons({ callbackUrl = "/home" }: Props) {
       >
         <span className="inline-flex items-center gap-3">
           <FaApple className="size-9 text-black" />
-          {loadingProvider === "apple" ? "Connecting..." : "Sign up with Apple"}
+          {loadingProvider === "apple" ? "Connecting..." : `${verb} with Apple`}
         </span>
       </Button>
     </div>
