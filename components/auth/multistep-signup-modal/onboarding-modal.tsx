@@ -10,6 +10,9 @@ import {
   checkUsernameAvailabilityAction,
   completeOnboardingAction,
 } from "@/lib/actions/onboarding-action";
+import { base64 } from "zod";
+import { uploadImageAction } from "@/lib/actions/profile/upload-image";
+import { LoaderCircle } from "lucide-react";
 
 type Props = {
   open: boolean;
@@ -64,6 +67,7 @@ const OnboardingModal: React.FC<Props> = ({
 
   const [step, setStep] = React.useState<1 | 2>(1);
   const [image, setImage] = React.useState(initialImage ?? "");
+  const [uploading, setUploading] = React.useState(false);
   const [username, setUsername] = React.useState(initialUsername ?? "");
   const [usernameFocused, setUsernameFocused] = React.useState(false);
   const [showAllSuggestions, setShowAllSuggestions] = React.useState(false);
@@ -104,8 +108,6 @@ const OnboardingModal: React.FC<Props> = ({
     ? suggestedUsernames
     : suggestedUsernames.slice(0, 2);
 
-  const hasImage = image.trim().length > 0;
-
   React.useEffect(() => {
     let active = true;
 
@@ -133,12 +135,28 @@ const OnboardingModal: React.FC<Props> = ({
     };
   }, [cleanUsername, isUsernameValid, step]);
 
+  const hasImage = image.trim().length > 0;
+
   const onPickImage = (file?: File) => {
     if (!file) return;
 
     const reader = new FileReader();
-    reader.onload = () => {
-      setImage(typeof reader.result === "string" ? reader.result : "");
+    reader.onload = async () => {
+      const base64 = reader.result as string;
+      // show instant preview
+      setImage(base64);
+
+      //upload to Cloudinary
+      const res = await uploadImageAction(base64);
+      setUploading(false);
+
+      if (res.error || !res.url) {
+        setError(res.error || "Upload failed. Please try again.");
+        setImage("");
+        return;
+      }
+
+      setImage(res.url);
     };
     reader.readAsDataURL(file);
   };
@@ -178,6 +196,13 @@ const OnboardingModal: React.FC<Props> = ({
     router.replace("/home");
     router.refresh();
   }
+
+  const canFinish =
+    step === 2 &&
+    isUsernameValid &&
+    usernameStatus === "available" &&
+    !uploading &&
+    !loading;
 
   return (
     <Dialog open={open}>
@@ -229,10 +254,22 @@ const OnboardingModal: React.FC<Props> = ({
 
                   <div className="absolute inset-0 flex items-center justify-center bg-black/30 transition group-hover:bg-black/40">
                     <div className="flex h-11 w-11 items-center justify-center rounded-full bg-black/55">
-                      <CameraIcon />
+                      {uploading ? (
+                        <LoaderCircle className="animate-spin" />
+                      ) : (
+                        <CameraIcon />
+                      )}
                     </div>
                   </div>
                 </button>
+
+                {uploading ? (
+                  <p className="mt-3 text-sm text-zinc-500">Uploading...</p>
+                ) : null}
+
+                {error ? (
+                  <p className="mt-3 text-sm text-red-500">{error}</p>
+                ) : null}
 
                 <input
                   ref={fileRef}
@@ -325,9 +362,17 @@ const OnboardingModal: React.FC<Props> = ({
               variant="outline"
               className="w-full border border-gray-300 rounded-full py-6 hover:bg-gray-100 text-lg"
               onClick={onNext}
-              disabled={loading}
+              disabled={loading || (step === 2 ? !canFinish : false)}
             >
-              {step === 1 ? "Skip for now" : "Finish"}
+              {uploading
+                ? "Uploading..."
+                : step === 1
+                  ? hasImage
+                    ? "Next"
+                    : "Skip for now"
+                  : loading
+                    ? "Saving..."
+                    : "Finish"}
             </Button>
           </div>
         </div>
