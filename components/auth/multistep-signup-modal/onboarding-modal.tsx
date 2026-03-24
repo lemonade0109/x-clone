@@ -10,7 +10,6 @@ import {
   checkUsernameAvailabilityAction,
   completeOnboardingAction,
 } from "@/lib/actions/onboarding-action";
-import { base64 } from "zod";
 import { uploadImageAction } from "@/lib/actions/profile/upload-image";
 import { LoaderCircle } from "lucide-react";
 
