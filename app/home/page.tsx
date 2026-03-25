@@ -71,7 +71,7 @@ export default async function Homepage() {
         image={userProfile?.image ?? ""}
       />
 
-      <HomeSection posts={posts} />
+      <HomeSection posts={posts} image={userProfile?.image ?? ""} />
 
       <TrendingSideBar />
 

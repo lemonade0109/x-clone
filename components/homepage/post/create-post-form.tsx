@@ -1,14 +1,20 @@
 "use client";
 
-import { createPostAction } from "@/lib/actions/post-actions/create-post-action";
-import React from "react";
-import { useActionState } from "react";
+import { useActionState, useEffect, useRef } from "react";
 import { useFormStatus } from "react-dom";
+import { createPostAction } from "@/lib/actions/post-actions/create-post-action";
 
-const initialState = {
-  success: false,
-  error: "",
+type CreatePostState = {
+  success: boolean;
+  error?: string;
 };
+
+type Props = {
+  content: string;
+  onPosted?: () => void;
+};
+
+const initialState: CreatePostState = { success: false };
 
 function SubmitButton({ disabled }: { disabled: boolean }) {
   const { pending } = useFormStatus();
@@ -17,42 +23,32 @@ function SubmitButton({ disabled }: { disabled: boolean }) {
     <button
       type="submit"
       disabled={disabled || pending}
-      className="rounded-full bg-blue-500 px-4 py-2 font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50"
+      className="h-9 min-w-18 rounded-full bg-black px-4 text-[15px] font-bold text-white transition hover:bg-gray-800 disabled:bg-gray-400 disabled:text-white/70"
     >
       {pending ? "Posting..." : "Post"}
     </button>
   );
 }
 
-export default function CreatePostForm() {
+export default function CreatePostForm({ content, onPosted }: Props) {
   const [state, formAction] = useActionState(createPostAction, initialState);
-  const [content, setContent] = React.useState("");
-  const formRef = React.useRef<HTMLFormElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (state.success) {
-      setContent("");
       formRef.current?.reset();
+      onPosted?.();
     }
-  }, [state.success]);
+  }, [state.success, onPosted]);
 
   return (
-    <form ref={formRef} action={formAction} className="flex flex-col gap-4">
-      <textarea
-        name="content"
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
-        placeholder="What is happening?"
-        maxLength={280}
-        className="min-h-28 w-full resize-none rounded-xl p-4 outline-none border"
-      />
-
-      {state.error && <p className="text-red-500">{state.error}</p>}
-
-      <div className="flex items-center justify-between">
-        <span className="text-sm text-gray-500">{content.length}/280</span>
-        <SubmitButton disabled={!content.trim()} />
-      </div>
+    <form
+      ref={formRef}
+      action={formAction}
+      className="inline-flex items-center"
+    >
+      <input type="hidden" name="content" value={content} />
+      <SubmitButton disabled={!content.trim()} />
     </form>
   );
 }

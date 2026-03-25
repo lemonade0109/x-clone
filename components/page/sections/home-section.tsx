@@ -1,5 +1,7 @@
+"use client";
 import React from "react";
 import { Ellipsis, Image as ImageIcon, Verified } from "lucide-react";
+import CreatePostForm from "@/components/homepage/post/create-post-form";
 
 interface HomeSectionProps {
   posts: {
@@ -15,11 +17,14 @@ interface HomeSectionProps {
       views: string;
     };
     verified: boolean;
+    image?: string;
   }[];
+  image?: string;
 }
 const tabs = ["For you", "Following"];
 
-const HomeSection: React.FC<HomeSectionProps> = ({ posts }) => {
+const HomeSection: React.FC<HomeSectionProps> = ({ posts, image }) => {
+  const [content, setContent] = React.useState("");
   return (
     <section className="min-h-screen w-full max-w-150 border-r border-zinc-200">
       <header className="sticky top-0 z-20 border-b border-zinc-200 bg-white/80 backdrop-blur-md">
@@ -43,21 +48,29 @@ const HomeSection: React.FC<HomeSectionProps> = ({ posts }) => {
       <div className="border-b border-zinc-200 px-4 py-3">
         <div className="flex gap-3">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-zinc-200 font-semibold">
-            J
+            {image ? (
+              <img src={image} alt="User" className="h-10 w-10 rounded-full" />
+            ) : (
+              "J"
+            )}
           </div>
           <div className="w-full">
             <input
               className="w-full border-none bg-transparent py-2 text-xl text-zinc-800 placeholder:text-zinc-500 focus:outline-none"
               placeholder="What is happening?!"
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
             />
             <div className="mt-3 flex items-center justify-between">
               <button className="inline-flex items-center gap-2 rounded-full px-2 py-1 text-sky-500 transition hover:bg-sky-50">
                 <ImageIcon className="h-5 w-5" />
                 <span className="text-sm font-semibold">Media</span>
               </button>
-              <button className="rounded-full bg-black px-4 py-1.5 text-sm font-bold text-white transition hover:bg-zinc-800">
-                Post
-              </button>
+
+              <CreatePostForm
+                content={content}
+                onPosted={() => setContent("")}
+              />
             </div>
           </div>
         </div>
