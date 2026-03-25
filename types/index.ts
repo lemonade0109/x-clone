@@ -15,3 +15,10 @@ export type SignUpData = {
 };
 
 export type FullSignUpSchema = z.infer<typeof fullSignUpSchema>;
+
+export type TooltipContainerProps = {
+  children: React.ReactNode;
+  content: React.ReactNode;
+  className?: string;
+  disabled?: boolean;
+};
