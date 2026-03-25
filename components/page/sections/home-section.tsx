@@ -24,7 +24,6 @@ interface HomeSectionProps {
 const tabs = ["For you", "Following"];
 
 const HomeSection: React.FC<HomeSectionProps> = ({ posts, userImage }) => {
-  const [content, setContent] = React.useState("");
   return (
     <section className="min-h-screen w-full max-w-150 border-r border-zinc-200">
       <header className="sticky top-0 z-20 border-b border-zinc-200 bg-white/80 backdrop-blur-md">
@@ -45,38 +44,8 @@ const HomeSection: React.FC<HomeSectionProps> = ({ posts, userImage }) => {
         </div>
       </header>
 
-      <div className="border-b border-zinc-200 px-4 py-3">
-        <div className="flex gap-3">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-zinc-200 font-semibold">
-            {userImage ? (
-              <img
-                src={userImage}
-                alt="User"
-                className="h-10 w-10 rounded-full"
-              />
-            ) : (
-              "J"
-            )}
-          </div>
-          <div className="w-full">
-            <input
-              className="w-full border-none bg-transparent py-2 text-xl text-zinc-800 placeholder:text-zinc-500 focus:outline-none"
-              placeholder="What is happening?!"
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-            />
-            <div className="mt-3 flex items-center justify-between">
-              <button className="inline-flex items-center gap-2 rounded-full px-2 py-1 text-sky-500 transition hover:bg-sky-50">
-                <ImageIcon className="h-5 w-5" />
-              </button>
-
-              <CreatePostForm
-                content={content}
-                onPosted={() => setContent("")}
-              />
-            </div>
-          </div>
-        </div>
+      <div className="border-b border-zinc-200 px-4 pt-4">
+        <CreatePostForm userImage={userImage} />
       </div>
 
       <div>

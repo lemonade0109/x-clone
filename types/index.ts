@@ -22,3 +22,42 @@ export type TooltipContainerProps = {
   className?: string;
   disabled?: boolean;
 };
+
+export type ActionToastType = "success" | "error" | "info" | "warning";
+
+export type ActionStateBase = {
+  success: boolean;
+  message?: string;
+  error?: string;
+  toast?: {
+    type: ActionToastType;
+    message: string;
+    id?: string;
+  };
+};
+
+export type ServerAction<S extends ActionStateBase> = (
+  prevState: S,
+  formData: FormData,
+) => S | Promise<S>;
+
+export type FormContainerProps<S extends ActionStateBase> = {
+  action: ServerAction<S>;
+  initialState: S;
+  className?: string;
+  resetOnSuccess?: boolean;
+  onSuccess?: (state: S) => void;
+  onError?: (state: S) => void;
+  children: (args: { state: S; pending: boolean }) => React.ReactNode;
+};
+
+export type CreatePostState = {
+  success: boolean;
+  error?: string;
+  message?: string;
+};
+
+export type Props = {
+  onPosted?: () => void;
+  userImage?: string;
+};
