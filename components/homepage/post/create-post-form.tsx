@@ -47,7 +47,6 @@ export default function CreatePostForm({ userImage }: Props) {
   };
 
   return (
-    // <FormContainer className="inline-flex items-center">
     <FormContainer
       className="w-full"
       action={createPostAction}
@@ -81,6 +80,8 @@ export default function CreatePostForm({ userImage }: Props) {
               name="content"
             />
 
+            <input type="hidden" name="image" value={imageUrl || ""} />
+
             {imageUrl && (
               <div className="px-4 py-2 relative">
                 <img
@@ -108,7 +109,16 @@ export default function CreatePostForm({ userImage }: Props) {
             )}
 
             <div className="flex justify-between px-2 ">
-              <IconSelectors addImageToPost={addImageToPost} />
+              <IconSelectors
+                addImageToPost={addImageToPost}
+                onEmojiSelect={(emoji) => {
+                  setContent((prev) => prev + emoji);
+                }}
+                onGifSelect={(gifUrl) => {
+                  setImage(null);
+                  setImageUrl(gifUrl);
+                }}
+              />
 
               {pending ? (
                 <div className="">

@@ -1,4 +1,3 @@
-"use client";
 import React from "react";
 import {
   Tooltip,
@@ -6,36 +5,48 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "./tooltip";
-import { TooltipContainerProps } from "@/types";
-import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
-const tooltipVariants = cva("rounded-sm tracking-normal text-sm px-1 py-0", {
-  variants: {
-    variant: {
-      blueShade: " bg-twitter/20 text-white/70 ",
-      blackShade: " bg-white/50 text-white/70 ",
-    },
-  },
-});
+export type TooltipContainerProps = {
+  content: React.ReactNode;
+  children: React.ReactNode;
+  disabled?: boolean;
+  side?: "top" | "right" | "bottom" | "left";
+  align?: "start" | "center" | "end";
+  sideOffset?: number;
+  delayDuration?: number;
+  contentClassName?: string;
+  variant?: "blueShade" | "default";
+};
 
-interface ContainerProps
-  extends TooltipContainerProps, VariantProps<typeof tooltipVariants> {}
-
-const TooltipContainer = ({
-  disabled,
-  className,
-  variant,
+const TooltipContainer: React.FC<TooltipContainerProps> = ({
   content,
   children,
-}: ContainerProps) => {
+  disabled = false,
+  side = "bottom",
+  align = "center",
+  sideOffset = -16,
+  delayDuration = 180,
+  contentClassName,
+  variant = "default",
+}) => {
+  if (disabled || !content) return <>{children}</>;
   return (
-    <TooltipProvider>
+    <TooltipProvider delayDuration={delayDuration}>
       <Tooltip>
-        <TooltipTrigger disabled={disabled}>{children}</TooltipTrigger>
+        <TooltipTrigger asChild>
+          <span className="inline-flex">{children}</span>
+        </TooltipTrigger>
+
         <TooltipContent
-          side="bottom"
-          className={cn(tooltipVariants({ variant, className }))}
+          side={side}
+          align={align}
+          sideOffset={sideOffset}
+          className={cn(
+            "rounded-sm bg-[#0f1419] px-2 py-1 text-[11px] leading-4 text-white shadow-[0_4px_14px_rgba(0,0,0,0.28)]",
+            variant === "blueShade" && "bg-blue-500",
+            contentClassName,
+          )}
         >
           {content}
         </TooltipContent>
@@ -44,4 +55,4 @@ const TooltipContainer = ({
   );
 };
 
-export { TooltipContainer, tooltipVariants };
+export default TooltipContainer;
