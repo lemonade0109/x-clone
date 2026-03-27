@@ -80,8 +80,6 @@ export default function CreatePostForm({ userImage }: Props) {
               name="content"
             />
 
-            <input type="hidden" name="image" value={imageUrl || ""} />
-
             {imageUrl && (
               <div className="px-4 py-2 relative">
                 <img

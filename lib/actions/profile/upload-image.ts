@@ -1,7 +1,6 @@
 "use server";
 
 import { v2 as cloudinary } from "cloudinary";
-import { string } from "zod";
 
 cloudinary.config({
   cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
@@ -9,15 +8,19 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
+type UploadTarget = "avatars" | "posts";
+
 export const uploadImageAction = async (
   base64Image: string,
+  target: UploadTarget = "avatars",
 ): Promise<{ url: string | null; error: string | null }> => {
   try {
     const result = await cloudinary.uploader.upload(base64Image, {
-      folder: "x-clone/avatars",
-      transformation: [
-        { width: 400, height: 400, crop: "fill", gravity: "face" },
-      ],
+      folder: target === "avatars" ? "x-clone/avatars" : "x-clone/posts",
+      transformation:
+        target === "avatars"
+          ? [{ width: 400, height: 400, crop: "fill", gravity: "face" }]
+          : [{ quality: "auto", fetch_format: "auto" }],
     });
     return { url: result.secure_url, error: null };
   } catch (error) {

@@ -23,23 +23,12 @@ export function generate6DigitCode() {
 }
 
 // Render error message from different error shapes
-export function renderError(error: unknown): { message: string } {
+export default function renderError(error: unknown): { message: string } {
   console.log(error);
 
-  if (error instanceof Error) {
-    return { message: error.message };
-  }
-
-  try {
-    const maybe = error as { message?: unknown };
-    if (maybe && typeof maybe.message === "string") {
-      return { message: maybe.message };
-    }
-  } catch {
-    // ignore
-  }
-
-  return { message: "An error occurred" };
+  return {
+    message: error instanceof Error ? error.message : "An error occurred",
+  };
 }
 
 // Provide user-friendly error messages based on error types or codes

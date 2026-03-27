@@ -27,9 +27,13 @@ model User {
   updatedAt           DateTime  @updatedAt
   onboardingCompleted Boolean   @default(false)
 
-  accounts Account[]
-  sessions Session[]
-  posts    Post[]
+  accounts  Account[]
+  sessions  Session[]
+  posts     Post[]
+  comments  Comment[]
+  reposts   Repost[]
+  likes     Like[]
+  bookmarks Bookmark[]
 }
 
 model Account {
@@ -79,14 +83,85 @@ model VerificationToken {
 }
 
 model Post {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  content   String
-  image     String?
-  authorId  String   @db.ObjectId
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  content      String
+  image        String?
+  authorId     String   @db.ObjectId
+  profileImage String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  author    User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  comments  Comment[]
+  reposts   Repost[]
+  likes     Like[]
+  bookmarks Bookmark[]
+
+  @@index([authorId, createdAt(sort: Desc)])
+}
+
+model Comment {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  content  String
+  postId   String @db.ObjectId
+  authorId String @db.ObjectId
+
+  // for nested replies
+  parentId  String?  @db.ObjectId
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
   author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
 
+  parent  Comment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  replies Comment[] @relation("CommentReplies")
+
+  @@index([postId, createdAt(sort: Desc)])
+  @@index([authorId])
+}
+
+model Repost {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  postId    String   @db.ObjectId
+  authorId  String   @db.ObjectId
+  createdAt DateTime @default(now())
+
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  // one repost per user per post
+  @@unique([postId, authorId])
   @@index([authorId, createdAt(sort: Desc)])
+  @@index([postId, createdAt(sort: Desc)])
+}
+
+model Like {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  postId    String   @db.ObjectId
+  authorId  String   @db.ObjectId
+  createdAt DateTime @default(now())
+
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  // one like per user per post
+  @@unique([postId, authorId])
+  @@index([authorId, createdAt(sort: Desc)])
+  @@index([postId, createdAt(sort: Desc)])
+}
+
+model Bookmark {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  postId    String   @db.ObjectId
+  authorId  String   @db.ObjectId
+  createdAt DateTime @default(now())
+
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  // one bookmark per user per post
+  @@unique([postId, authorId])
+  @@index([authorId, createdAt(sort: Desc)])
+  @@index([postId, createdAt(sort: Desc)])
 }

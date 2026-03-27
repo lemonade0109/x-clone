@@ -53,19 +53,17 @@ const IconSelectors = (props: IconSelectorsProp) => {
   React.useEffect(() => {
     const fetchTrendingGifs = async () => {
       try {
-        const res = await fetch(
-          `https://api.giphy.com/v1/gifs/trending?api_key=${process.env.NEXT_PUBLIC_GIPHY_API_KEY}&limit=20`,
-        );
+        const res = await fetch("/api/giphy/trending?limit=20");
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
         setGifs(parseGifs(Array.isArray(data?.data) ? data.data : []));
       } catch (error) {
         console.error("Error fetching trending GIFs:", error);
+        setGifs([]);
       }
     };
 
-    if (showGif) {
-      fetchTrendingGifs();
-    }
+    if (showGif) fetchTrendingGifs();
   }, [showGif]);
 
   // Search GIFs
@@ -77,13 +75,15 @@ const IconSelectors = (props: IconSelectorsProp) => {
 
     try {
       const res = await fetch(
-        `https://api.giphy.com/v1/gifs/search?api_key=${process.env.NEXT_PUBLIC_GIPHY_API_KEY}&q=${encodeURIComponent(query)}&limit=20`,
+        `/api/giphy/search?q=${encodeURIComponent(query)}&limit=20`,
       );
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
-      // ✅ use parseGifs not .map to url string
+
       setGifs(parseGifs(Array.isArray(data?.data) ? data.data : []));
     } catch (error) {
       console.error("Error searching GIFs:", error);
+      setGifs([]);
     }
   };
 
