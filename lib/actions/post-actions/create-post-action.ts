@@ -7,6 +7,12 @@ import { revalidatePath } from "next/cache";
 type CreatePostState = {
   success: boolean;
   error?: string;
+  message?: string;
+  toast?: {
+    id?: string;
+    type: "success" | "error" | "info" | "warning";
+    message: string;
+  };
 };
 
 export const createPostAction = async (
@@ -31,6 +37,10 @@ export const createPostAction = async (
       return {
         success: false,
         error: "Post cannot be empty.",
+        toast: {
+          type: "error",
+          message: "Post cannot be empty.",
+        },
       };
     }
 
@@ -38,6 +48,10 @@ export const createPostAction = async (
       return {
         success: false,
         error: "Post must be 280 characters or less.",
+        toast: {
+          type: "error",
+          message: "Post must be 280 characters or less.",
+        },
       };
     }
 
@@ -50,6 +64,10 @@ export const createPostAction = async (
       return {
         success: false,
         error: "User not found.",
+        toast: {
+          type: "error",
+          message: "User not found.",
+        },
       };
     }
 
@@ -64,11 +82,20 @@ export const createPostAction = async (
     revalidatePath("/home");
     return {
       success: true,
+      message: "Post published.",
+      toast: {
+        type: "success",
+        message: "Post published.",
+      },
     };
   } catch {
     return {
       success: false,
       error: "Failed to create post. Please try again.",
+      toast: {
+        type: "error",
+        message: "Failed to create post. Please try again.",
+      },
     };
   }
 };
