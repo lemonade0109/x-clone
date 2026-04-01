@@ -32,9 +32,29 @@ export const createPostAction = async (
     }
 
     const content = String(formData.get("content") || "").trim();
-    const image = formData.get("image") as File | null;
-    console.log(image);
-    let imageUrl = null;
+    const file = formData.get("image") as File | null;
+    const directUrl = String(formData.get("imageUrl") || "").trim();
+    let image: string | null = directUrl || null;
+
+    // upload file if present
+    if (file && file.size > 0) {
+      const bytes = await file.arrayBuffer();
+      const base64 = Buffer.from(bytes).toString("base64");
+      const dataUri = `data:${file.type || "image/*"};base64,${base64}`;
+
+      const uploaded = await uploadImageAction(dataUri, "posts");
+      if (!uploaded?.url) {
+        return {
+          success: false,
+          error: "Failed to upload image.",
+          toast: {
+            type: "error",
+            message: "Failed to upload image.",
+          },
+        };
+      }
+      image = uploaded.url;
+    }
 
     if (!content && !image) {
       return {
@@ -58,18 +78,6 @@ export const createPostAction = async (
       };
     }
 
-    try {
-      if (image && image.size > 0) {
-        const base64 = await image
-          .arrayBuffer()
-          .then((buffer) => Buffer.from(buffer).toString("base64"));
-        const uploadResult = await uploadImageAction(base64, "posts");
-        imageUrl = uploadResult?.url || null;
-      }
-    } catch (error) {
-      console.log("Error uploading image", error);
-    }
-
     const user = await db.user.findUnique({
       where: { email: session.user.email! },
       select: { id: true, image: true },
@@ -89,7 +97,7 @@ export const createPostAction = async (
     await db.post.create({
       data: {
         content,
-        image: imageUrl,
+        image,
         authorId: user.id,
         profileImage: user.image,
       },

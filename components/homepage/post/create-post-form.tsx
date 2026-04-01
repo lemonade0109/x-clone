@@ -106,6 +106,8 @@ export default function CreatePostForm({ userImage }: Props) {
               <p className="px-3 text-sm text-red-500">{state.error}</p>
             )}
 
+            <input type="hidden" name="imageUrl" value={imageUrl || ""} />
+
             <div className="flex justify-between px-2 ">
               <IconSelectors
                 addImageToPost={addImageToPost}
@@ -124,7 +126,7 @@ export default function CreatePostForm({ userImage }: Props) {
                 </div>
               ) : (
                 <SubmitButton
-                  disabled={!content.trim() && !image}
+                  disabled={!content.trim() && !image && !imageUrl}
                   pending={pending}
                 />
               )}
