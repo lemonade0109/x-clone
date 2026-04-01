@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { startTransition } from "react";
 import { MdDeleteOutline } from "react-icons/md";
 import {
   Dialog,
@@ -11,18 +11,41 @@ import {
   DialogTrigger,
 } from "./dialog";
 import { Button } from "./button";
+import { toast } from "sonner";
+import { deletePostAction } from "@/lib/actions/post-actions/delete-post";
 
 const DeleteDialog = ({
-  tweetId,
+  postId,
   authorId,
+  currentUserId,
 }: {
-  tweetId: string;
+  postId: string;
   authorId: string;
+  currentUserId: string;
 }) => {
-  const [isDeletePending, startDeleteTransition] = React.useTransition();
-  const { userId } = useAuth();
-  const { toast } = useToast();
+  const [isPending, startTransition] = React.useTransition();
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
+
+  const handleDelete = () => {
+    if (currentUserId !== authorId) {
+      toast.error("You can only delete your own posts!");
+      return;
+    }
+
+    startTransition(async () => {
+      const res = await deletePostAction(postId);
+
+      if (!res.success) {
+        toast.error(
+          res.error || "Failed to delete the post. Please try again.",
+        );
+        return;
+      }
+
+      toast.success("Post deleted successfully!");
+      setIsDialogOpen(false);
+    });
+  };
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -46,31 +69,19 @@ const DeleteDialog = ({
         <DialogFooter className="my-2">
           <div className="flex flex-col space-y-4 w-full ">
             <Button
-              disabled={isDeletePending}
-              onClick={() => {
-                if (userId === authorId) {
-                  startDeleteTransition(() => {
-                    deleteTweet({ tweetId: tweetId });
-                    toast({
-                      description: "Tweet deleted successfully!",
-                    });
-                  });
-                } else {
-                  toast({
-                    description: "You can only delete your own tweets!",
-                  });
-                }
-              }}
+              disabled={isPending}
+              onClick={handleDelete}
               variant="destructive"
               className=" rounded-full py-8 font-bold text-white"
             >
-              Delete
+              {isPending ? "Deleting..." : "Delete"}
             </Button>
 
             <Button
               variant="outline"
               className="rounded-full py-8 font-bold"
               onClick={() => setIsDialogOpen(false)}
+              disabled={isPending}
             >
               Cancel
             </Button>

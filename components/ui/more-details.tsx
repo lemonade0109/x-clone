@@ -6,7 +6,11 @@ import { HiDotsHorizontal } from "react-icons/hi";
 import { links } from "@/lib/utils";
 import DeleteDialog from "./delete-dialog";
 
-const MoreDetails = (props: { postId: string; authorId: string }) => {
+const MoreDetails = (props: {
+  postId: string;
+  authorId: string;
+  currentUserId: string;
+}) => {
   return (
     <Popover>
       <PopoverTrigger>
@@ -24,7 +28,11 @@ const MoreDetails = (props: { postId: string; authorId: string }) => {
       >
         <ul className="  w-full h-full space-y-6">
           <li>
-            <DeleteDialog authorId={props.authorId} tweetId={props.postId} />
+            <DeleteDialog
+              authorId={props.authorId}
+              postId={props.postId}
+              currentUserId={props.currentUserId}
+            />
           </li>
 
           {links.map((link) => (

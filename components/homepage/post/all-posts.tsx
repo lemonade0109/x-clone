@@ -2,9 +2,11 @@ import { getAllPostsAction } from "@/lib/actions/post-actions/get-all-posts-acti
 import React from "react";
 import AllPostsContainer from "./all-posts-container";
 import { PostProps } from "@/types";
+import { getProfileAction } from "@/lib/actions/profile/get-profile";
 
 const AllPosts: React.FC = async () => {
   const posts = await getAllPostsAction();
+  const currentUser = await getProfileAction();
 
   if (!posts || posts.length === 0) {
     return (
@@ -17,7 +19,11 @@ const AllPosts: React.FC = async () => {
   return (
     <section>
       {posts.map((post) => (
-        <AllPostsContainer key={post.id} posts={{ ...post }} />
+        <AllPostsContainer
+          key={post.id}
+          posts={{ ...post }}
+          currentUser={currentUser}
+        />
       ))}
     </section>
   );

@@ -62,7 +62,7 @@ export type Props = {
   userImage?: string;
 };
 
-export interface PostProps {
+export type PostItem = {
   profileImage: string | null;
   id: string;
   content: string;
@@ -86,5 +86,13 @@ export interface PostProps {
     updatedAt: Date;
     onboardingCompleted: boolean;
   };
-}
-[];
+};
+
+type CurrentUser = {
+  id: string;
+};
+
+export type AllPostContainerProps = {
+  post: PostItem;
+  currentUser: CurrentUser;
+};

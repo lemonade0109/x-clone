@@ -1,5 +1,4 @@
 "use client";
-import { PostProps } from "@/types";
 import dayjs from "dayjs";
 import Image from "next/image";
 import Link from "next/link";
@@ -8,8 +7,12 @@ import React from "react";
 import ProfilePopover from "./profile-popover";
 import { LucideDot } from "lucide-react";
 import MoreDetails from "@/components/ui/more-details";
+import { AllPostContainerProps } from "@/types";
 
-const AllPostsContainer: React.FC<PostProps> = (post) => {
+const AllPostsContainer: React.FC<AllPostContainerProps> = ({
+  post,
+  currentUser,
+}) => {
   const [formattedDate, setFormattedDate] = React.useState("");
   const router = useRouter();
 
@@ -98,7 +101,11 @@ const AllPostsContainer: React.FC<PostProps> = (post) => {
             </div>
           </Link>
 
-          <MoreDetails postId={post.id} authorId={post.authorId} />
+          <MoreDetails
+            postId={post.id}
+            authorId={post.authorId}
+            currentUserId={currentUser.id}
+          />
         </div>
 
         <div
