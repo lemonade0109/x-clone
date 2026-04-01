@@ -22,7 +22,10 @@ model User {
   emailVerified       DateTime?
   image               String?
   bio                 String?
+  website             String?
+  location            String?
   password            String?
+  verified            Boolean   @default(false)
   createdAt           DateTime  @default(now())
   updatedAt           DateTime  @updatedAt
   onboardingCompleted Boolean   @default(false)

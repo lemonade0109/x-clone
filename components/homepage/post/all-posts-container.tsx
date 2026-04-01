@@ -50,108 +50,99 @@ const AllPostsContainer: React.FC<AllPostContainerProps> = ({
   return (
     <article
       key={post.id}
-      className="cursor-pointer border-b border-zinc-200 px-4 py-3 transition hover:bg-zinc-50"
+      className="flex gap-3 cursor-pointer border-b border-zinc-200 px-4 py-3 transition hover:bg-zinc-50"
     >
-      <div className="flex items-center justify-center w-16 h-14 relative">
+      {/* Avatar column */}
+      <div className="shrink-0">
         <ProfilePopover
           name={post.author.name}
-          userName={post.author.username}
+          userName={post.author.username || ""}
           profileImage={post.profileImage || ""}
-          bio={post.author.bio}
+          bio={post.author.bio || ""}
         >
           <Link
-            href={`/${post.author.username}`}
-            className="flex items-center  space-x-1"
+            href={`/${post.author.username || ""}`}
+            className="block w-10 h-10 relative"
+            onClick={(e) => e.stopPropagation()}
           >
             <Image
               src={post.profileImage || ""}
               alt="profile image"
               fill
-              className="rounded-full"
+              className="rounded-full object-cover"
             />
           </Link>
-
-          <p>{post.author.name}</p>
         </ProfilePopover>
       </div>
 
-      <div className="flex flex-col space-y-4 w-full">
-        <div className="flex justify-between ">
-          <Link
-            href={`/${post.author.username}`}
-            className="flex items-center  space-x-1"
-          >
+      {/* Content column */}
+      <div className="flex flex-col flex-1 min-w-0">
+        {/* Header: name · username · time · more */}
+        <div className="flex items-center justify-between gap-1">
+          <div className="flex items-center gap-1 min-w-0">
             <ProfilePopover
               name={post.author.name}
-              userName={post.author.username}
+              userName={post.author.username || ""}
               profileImage={post.profileImage || ""}
-              bio={post.author.bio}
+              bio={post.author.bio || ""}
             >
-              <h3 className="font-bold text-lg truncate hover:underline">
+              <Link
+                href={`/${post.author.username || ""}`}
+                className="font-bold text-md truncate hover:underline"
+                onClick={(e) => e.stopPropagation()}
+              >
                 {post.author.name}
-              </h3>
+              </Link>
             </ProfilePopover>
-            <p className="text-gray-500 tracking-normal truncate ">
-              @{post.author.username}
-            </p>
-            <div className="flex justify-center items-center text-gray-600">
-              <LucideDot />
+            <span className="text-gray-500 text-sm truncate">
+              @{post.author.username || ""}
+            </span>
+            <span className="text-gray-500 flex items-center text-sm shrink-0">
+              <LucideDot className="w-4 h-4" />
+              {formattedDate}
+            </span>
+          </div>
 
-              <p>{formattedDate}</p>
-            </div>
-          </Link>
-
-          <MoreDetails
-            postId={post.id}
-            authorId={post.authorId}
-            currentUserId={currentUser.id}
-          />
+          <div className="shrink-0" onClick={(e) => e.stopPropagation()}>
+            <MoreDetails
+              postId={post.id}
+              authorId={post.authorId}
+              currentUserId={currentUser?.id ?? ""}
+            />
+          </div>
         </div>
 
+        {/* Post body */}
         <div
           onClick={() => {
-            router.push(`/${post.author.username}/status/${post.id}`);
+            router.push(`/${post.author.username || ""}/status/${post.id}`);
           }}
-          className="flex flex-col justify-center space-y-2 cursor-pointer"
+          className="flex flex-col gap-3 mt-1"
         >
-          <p className="text-lg text-start max-w-2xl">{post.content}</p>
+          {post.content && (
+            <p className="text-lg leading-normal wrap-break-words">
+              {post.content}
+            </p>
+          )}
 
           {post.image && (
             <Link
-              href={`/${post.author.username}/status/${post.id}/photo/1`}
-              className=" w-full h-96 rounded-xl relative"
+              href={`/${post.author.username || ""}/status/${post.id}/photo/1`}
+              className="block w-full h-72 relative rounded-2xl overflow-hidden border border-zinc-200"
+              onClick={(e) => e.stopPropagation()}
             >
               <Image
-                src={post.image || ""}
-                alt={"image posted by the user"}
+                src={post.image}
+                alt="image posted by the user"
                 fill
-                className="rounded-xl"
+                className="object-cover"
               />
             </Link>
           )}
         </div>
 
-        {/* <div className="flex justify-between">
-          <CommentIcon
-            name={props.name}
-            profileImage={props.profileImage}
-            tweetId={props.tweetId!}
-            tweetTxt={props.tweetTxt}
-            userName={props.userName}
-            commentCount={props.commentCount}
-          />
-          <RetweetIcon
-            isRetweeted={props.isReposted}
-            id={props.tweetId!}
-            retweetCount={props.repostCount}
-          />
-          <LikeIcon
-            likesCount={props.likeCount}
-            isLiked={props.isLiked}
-            id={props.tweetId!}
-          />
-          <BookmarkIcon isBookmarked={props.isBookmarked} id={props.tweetId!} />
-        </div> */}
+        {/* Action buttons placeholder */}
+        {/* <div className="flex justify-between mt-3"> ... </div> */}
       </div>
     </article>
   );

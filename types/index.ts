@@ -73,18 +73,15 @@ export type PostItem = {
     id: string;
     name: string;
     email: string;
-    username: string;
-    dateOfBirth: Date;
-    emailVerified: boolean;
-    bio: string;
-    location: string;
-    website: string;
-    verified: boolean;
-    image?: string;
-    password: string;
+    username: string | null;
+    bio: string | null;
+    image: string | null;
+    website: string | null;
+    dateOfBirth: Date | null;
+    emailVerified: Date | null;
+    onboardingCompleted: boolean;
     createdAt: Date;
     updatedAt: Date;
-    onboardingCompleted: boolean;
   };
 };
 

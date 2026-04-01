@@ -12,6 +12,7 @@ export const getProfileAction = async () => {
   return await db.user.findUnique({
     where: { id: userId },
     select: {
+      id: true,
       name: true,
       email: true,
       username: true,
