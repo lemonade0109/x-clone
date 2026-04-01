@@ -61,3 +61,30 @@ export type Props = {
   onPosted?: () => void;
   userImage?: string;
 };
+
+export interface PostProps {
+  profileImage: string | null;
+  id: string;
+  content: string;
+  image: string | null;
+  authorId: string;
+  createdAt: Date;
+  author: {
+    id: string;
+    name: string;
+    email: string;
+    username: string;
+    dateOfBirth: Date;
+    emailVerified: boolean;
+    bio: string;
+    location: string;
+    website: string;
+    verified: boolean;
+    image?: string;
+    password: string;
+    createdAt: Date;
+    updatedAt: Date;
+    onboardingCompleted: boolean;
+  };
+}
+[];

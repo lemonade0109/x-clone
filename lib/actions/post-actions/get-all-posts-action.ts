@@ -2,7 +2,7 @@
 
 import { db } from "@/db/db";
 
-export const getPostsAction = async () => {
+export const getAllPostsAction = async () => {
   const posts = await db.post.findMany({
     orderBy: {
       createdAt: "desc",
