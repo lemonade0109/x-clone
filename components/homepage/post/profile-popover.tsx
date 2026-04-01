@@ -25,7 +25,7 @@ const ProfilePopover: React.FC<{
             <div className="flex items-center justify-center w-8 h-8 relative">
               <Link href={`/${userName}`}>
                 <Image
-                  src={profileImage!}
+                  src={profileImage || ""}
                   alt="profile image"
                   fill
                   className="rounded-full"
@@ -48,7 +48,7 @@ const ProfilePopover: React.FC<{
           <div className="text-md">
             <p>
               {bio ||
-                "Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto consectetur quod impedit commodi fuga sit id natus perferendis! 💥"}
+                "(TODO)Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto consectetur quod impedit commodi fuga sit id natus perferendis!💥"}
             </p>
           </div>
 
