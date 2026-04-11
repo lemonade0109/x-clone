@@ -33,7 +33,7 @@ export default async function Homepage() {
   const userProfile = await getProfileAction();
 
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-7xl bg-white text-black">
+    <main className="mx-auto flex min-h-screen w-full max-w-7xl">
       <NavLayoutTemplate
         name={userProfile?.name ?? ""}
         email={userProfile?.email ?? ""}
