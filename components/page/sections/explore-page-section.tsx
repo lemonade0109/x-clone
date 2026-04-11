@@ -33,14 +33,14 @@ const trends = [
 
 const ExplorePageSection: React.FC = () => {
   return (
-    <section className="min-h-screen w-full max-w-150 border-r border-zinc-200">
-      <header className="sticky top-0 z-20 border-b border-zinc-200 bg-white/90 px-4 py-2 backdrop-blur-md">
+    <section className="min-h-screen w-full max-w-150 border-r border-zinc-200 dark:border-zinc-800">
+      <header className="sticky top-0 z-20 border-b border-zinc-200 dark:border-zinc-800 bg-white/90 dark:bg-black/90 px-4 py-2 backdrop-blur-md">
         <div className="flex items-center gap-3">
-          <div className="flex h-11 w-full items-center gap-3 rounded-full bg-zinc-100 px-4 text-zinc-500 transition focus-within:bg-white focus-within:ring-2 focus-within:ring-sky-500">
+          <div className="flex h-11 w-full items-center gap-3 rounded-full bg-zinc-100 dark:bg-zinc-800 px-4 text-zinc-500 transition focus-within:bg-white dark:focus-within:bg-zinc-900 focus-within:ring-2 focus-within:ring-sky-500">
             <Search className="h-5 w-5" />
             <input
               placeholder="Search"
-              className="w-full bg-transparent text-[15px] text-zinc-900 placeholder:text-zinc-500 focus:outline-none"
+              className="w-full bg-transparent text-[15px] text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-500 focus:outline-none"
             />
           </div>
         </div>
@@ -49,8 +49,8 @@ const ExplorePageSection: React.FC = () => {
           {tabs.map((tab, index) => (
             <button
               key={tab}
-              className={`relative py-4 font-medium transition hover:bg-zinc-100 ${
-                index === 0 ? "text-black font-semibold" : "text-zinc-500"
+              className={`relative py-4 font-medium transition hover:bg-zinc-100 dark:hover:bg-zinc-800 ${
+                index === 0 ? "text-black dark:text-white font-semibold" : "text-zinc-500"
               }`}
             >
               {tab}
@@ -62,7 +62,7 @@ const ExplorePageSection: React.FC = () => {
         </div>
       </header>
 
-      <article className="cursor-pointer border-b border-zinc-200 transition hover:bg-zinc-50">
+      <article className="cursor-pointer border-b border-zinc-200 dark:border-zinc-800 transition hover:bg-zinc-50 dark:hover:bg-zinc-900">
         <div className="relative h-52 w-full bg-[linear-gradient(135deg,#0f172a_0%,#1d4ed8_55%,#38bdf8_100%)]">
           <div className="absolute inset-0 bg-black/20" />
           <div className="absolute right-4 bottom-4 left-4 text-white">
@@ -79,11 +79,11 @@ const ExplorePageSection: React.FC = () => {
         {trends.map((trend) => (
           <button
             key={trend.topic}
-            className="flex w-full items-start justify-between border-b border-zinc-200 px-4 py-3 text-left transition hover:bg-zinc-50"
+            className="flex w-full items-start justify-between border-b border-zinc-200 dark:border-zinc-800 px-4 py-3 text-left transition hover:bg-zinc-50 dark:hover:bg-zinc-900"
           >
             <div>
               <p className="text-xs text-zinc-500">{trend.category}</p>
-              <p className="mt-0.5 text-[15px] font-extrabold text-zinc-900">
+              <p className="mt-0.5 text-[15px] font-extrabold text-zinc-900 dark:text-zinc-100">
                 {trend.topic}
               </p>
               <p className="mt-0.5 text-xs text-zinc-500">{trend.posts}</p>

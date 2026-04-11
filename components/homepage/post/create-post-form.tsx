@@ -21,7 +21,7 @@ function SubmitButton({
     <button
       type="submit"
       disabled={disabled || pending}
-      className="h-9 min-w-18 rounded-full bg-black px-4 text-[15px] font-bold text-white transition hover:bg-gray-800 disabled:bg-gray-400 disabled:text-white/70"
+      className="h-9 min-w-18 rounded-full bg-black dark:bg-white px-4 text-[15px] font-bold text-white dark:text-black transition hover:bg-gray-800 dark:hover:bg-white/90 disabled:bg-gray-400 disabled:text-white/70 dark:disabled:bg-gray-500 dark:disabled:text-black/70"
     >
       {pending ? "Posting..." : "Post"}
     </button>
@@ -59,7 +59,7 @@ export default function CreatePostForm({ userImage }: Props) {
     >
       {({ pending, state }) => (
         <div className="flex w-full gap-3">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-zinc-200 font-semibold">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-zinc-200 dark:bg-zinc-700 font-semibold">
             {userImage ? (
               <img
                 src={userImage}

@@ -31,18 +31,18 @@ const TrendingSideBar = async () => {
     <aside className="sticky top-0 hidden h-screen min-w-[320px] flex-col px-4 py-2 lg:flex">
       <div className="flex flex-col gap-4 overflow-y-auto scrollbar-hide">
         {/* Search bar */}
-        <div className="sticky top-0 bg-white py-2 z-10">
+        <div className="sticky top-0 bg-white dark:bg-black py-2 z-10">
           <SearchBar />
         </div>
 
         {/* Trends for you */}
-        <section className="rounded-2xl bg-zinc-100">
+        <section className="rounded-2xl bg-zinc-100 dark:bg-zinc-800/60">
           <h2 className="px-4 pt-3 pb-1 text-xl font-extrabold">Trends for you</h2>
           {trends.map((trend) => (
             <Link
               key={trend.topic}
               href={`/explore?q=${encodeURIComponent(trend.topic)}`}
-              className="flex w-full items-start justify-between px-4 py-3 text-left transition hover:bg-zinc-200/70"
+              className="flex w-full items-start justify-between px-4 py-3 text-left transition hover:bg-zinc-200/70 dark:hover:bg-zinc-700/50"
             >
               <div className="min-w-0">
                 <p className="text-xs text-zinc-500">{trend.category}</p>
@@ -54,14 +54,14 @@ const TrendingSideBar = async () => {
           ))}
           <Link
             href="/explore"
-            className="block rounded-b-2xl px-4 py-3 text-sm text-sky-500 transition hover:bg-zinc-200/70"
+            className="block rounded-b-2xl px-4 py-3 text-sm text-sky-500 transition hover:bg-zinc-200/70 dark:hover:bg-zinc-700/50"
           >
             Show more
           </Link>
         </section>
 
         {/* Who to follow */}
-        <section className="rounded-2xl bg-zinc-100">
+        <section className="rounded-2xl bg-zinc-100 dark:bg-zinc-800/60">
           <h2 className="px-4 pt-3 pb-1 text-xl font-extrabold">Who to follow</h2>
 
           {suggestedUsers.length === 0 ? (
@@ -70,7 +70,7 @@ const TrendingSideBar = async () => {
             suggestedUsers.map((user) => (
               <div
                 key={user.id}
-                className="flex items-center justify-between px-4 py-3 transition hover:bg-zinc-200/70"
+                className="flex items-center justify-between px-4 py-3 transition hover:bg-zinc-200/70 dark:hover:bg-zinc-700/50"
               >
                 <Link
                   href={`/${user.username ?? ""}`}
@@ -85,7 +85,7 @@ const TrendingSideBar = async () => {
                         className="rounded-full object-cover"
                       />
                     ) : (
-                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-300 text-sm font-bold text-zinc-600">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-300 dark:bg-zinc-600 text-sm font-bold text-zinc-600 dark:text-zinc-300">
                         {user.name?.[0]?.toUpperCase() ?? "?"}
                       </div>
                     )}
@@ -111,7 +111,7 @@ const TrendingSideBar = async () => {
 
           <Link
             href="/explore"
-            className="block rounded-b-2xl px-4 py-3 text-sm text-sky-500 transition hover:bg-zinc-200/70"
+            className="block rounded-b-2xl px-4 py-3 text-sm text-sky-500 transition hover:bg-zinc-200/70 dark:hover:bg-zinc-700/50"
           >
             Show more
           </Link>

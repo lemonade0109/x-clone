@@ -33,13 +33,13 @@ const bookmarkedPosts = [
 
 const BookmarkPageSection: React.FC = () => {
   return (
-    <section className="min-h-screen w-full max-w-150 border-r border-zinc-200">
-      <header className="sticky top-0 z-20 border-b border-zinc-200 bg-white/90 px-4 py-2 backdrop-blur-md">
+    <section className="min-h-screen w-full max-w-150 border-r border-zinc-200 dark:border-zinc-800">
+      <header className="sticky top-0 z-20 border-b border-zinc-200 dark:border-zinc-800 bg-white/90 dark:bg-black/90 px-4 py-2 backdrop-blur-md">
         <h1 className="text-xl leading-tight font-extrabold">Bookmarks</h1>
         <p className="text-[13px] text-zinc-500">@jubril1234</p>
       </header>
 
-      <div className="border-b border-zinc-200 px-4 py-2.5 text-sm text-zinc-500">
+      <div className="border-b border-zinc-200 dark:border-zinc-800 px-4 py-2.5 text-sm text-zinc-500">
         <p>Only you can see your bookmarks.</p>
       </div>
 
@@ -47,7 +47,7 @@ const BookmarkPageSection: React.FC = () => {
         {bookmarkedPosts.map((post) => (
           <article
             key={post.id}
-            className="cursor-pointer border-b border-zinc-200 px-4 py-3 transition hover:bg-zinc-50"
+            className="cursor-pointer border-b border-zinc-200 dark:border-zinc-800 px-4 py-3 transition hover:bg-zinc-50 dark:hover:bg-zinc-900"
           >
             <div className="mb-2 flex items-center gap-2 text-[13px] font-medium text-zinc-500">
               <BookmarkCheck className="h-4 w-4" />
@@ -55,7 +55,7 @@ const BookmarkPageSection: React.FC = () => {
             </div>
 
             <div className="flex gap-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-zinc-300 font-semibold">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-zinc-300 dark:bg-zinc-600 font-semibold">
                 {post.name[0]}
               </div>
 
@@ -70,7 +70,7 @@ const BookmarkPageSection: React.FC = () => {
                   <Ellipsis className="ml-auto h-5 w-5 text-zinc-500" />
                 </div>
 
-                <p className="mt-1 text-[15px] leading-6 text-zinc-900">{post.text}</p>
+                <p className="mt-1 text-[15px] leading-6 text-zinc-900 dark:text-zinc-100">{post.text}</p>
 
                 <div className="mt-3 grid grid-cols-4 text-sm text-zinc-500">
                   <span>{post.stats.replies}</span>

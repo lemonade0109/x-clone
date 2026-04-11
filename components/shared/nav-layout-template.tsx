@@ -6,6 +6,7 @@ import MoreDropdownMenu from "../homepage/more-dropdown-menu";
 import Link from "next/link";
 import { Home, Search, Bell, Mail, Bookmark, Users, User } from "lucide-react";
 import Image from "next/image";
+import { FaXTwitter } from "react-icons/fa6";
 import { usePathname } from "next/navigation";
 
 export type UserProfile = {
@@ -63,20 +64,21 @@ const NavLayoutTemplate = ({ username, name, image }: UserProfile) => {
   ];
 
   return (
-    <aside className="sticky top-0 hidden h-screen w-22 shrink-0 border-r border-zinc-200 px-3 py-3 lg:block xl:w-68.75">
+    <aside className="sticky top-0 hidden h-screen w-22 shrink-0 border-r border-zinc-200 dark:border-zinc-800 px-3 py-3 lg:block xl:w-68.75">
       <div className="flex h-full flex-col justify-between">
         <div className="space-y-1 ">
           <Link
             href="/home"
-            className="mb-2 inline-flex h-12 w-12 items-center justify-center rounded-full  transition hover:bg-zinc-100"
+            className="mb-2 inline-flex h-12 w-12 items-center justify-center rounded-full  transition hover:bg-zinc-100 dark:hover:bg-zinc-800"
           >
-            <Image
+            {/* <Image
               alt="x image"
               src="/image.jpg"
               width={58}
               height={58}
               className="object-contain mx-auto"
-            />
+            /> */}
+            <FaXTwitter className="w-7 h-7" />
           </Link>
 
           {navItems.map((item) => (
@@ -84,7 +86,7 @@ const NavLayoutTemplate = ({ username, name, image }: UserProfile) => {
               key={item.label}
               href={item.href}
               aria-current={item.isActive ? "page" : undefined}
-              className="group flex items-center gap-4 rounded-full px-3 py-3 transition hover:bg-zinc-100"
+              className="group flex items-center gap-4 rounded-full px-3 py-3 transition hover:bg-zinc-100 dark:hover:bg-zinc-800"
             >
               <item.icon
                 className="h-7 w-7"
@@ -100,7 +102,7 @@ const NavLayoutTemplate = ({ username, name, image }: UserProfile) => {
 
           <MoreDropdownMenu username={username} />
 
-          <button className="mt-10 hidden w-full rounded-full bg-black px-8 py-3 text-[15px] font-bold text-white transition hover:bg-zinc-800 xl:block">
+          <button className="mt-10 hidden w-full rounded-full bg-black dark:bg-white px-8 py-3 text-[15px] font-bold text-white dark:text-black transition hover:bg-zinc-800 dark:hover:bg-white/90 xl:block">
             Post
           </button>
         </div>

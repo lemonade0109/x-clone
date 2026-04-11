@@ -50,7 +50,7 @@ const AllPostsContainer: React.FC<AllPostContainerProps> = ({
   return (
     <article
       key={post.id}
-      className="flex gap-3 cursor-pointer border-b border-zinc-200 px-4 py-3 transition hover:bg-zinc-50"
+      className="flex gap-3 cursor-pointer border-b border-zinc-200 dark:border-zinc-800 px-4 py-3 transition hover:bg-zinc-50 dark:hover:bg-zinc-900"
     >
       {/* Avatar column */}
       <div className="shrink-0">
@@ -128,7 +128,7 @@ const AllPostsContainer: React.FC<AllPostContainerProps> = ({
           {post.image && (
             <Link
               href={`/${post.author.username || ""}/status/${post.id}/photo/1`}
-              className="block w-full h-72 relative rounded-2xl overflow-hidden border border-zinc-200"
+              className="block w-full h-72 relative rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-800"
               onClick={(e) => e.stopPropagation()}
             >
               <Image

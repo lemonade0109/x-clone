@@ -10,14 +10,14 @@ const tabs = ["For you", "Following"];
 
 const HomeSection: React.FC<HomeSectionProps> = ({ userImage }) => {
   return (
-    <section className="min-h-screen w-full max-w-150 border-r border-zinc-200">
-      <header className="sticky top-0 z-20 border-b border-zinc-200 bg-white/80 backdrop-blur-md">
+    <section className="min-h-screen w-full max-w-150 border-r border-zinc-200 dark:border-zinc-800">
+      <header className="sticky top-0 z-20 border-b border-zinc-200 dark:border-zinc-800 bg-white/80 dark:bg-black/80 backdrop-blur-md">
         <div className="grid grid-cols-2 text-sm">
           {tabs.map((tab, index) => (
             <button
               key={tab}
-              className={`relative py-4 font-semibold transition hover:bg-zinc-100 ${
-                index === 0 ? "text-black" : "text-zinc-500"
+              className={`relative py-4 font-semibold transition hover:bg-zinc-100 dark:hover:bg-zinc-800 ${
+                index === 0 ? "text-black dark:text-white" : "text-zinc-500"
               }`}
             >
               {tab}
@@ -29,7 +29,7 @@ const HomeSection: React.FC<HomeSectionProps> = ({ userImage }) => {
         </div>
       </header>
 
-      <div className="border-b border-zinc-200 px-4 pt-4">
+      <div className="border-b border-zinc-200 dark:border-zinc-800 px-4 pt-4">
         <CreatePostForm userImage={userImage} />
       </div>
 
