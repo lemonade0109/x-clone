@@ -31,13 +31,15 @@ const TrendingSideBar = async () => {
     <aside className="sticky top-0 hidden h-screen min-w-[320px] flex-col px-4 py-2 lg:flex">
       <div className="flex flex-col gap-4 overflow-y-auto scrollbar-hide">
         {/* Search bar */}
-        <div className="sticky top-0 bg-white dark:bg-black py-2 z-10">
+        <div className="sticky top-0 bg-white dark:bg-black py-2 z-10 px-2">
           <SearchBar />
         </div>
 
         {/* Trends for you */}
         <section className="rounded-2xl bg-zinc-100 dark:bg-zinc-800/60">
-          <h2 className="px-4 pt-3 pb-1 text-xl font-extrabold">Trends for you</h2>
+          <h2 className="px-4 pt-3 pb-1 text-xl font-extrabold">
+            Trends for you
+          </h2>
           {trends.map((trend) => (
             <Link
               key={trend.topic}
@@ -62,10 +64,14 @@ const TrendingSideBar = async () => {
 
         {/* Who to follow */}
         <section className="rounded-2xl bg-zinc-100 dark:bg-zinc-800/60">
-          <h2 className="px-4 pt-3 pb-1 text-xl font-extrabold">Who to follow</h2>
+          <h2 className="px-4 pt-3 pb-1 text-xl font-extrabold">
+            Who to follow
+          </h2>
 
           {suggestedUsers.length === 0 ? (
-            <p className="px-4 py-3 text-sm text-zinc-500">No suggestions yet.</p>
+            <p className="px-4 py-3 text-sm text-zinc-500">
+              No suggestions yet.
+            </p>
           ) : (
             suggestedUsers.map((user) => (
               <div
@@ -119,11 +125,21 @@ const TrendingSideBar = async () => {
 
         {/* Footer */}
         <footer className="flex flex-wrap gap-x-2 gap-y-1 px-4 pb-4 text-xs text-zinc-500">
-          <Link href="#" className="hover:underline">Terms of Service</Link>
-          <Link href="#" className="hover:underline">Privacy Policy</Link>
-          <Link href="#" className="hover:underline">Cookie Policy</Link>
-          <Link href="#" className="hover:underline">Accessibility</Link>
-          <Link href="#" className="hover:underline">Ads info</Link>
+          <Link href="#" className="hover:underline">
+            Terms of Service
+          </Link>
+          <Link href="#" className="hover:underline">
+            Privacy Policy
+          </Link>
+          <Link href="#" className="hover:underline">
+            Cookie Policy
+          </Link>
+          <Link href="#" className="hover:underline">
+            Accessibility
+          </Link>
+          <Link href="#" className="hover:underline">
+            Ads info
+          </Link>
           <span>© 2026 X Corp.</span>
         </footer>
       </div>

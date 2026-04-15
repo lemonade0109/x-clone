@@ -19,7 +19,7 @@ const SearchBar = () => {
       <Search className="h-5 w-5 flex-shrink-0" />
       <input
         type="text"
-        placeholder="Search"
+        placeholder="Search(todo)"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         onKeyDown={handleKeyDown}
