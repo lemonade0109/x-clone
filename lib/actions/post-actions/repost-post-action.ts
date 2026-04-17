@@ -1,34 +1,37 @@
 "use server";
 
-import { auth } from "@/auth";
 import { db } from "@/db/db";
 import { getFriendlyErrorMessage } from "@/lib/utils";
 import { revalidatePath } from "next/cache";
+import { validateUserSession } from "../auth/validate-user-session";
 
 export const toggleRepostAction = async (postId: string) => {
   try {
-    const session = await auth();
-    if (!session?.user?.email)
-      return { success: false, error: "Unauthorized." };
-
-    const user = await db.user.findUnique({
-      where: { email: session.user.email },
-      select: { id: true },
-    });
-    if (!user) return { success: false, error: "User not found." };
+    const userValidation = await validateUserSession();
+    if (!userValidation?.success) {
+      return {
+        success: false,
+        error: userValidation?.error,
+        toast: {
+          type: "error",
+          message: userValidation?.error,
+        },
+      };
+    }
+    const user = userValidation.user;
 
     const existingRepost = await db.repost.findUnique({
-      where: { postId_authorId: { authorId: user.id, postId } },
+      where: { postId_authorId: { authorId: user?.id ?? "", postId } },
     });
 
     if (existingRepost) {
       await db.repost.delete({
-        where: { postId_authorId: { postId, authorId: user.id } },
+        where: { postId_authorId: { postId, authorId: user?.id ?? "" } },
       });
     } else {
       await db.repost.create({
         data: {
-          authorId: user.id,
+          authorId: user?.id ?? "",
           postId,
         },
       });
@@ -41,6 +44,10 @@ export const toggleRepostAction = async (postId: string) => {
     return {
       success: false,
       error: getFriendlyErrorMessage(error),
+      toast: {
+        type: "error",
+        message: getFriendlyErrorMessage(error),
+      },
     };
   }
 };
