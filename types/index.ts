@@ -99,3 +99,14 @@ export type PostState = {
     message: string;
   };
 };
+
+export interface PostyourreplyButtonProps {
+  username: string;
+  postId: string;
+  profileImage: string;
+  setIsCommentOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+  comments: string;
+  setComments: React.Dispatch<React.SetStateAction<string>>;
+  handleComments: () => void;
+  isPending: boolean;
+}

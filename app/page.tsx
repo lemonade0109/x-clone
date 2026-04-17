@@ -1,25 +1,27 @@
-"use client";
 import OAuthButtons from "@/components/auth/oauth-buttons";
 import HomepageLinks from "@/components/homepage/homepage-links";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
+import { FaXTwitter } from "react-icons/fa6";
 
 export default function HomePage() {
   return (
     <>
       <div className="grid grid-cols-2">
         <div className="flex items-center justify-center p-6 md:p-8 lg:p-10">
-          <div className="relative w-[clamp(260px,72vw,430px)] h-[clamp(220px,60vw,360px)] md:w-[clamp(320px,38vw,610px)] md:h-[clamp(280px,32vw,500px)]">
-            <Image
+          {/* <div className="relative w-[clamp(260px,72vw,430px)] h-[clamp(220px,60vw,360px)] md:w-[clamp(320px,38vw,610px)] md:h-[clamp(280px,32vw,500px)]">
+             <Image
               alt="x image"
               src="/image1.jpg"
               fill
               priority
               className="object-contain"
               sizes="(max-width: 768px) 72vw, 38vw"
-            />
-          </div>
+            /> 
+          </div>  */}
+
+          <FaXTwitter size={400} />
         </div>
         <div className="flex flex-col px-6 py-12 md:px-8 md:py-16 lg:px-10 lg:py-40 items-start justify-start">
           <h1 className="text-7xl font-extrabold ml-12">Happening now</h1>

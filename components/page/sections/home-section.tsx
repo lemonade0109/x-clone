@@ -5,10 +5,14 @@ import AllPosts from "@/components/homepage/post/all-posts";
 
 interface HomeSectionProps {
   userImage: string;
+  currentUserId: string | null;
 }
 const tabs = ["For you", "Following"];
 
-const HomeSection: React.FC<HomeSectionProps> = ({ userImage }) => {
+const HomeSection: React.FC<HomeSectionProps> = ({
+  userImage,
+  currentUserId,
+}) => {
   return (
     <section className="min-h-screen w-full max-w-150 border-r border-zinc-200 dark:border-zinc-800">
       <header className="sticky top-0 z-20 border-b border-zinc-200 dark:border-zinc-800 bg-white/80 dark:bg-black/80 backdrop-blur-md">
@@ -33,7 +37,7 @@ const HomeSection: React.FC<HomeSectionProps> = ({ userImage }) => {
         <CreatePostForm userImage={userImage} />
       </div>
 
-      <AllPosts />
+      <AllPosts currentUserId={currentUserId} />
     </section>
   );
 };

@@ -8,7 +8,7 @@ import ProfilePopover from "./profile-popover";
 import { LucideDot } from "lucide-react";
 import MoreDetails from "@/components/ui/more-details";
 import { AllPostContainerProps } from "@/types";
-import PostActionBar from "./post-action-bar";
+import PostActionBar from "./post-action-bar-v2";
 
 const AllPostsContainer: React.FC<AllPostContainerProps> = ({
   post,
@@ -58,7 +58,7 @@ const AllPostsContainer: React.FC<AllPostContainerProps> = ({
         <ProfilePopover
           name={post.author.name}
           userName={post.author.username || ""}
-          profileImage={post.profileImage || ""}
+          profileImage={post.author.image || ""}
           bio={post.author.bio || ""}
         >
           <Link
@@ -67,7 +67,7 @@ const AllPostsContainer: React.FC<AllPostContainerProps> = ({
             onClick={(e) => e.stopPropagation()}
           >
             <Image
-              src={post.profileImage || ""}
+              src={post.author.image || ""}
               alt="profile image"
               fill
               className="rounded-full object-cover"
@@ -84,7 +84,7 @@ const AllPostsContainer: React.FC<AllPostContainerProps> = ({
             <ProfilePopover
               name={post.author.name}
               userName={post.author.username || ""}
-              profileImage={post.profileImage || ""}
+              profileImage={post.author.image || ""}
               bio={post.author.bio || ""}
             >
               <Link
@@ -147,15 +147,15 @@ const AllPostsContainer: React.FC<AllPostContainerProps> = ({
           postId={post.id}
           content={post.content || ""}
           username={post.author.username || ""}
-          profileImage={post.profileImage || ""}
+          profileImage={post.author.image || ""}
           authorName={post.author.name}
           isLiked={post.isLiked}
           isReposted={post.isReposted}
           isBookmarked={post.isBookmarked}
-          likesCount={post.likesCount}
-          commentsCount={post.commentsCount}
-          repostsCount={post.repostsCount}
-          bookmarkCount={post.bookmarksCount}
+          likesCount={post.likeCount}
+          commentsCount={post.commentCount}
+          repostsCount={post.repostCount}
+          bookmarkCount={post.bookmarkCount}
         />
       </div>
     </article>

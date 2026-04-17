@@ -3,47 +3,49 @@ import NavLayoutTemplate from "@/components/shared/nav-layout-template";
 import TrendingSideBar from "@/components/shared/trending-sidebar";
 import { auth } from "@/auth";
 import { db } from "@/db/db";
-import { unstable_noStore as noStore } from "next/cache";
 import OnboardingModal from "@/components/auth/multistep-signup-modal/onboarding-modal";
-import { getProfileAction } from "@/lib/actions/profile/get-profile";
+import { Suspense } from "react";
 
 export default async function Homepage() {
-  noStore();
   const session = await auth();
 
-  let showOnboarding = false;
-  let initialUsername: string | null = null;
-  let initialImage: string | null = null;
+  const user = session?.user?.id
+    ? await db.user.findUnique({
+        where: { id: session.user.id },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          username: true,
+          image: true,
+          onboardingCompleted: true,
+        },
+      })
+    : null;
 
-  if (session?.user?.id) {
-    const user = await db.user.findUnique({
-      where: { id: session.user.id },
-      select: {
-        onboardingCompleted: true,
-        username: true,
-        image: true,
-      },
-    });
-
-    showOnboarding = !user?.onboardingCompleted;
-    initialUsername = user?.username ?? null;
-    initialImage = user?.image ?? null;
-  }
-
-  const userProfile = await getProfileAction();
+  const showOnboarding = !!user && !user.onboardingCompleted;
+  const initialUsername = user?.username ?? null;
+  const initialImage = user?.image ?? null;
 
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-7xl">
       <NavLayoutTemplate
-        name={userProfile?.name ?? ""}
-        email={userProfile?.email ?? ""}
-        username={userProfile?.username ?? ""}
-        image={userProfile?.image ?? ""}
+        name={user?.name ?? ""}
+        email={user?.email ?? ""}
+        username={user?.username ?? ""}
+        image={user?.image ?? ""}
       />
 
-      <HomeSection userImage={userProfile?.image ?? ""} />
+      <Suspense fallback={<div className="w-full p-4">Loading timeline...</div>}>
+        <HomeSection
+          userImage={user?.image ?? ""}
+          currentUserId={user?.id ?? null}
+        />
+      </Suspense>
 
-      <TrendingSideBar />
+      <Suspense fallback={<div className="hidden lg:block w-[350px] p-4">Loading...</div>}>
+        <TrendingSideBar />
+      </Suspense>
 
       {showOnboarding ? (
         <OnboardingModal

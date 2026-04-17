@@ -1,58 +1,57 @@
 "use server";
 
-import { auth } from "@/auth";
 import { db } from "@/db/db";
 
-export const getAllPostsAction = async () => {
-  const session = await auth();
-  const email = session?.user.email;
-
-  const currentUser = email
-    ? await db.user.findUnique({ where: { email }, select: { id: true } })
-    : null;
-
+export async function getAllPostsAction({
+  currentUserId,
+}: {
+  currentUserId: string | null;
+}) {
   const posts = await db.post.findMany({
-    orderBy: {
-      createdAt: "desc",
-    },
-    include: {
-      author: true,
+    orderBy: { createdAt: "desc" },
+    select: {
+      id: true,
+      content: true,
+      image: true,
+      authorId: true,
+      createdAt: true,
+      author: {
+        select: {
+          id: true,
+          name: true,
+          username: true,
+          image: true,
+          bio: true,
+        },
+      },
       _count: {
         select: {
           likes: true,
-          comments: true,
           reposts: true,
+          comments: true,
           bookmarks: true,
         },
       },
-      likes: currentUser ? { where: { authorId: currentUser.id } } : false,
-      reposts: currentUser ? { where: { authorId: currentUser.id } } : false,
-      bookmarks: currentUser ? { where: { authorId: currentUser.id } } : false,
+      likes: currentUserId
+        ? { where: { authorId: currentUserId }, select: { id: true } }
+        : false,
+      reposts: currentUserId
+        ? { where: { authorId: currentUserId }, select: { id: true } }
+        : false,
+      bookmarks: currentUserId
+        ? { where: { authorId: currentUserId }, select: { id: true } }
+        : false,
     },
   });
 
   return posts.map((post) => ({
     ...post,
-    likesCount: post._count.likes,
-    commentsCount: post._count.comments,
-    repostsCount: post._count.reposts,
-    bookmarksCount: post._count.bookmarks,
-    isLiked: post.likes.length > 0,
-    isReposted: post.reposts.length > 0,
-    isBookmarked: post.bookmarks.length > 0,
+    likeCount: post._count.likes,
+    repostCount: post._count.reposts,
+    commentCount: post._count.comments,
+    bookmarkCount: post._count.bookmarks,
+    isLiked: Array.isArray(post.likes) && post.likes.length > 0,
+    isReposted: Array.isArray(post.reposts) && post.reposts.length > 0,
+    isBookmarked: Array.isArray(post.bookmarks) && post.bookmarks.length > 0,
   }));
-};
-
-// Without like, comment, repost and bookmark
-// export const getAllPostsAction = async () => {
-//   const posts = await db.post.findMany({
-//     orderBy: {
-//       createdAt: "desc",
-//     },
-//     include: {
-//       author: true,
-//     },
-//   });
-
-//   return posts;
-// };
+}
