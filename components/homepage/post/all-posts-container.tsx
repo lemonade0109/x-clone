@@ -8,6 +8,7 @@ import ProfilePopover from "./profile-popover";
 import { LucideDot } from "lucide-react";
 import MoreDetails from "@/components/ui/more-details";
 import { AllPostContainerProps } from "@/types";
+import PostActionBar from "./post-action-bar";
 
 const AllPostsContainer: React.FC<AllPostContainerProps> = ({
   post,
@@ -142,7 +143,20 @@ const AllPostsContainer: React.FC<AllPostContainerProps> = ({
         </div>
 
         {/* Action buttons placeholder */}
-        {/* <div className="flex justify-between mt-3"> ... </div> */}
+        <PostActionBar
+          postId={post.id}
+          content={post.content || ""}
+          username={post.author.username || ""}
+          profileImage={post.profileImage || ""}
+          authorName={post.author.name}
+          isLiked={post.isLiked}
+          isReposted={post.isReposted}
+          isBookmarked={post.isBookmarked}
+          likesCount={post.likesCount}
+          commentsCount={post.commentsCount}
+          repostsCount={post.repostsCount}
+          bookmarkCount={post.bookmarksCount}
+        />
       </div>
     </article>
   );

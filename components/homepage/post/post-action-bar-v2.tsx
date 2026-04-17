@@ -2,6 +2,7 @@
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -11,7 +12,7 @@ import { toggleBookmarkAction } from "@/lib/actions/post-actions/bookmark-post-a
 import { createCommentAction } from "@/lib/actions/post-actions/comment-post-action";
 import { toggleLikeAction } from "@/lib/actions/post-actions/like-post-action";
 import { toggleRepostAction } from "@/lib/actions/post-actions/repost-post-action";
-import React from "react";
+import React, { Fragment } from "react";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { BiComment } from "react-icons/bi";
 import { AiOutlineRetweet } from "react-icons/ai";
@@ -21,6 +22,10 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { PostActionBarProps } from "@/types";
 import { FaComment } from "react-icons/fa";
+import Link from "next/link";
+import { TooltipContainerV2 } from "@/components/ui/tooltip-container-v2";
+import Image from "next/image";
+import PostyourreplyButton from "./post-your-reply-button";
 
 const PostActionBar: React.FC<PostActionBarProps> = ({
   postId,
@@ -31,6 +36,10 @@ const PostActionBar: React.FC<PostActionBarProps> = ({
   isLiked,
   isReposted,
   isBookmarked,
+  username,
+  profileImage,
+  authorName,
+  content,
 }) => {
   const [liked, setLiked] = React.useState(isLiked);
   const [reposted, setReposted] = React.useState(isReposted);
@@ -114,41 +123,67 @@ const PostActionBar: React.FC<PostActionBarProps> = ({
       onClick={(e) => e.stopPropagation()}
     >
       {/* Comment */}
-      <Dialog open={isCommentOpen} onOpenChange={setIsCommentOpen}>
-        <TooltipContainer content="Reply" side="bottom">
-          <DialogTrigger asChild>
-            <button
-              type="button"
-              className="group flex items-center gap-2 text-zinc-500 hover:text-sky-500"
-            >
-              <span className="flex h-9 w-9 items-center justify-center rounded-full group-hover:bg-sky-500/15">
-                <FaComment className="h-5 w-5" />
-              </span>
-              <span className="text-sm">{commentsCount}</span>
-            </button>
-          </DialogTrigger>
-        </TooltipContainer>
+      <TooltipContainerV2 content="Reply" variant="blackShade">
+        <div className="flex items-center justify-center group">
+          <Fragment>
+            <Dialog open={isCommentOpen} onOpenChange={setIsCommentOpen}>
+              <DialogTrigger asChild>
+                <div className="flex items-center justify-center group-hover:bg-twitter/30 rounded-full w-10 h-10">
+                  <FaComment className="w-6 h-6 text-gray-500 group-hover:text-twitter " />
+                </div>
+              </DialogTrigger>
 
-        <DialogContent className="max-w-md rounded-2xl">
-          <DialogHeader>
-            <DialogTitle className="text-xl font-bold">Reply</DialogTitle>
-          </DialogHeader>
+              <DialogContent className="flex flex-col max-w-3xl h-auto py-12 space-y-0 lg:rounded-3xl">
+                <DialogHeader>
+                  <DialogTitle className="flex items-center space-x-4">
+                    <div className="w-12 h-12  rounded-full relative">
+                      <Image
+                        src={profileImage}
+                        alt={"Profile Image"}
+                        fill
+                        className="rounded-full"
+                      />
+                    </div>
 
-          <textarea
-            value={comments}
-            onChange={(e) => setComments(e.target.value)}
-            placeholder="Post your reply(TODO:make it real like Twitter's)"
-            className="h-32 w-full resize-none rounded-xl border border-zinc-200 p-3 text-lg outline-none focus:border-sky-500"
-          />
-          <Button
-            onClick={handleComment}
-            disabled={isPending || !comments.trim()}
-            className="ml-auto rounded-full px-6 font-bold"
-          >
-            {isPending ? "Posting..." : "Post Reply"}
-          </Button>
-        </DialogContent>
-      </Dialog>
+                    <div className="flex justify-between ">
+                      <Link
+                        href={`/${username}`}
+                        className="flex items-center space-x-2"
+                      >
+                        <h3 className="font-bold text-lg truncate">
+                          {authorName}
+                        </h3>
+                        <p className="text-gray-500 tracking-normal truncate">
+                          @{username}
+                        </p>
+                      </Link>
+                    </div>
+                  </DialogTitle>
+
+                  <DialogDescription className="max-w-sm pl-16">
+                    <span className="text-lg text-white">{content}</span>
+                  </DialogDescription>
+                </DialogHeader>
+
+                <PostyourreplyButton
+                  profileImage={profileImage}
+                  username={username}
+                  comments={comments}
+                  postId={postId}
+                  setIsCommentOpen={setIsCommentOpen}
+                  setComments={setComments}
+                  handleComments={handleComment}
+                  isPending={isPending}
+                />
+              </DialogContent>
+            </Dialog>
+
+            <span className="text-gray-500 group-hover:text-twitter">
+              {commentsCount ?? 0}
+            </span>
+          </Fragment>
+        </div>
+      </TooltipContainerV2>
 
       {/* Repost */}
       <TooltipContainer content="Repost" side="bottom">

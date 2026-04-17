@@ -1,3 +1,4 @@
+import { getAllPostsAction } from "@/lib/actions/post-actions/get-all-posts-action";
 import { fullSignUpSchema } from "@/lib/validators";
 import z from "zod";
 
@@ -62,27 +63,21 @@ export type Props = {
   userImage?: string;
 };
 
-export type PostItem = {
-  profileImage: string | null;
-  id: string;
+export type PostItem = Awaited<ReturnType<typeof getAllPostsAction>>[number];
+
+export type PostActionBarProps = {
+  postId: string;
+  likesCount: number;
+  commentsCount: number;
+  repostsCount: number;
+  bookmarkCount: number;
+  isLiked: boolean;
+  isReposted: boolean;
+  isBookmarked: boolean;
+  username: string;
+  profileImage: string;
+  authorName: string;
   content: string;
-  image: string | null;
-  authorId: string;
-  createdAt: Date;
-  author: {
-    id: string;
-    name: string;
-    email: string;
-    username: string | null;
-    bio: string | null;
-    image: string | null;
-    website: string | null;
-    dateOfBirth: Date | null;
-    emailVerified: Date | null;
-    onboardingCompleted: boolean;
-    createdAt: Date;
-    updatedAt: Date;
-  };
 };
 
 type CurrentUser = {
