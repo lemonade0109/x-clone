@@ -12,7 +12,7 @@ import {
 } from "./dialog";
 import { Button } from "./button";
 import { toast } from "sonner";
-import { deletePostAction } from "@/lib/actions/post-actions/delete-post";
+import { deletePostAction } from "@/lib/actions/post-actions/delete-post-action";
 
 const DeleteDialog = ({
   postId,

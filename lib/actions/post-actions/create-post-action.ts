@@ -5,22 +5,12 @@ import { db } from "@/db/db";
 import { revalidatePath } from "next/cache";
 import { uploadImageAction } from "../profile/upload-image";
 import renderError from "@/lib/utils";
-
-type CreatePostState = {
-  success: boolean;
-  error?: string;
-  message?: string;
-  toast?: {
-    id?: string;
-    type: "success" | "error" | "info" | "warning";
-    message: string;
-  };
-};
+import { PostState } from "@/types";
 
 export const createPostAction = async (
-  prevState: CreatePostState,
+  prevState: PostState,
   formData: FormData,
-): Promise<CreatePostState> => {
+): Promise<PostState> => {
   try {
     const session = await auth();
 

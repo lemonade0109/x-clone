@@ -93,3 +93,14 @@ export type AllPostContainerProps = {
   post: PostItem;
   currentUser: CurrentUser;
 };
+
+export type PostState = {
+  success: boolean;
+  error?: string;
+  message?: string;
+  toast?: {
+    id?: string;
+    type: "success" | "error" | "info" | "warning";
+    message: string;
+  };
+};
