@@ -18,10 +18,12 @@ export const toggleLikeAction = async (postId: string) => {
     });
     if (!user) return { success: false, error: "User not found." };
 
-    const existingLike = await db.like.findFirst({
+    const existingLike = await db.like.findUnique({
       where: {
-        userId: user.id,
-        postId,
+        postId_authorId: {
+          authorId: user.id,
+          postId,
+        },
       },
     });
 
@@ -40,6 +42,7 @@ export const toggleLikeAction = async (postId: string) => {
     revalidatePath("/home");
     return { success: true, liked: !existingLike };
   } catch (error) {
+    console.log(error);
     return {
       success: false,
       error: getFriendlyErrorMessage(error),
