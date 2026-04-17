@@ -1,11 +1,10 @@
 "use server";
 
 import { db } from "@/db/db";
-import {
+import renderError, {
   hashCode,
   MAX_ATTEMPTS,
   normalizeEmail,
-  renderError,
 } from "@/lib/utils";
 
 export const verifyRequestCodeAction = async (input: {
