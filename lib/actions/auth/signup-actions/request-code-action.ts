@@ -2,12 +2,11 @@
 
 import { db } from "@/db/db";
 import { sendSignupCodeEmail } from "@/lib/mail/templates/send-signup-code-email";
-import {
+import renderError, {
   CODE_TTL_MINUTES,
   generate6DigitCode,
   hashCode,
   normalizeEmail,
-  renderError,
 } from "@/lib/utils";
 
 export const requestCodeAction = async (input: { email: string }) => {
