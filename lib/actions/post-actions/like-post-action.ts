@@ -7,18 +7,18 @@ import { validateUserSession } from "../auth/validate-user-session";
 
 export const toggleLikeAction = async (postId: string) => {
   try {
-    const userValidate = await validateUserSession();
-    if (!userValidate?.success) {
+    const userValidation = await validateUserSession();
+    if (!userValidation?.success) {
       return {
         success: false,
-        error: userValidate?.error,
+        error: userValidation?.error,
         toast: {
           type: "error",
-          message: userValidate?.error,
+          message: userValidation?.error,
         },
       };
     }
-    const user = userValidate.user;
+    const user = userValidation.user;
 
     const existingLike = await db.like.findUnique({
       where: {
