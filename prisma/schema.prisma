@@ -25,6 +25,7 @@ model User {
   website             String?
   location            String?
   password            String?
+  coverImage          String?
   verified            Boolean   @default(false)
   createdAt           DateTime  @default(now())
   updatedAt           DateTime  @updatedAt
@@ -37,6 +38,8 @@ model User {
   reposts   Repost[]
   likes     Like[]
   bookmarks Bookmark[]
+  following Follow[]   @relation("following")
+  followers Follow[]   @relation("followers")
 }
 
 model Account {
@@ -104,11 +107,11 @@ model Post {
 }
 
 model Comment {
-  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
   content  String
   image    String?
-  postId   String @db.ObjectId
-  authorId String @db.ObjectId
+  postId   String  @db.ObjectId
+  authorId String  @db.ObjectId
 
   // for nested replies
   parentId  String?  @db.ObjectId
@@ -168,4 +171,18 @@ model Bookmark {
   @@unique([postId, authorId])
   @@index([authorId, createdAt(sort: Desc)])
   @@index([postId, createdAt(sort: Desc)])
+}
+
+model Follow {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  followerId  String   @db.ObjectId
+  followingId String   @db.ObjectId
+  createdAt   DateTime @default(now())
+
+  follower  User @relation("following", fields: [followerId], references: [id], onDelete: Cascade)
+  following User @relation("followers", fields: [followingId], references: [id], onDelete: Cascade)
+
+  @@unique([followerId, followingId])
+  @@index([followerId, createdAt(sort: Desc)])
+  @@index([followingId, createdAt(sort: Desc)])
 }
