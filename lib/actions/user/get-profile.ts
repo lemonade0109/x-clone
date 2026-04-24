@@ -20,7 +20,7 @@ export const getProfileAction = async () => {
       name: true,
       username: true,
       bio: true,
-      profileImage: true,
+      image: true,
       coverImage: true,
       createdAt: true,
       location: true,
