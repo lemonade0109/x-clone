@@ -122,8 +122,9 @@ const PostComposer: React.FC<PostComposerProps> = ({
 
         {error && <p className="text-sm text-red-500">{error}</p>}
 
-        <div className="flex items-center justify-between">
-          {showMediaSelectors && addImageToPost ? (
+        <div className="flex items-center justify-between mb-3">
+          {showMediaSelectors &&
+          (addImageToPost || onEmojiSelect || onGifSelect) ? (
             <IconSelectors
               addImageToPost={addImageToPost}
               onEmojiSelect={onEmojiSelect}

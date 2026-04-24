@@ -8,7 +8,7 @@ import TooltipContainer from "./tooltip-container";
 import EmojiPicker from "emoji-picker-react";
 
 export type IconSelectorsProp = {
-  addImageToPost: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  addImageToPost?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onEmojiSelect?: (emoji: string) => void;
   onGifSelect?: (gifUrl: string) => void;
 };
@@ -139,31 +139,33 @@ const IconSelectors = (props: IconSelectorsProp) => {
   return (
     <div className="flex items-center gap-1">
       {/* Media */}
-      <TooltipContainer content="media" side="bottom">
-        <div className="group">
-          <button
-            type="button"
-            className="w-11 h-11 flex items-center justify-center group-hover:bg-[#1d9bf0]/15 rounded-full z-10"
-          >
-            <HiOutlinePhotograph
-              onClick={handleImageClick}
-              className="h-10 w-10 p-2 text-sky-500 group-hover:text-[#1d9bf0] rounded-full cursor-pointer "
+      {addImageToPost && (
+        <TooltipContainer content="media" side="bottom" variant="blueShade">
+          <div className="group">
+            <button
+              type="button"
+              className="w-11 h-11 flex items-center justify-center group-hover:bg-[#1d9bf0]/15 rounded-full z-10"
+            >
+              <HiOutlinePhotograph
+                onClick={handleImageClick}
+                className="h-10 w-10 p-2 text-sky-500 group-hover:text-[#1d9bf0] rounded-full cursor-pointer "
+              />
+            </button>
+            <Input
+              id="imageInput"
+              type="file"
+              ref={imagePickRef}
+              onChange={addImageToPost}
+              accept="image/*"
+              className="hidden"
+              name={name}
             />
-          </button>
-          <Input
-            id="imageInput"
-            type="file"
-            ref={imagePickRef}
-            onChange={addImageToPost}
-            accept="image/*"
-            className="hidden"
-            name={name}
-          />
-        </div>
-      </TooltipContainer>
+          </div>
+        </TooltipContainer>
+      )}
 
       {/* GIF */}
-      <TooltipContainer content="GIF" side="bottom">
+      <TooltipContainer content="GIF" side="bottom" variant="blueShade">
         <div className="group relative" ref={gifModalRef}>
           <button
             type="button"
@@ -226,7 +228,7 @@ const IconSelectors = (props: IconSelectorsProp) => {
       </TooltipContainer>
 
       {/* Emoji */}
-      <TooltipContainer content="emoji" side="bottom">
+      <TooltipContainer content="emoji" side="bottom" variant="blueShade">
         <div className="group relative" ref={emojiModalRef}>
           <button
             type="button"

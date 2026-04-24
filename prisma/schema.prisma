@@ -106,6 +106,7 @@ model Post {
 model Comment {
   id       String @id @default(auto()) @map("_id") @db.ObjectId
   content  String
+  image    String?
   postId   String @db.ObjectId
   authorId String @db.ObjectId
 

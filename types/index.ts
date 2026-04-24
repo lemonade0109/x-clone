@@ -107,6 +107,6 @@ export interface PostyourreplyButtonProps {
   setIsCommentOpen?: React.Dispatch<React.SetStateAction<boolean>>;
   comments: string;
   setComments: React.Dispatch<React.SetStateAction<string>>;
-  handleComments: () => void;
+  handleComments: (mediaUrl?: string | null) => void;
   isPending: boolean;
 }

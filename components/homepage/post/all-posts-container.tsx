@@ -51,7 +51,7 @@ const AllPostsContainer: React.FC<AllPostContainerProps> = ({
   return (
     <article
       key={post.id}
-      className="flex gap-3 cursor-pointer border-b border-zinc-200 dark:border-zinc-800 px-4 py-3 transition hover:bg-zinc-50 dark:hover:bg-zinc-900"
+      className="flex gap-3 cursor-pointer border-b border-zinc-200 dark:border-zinc-800 px-4 py-3 transition hover:bg-zinc-200 dark:hover:bg-zinc-800/30"
     >
       {/* Avatar column */}
       <div className="shrink-0">
@@ -137,6 +137,7 @@ const AllPostsContainer: React.FC<AllPostContainerProps> = ({
                 alt="image posted by the user"
                 fill
                 className="object-cover"
+                unoptimized={post.image.toLowerCase().includes(".gif")}
               />
             </Link>
           )}

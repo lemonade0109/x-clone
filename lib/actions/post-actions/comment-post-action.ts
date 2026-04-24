@@ -5,8 +5,26 @@ import { validateUserSession } from "../auth/validate-user-session";
 import { db } from "@/db/db";
 import { revalidatePath } from "next/cache";
 
-export const createCommentAction = async (postId: string, content: string) => {
+export const createCommentAction = async (
+  postId: string,
+  content: string,
+  mediaUrl?: string | null,
+) => {
   try {
+    const trimmedContent = content.trim();
+    const normalizedMediaUrl = mediaUrl?.trim();
+
+    if (!trimmedContent && !normalizedMediaUrl) {
+      return {
+        success: false,
+        error: "Reply cannot be empty.",
+        toast: {
+          type: "error",
+          message: "Reply cannot be empty.",
+        },
+      };
+    }
+
     const userValidation = await validateUserSession();
     if (!userValidation?.success) {
       return {
@@ -24,7 +42,8 @@ export const createCommentAction = async (postId: string, content: string) => {
       data: {
         authorId: user?.id ?? "",
         postId,
-        content,
+        content: trimmedContent,
+        image: normalizedMediaUrl || null,
       },
     });
     revalidatePath("/home");

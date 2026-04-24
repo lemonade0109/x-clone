@@ -18,7 +18,7 @@ import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
 import { FiShare } from "react-icons/fi";
 import { toast } from "sonner";
 import { PostActionBarProps } from "@/types";
-import { FaComment } from "react-icons/fa";
+import { FaRegComment } from "react-icons/fa6";
 import Link from "next/link";
 import TooltipContainer from "@/components/ui/tooltip-container";
 import Image from "next/image";
@@ -94,11 +94,11 @@ const PostActionBar: React.FC<PostActionBarProps> = ({
     });
   };
 
-  const handleComment = () => {
-    if (!comments.trim()) return;
+  const handleComment = (mediaUrl?: string | null) => {
+    if (!comments.trim() && !mediaUrl?.trim()) return;
 
     startTransition(async () => {
-      const res = await createCommentAction(postId, comments);
+      const res = await createCommentAction(postId, comments, mediaUrl);
       if (!res.success) {
         toast.error(res.error || "Failed to comment.");
         return;
@@ -126,11 +126,11 @@ const PostActionBar: React.FC<PostActionBarProps> = ({
             <Dialog open={isCommentOpen} onOpenChange={setIsCommentOpen}>
               <DialogTrigger asChild>
                 <div className="flex items-center justify-center group-hover:bg-sky/30 rounded-full w-10 h-10">
-                  <FaComment className="w-6 h-6 text-gray-500 group-hover:text-sky-500 " />
+                  <FaRegComment className="w-5 h-5 text-gray-500 group-hover:text-sky-500 " />
                 </div>
               </DialogTrigger>
 
-              <DialogContent className="flex flex-col max-w-3xl h-auto py-12 space-y-0 lg:rounded-3xl">
+              <DialogContent className="flex flex-col max-w-3xl h-auto py-12 gap-24 lg:rounded-3xl">
                 <DialogHeader>
                   <DialogTitle className="flex items-center space-x-4">
                     <div className="w-12 h-12  rounded-full relative">
@@ -175,7 +175,7 @@ const PostActionBar: React.FC<PostActionBarProps> = ({
               </DialogContent>
             </Dialog>
 
-            <span className="text-gray-500 group-hover:text-twitter">
+            <span className="text-gray-500 group-hover:text-sky-500">
               {commentsCount ?? 0}
             </span>
           </Fragment>

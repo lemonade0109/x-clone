@@ -25,7 +25,7 @@ const TooltipContainer: React.FC<TooltipContainerProps> = ({
   disabled = false,
   side = "bottom",
   align = "center",
-  sideOffset = -16,
+  sideOffset = 8,
   delayDuration = 180,
   contentClassName,
   variant = "default",
@@ -44,7 +44,7 @@ const TooltipContainer: React.FC<TooltipContainerProps> = ({
           sideOffset={sideOffset}
           className={cn(
             "rounded-sm bg-[#0f1419] px-2 py-1 text-[11px] leading-4 text-white shadow-[0_4px_14px_rgba(0,0,0,0.28)]",
-            variant === "blueShade" && "bg-blue-500",
+            variant === "blueShade" && "bg-sky-500/20",
             contentClassName,
           )}
         >
