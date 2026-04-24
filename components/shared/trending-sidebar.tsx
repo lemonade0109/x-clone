@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import SearchBar from "./search-bar";
-import { getSuggestedUsersAction } from "@/lib/actions/profile/get-suggested-users-action";
+import { getSuggestedUsersAction } from "@/lib/actions/user/get-suggested-users-action";
 
 const trends = [
   {

@@ -2,7 +2,7 @@ import NavLayoutTemplate from "@/components/shared/nav-layout-template";
 import BookmarkPageSection from "@/components/page/sections/bookmark-page-section";
 import TrendingSideBar from "@/components/shared/trending-sidebar";
 import React from "react";
-import { getProfileAction } from "@/lib/actions/profile/get-profile";
+import { getProfileAction } from "@/lib/actions/user/get-profile";
 
 export default async function BookmarkPage() {
   const userData = await getProfileAction();

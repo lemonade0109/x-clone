@@ -10,7 +10,7 @@ import {
   checkUsernameAvailabilityAction,
   completeOnboardingAction,
 } from "@/lib/actions/onboarding-action";
-import { uploadImageAction } from "@/lib/actions/profile/upload-image";
+import { uploadImageAction } from "@/lib/actions/user/upload-image";
 import { LoaderCircle } from "lucide-react";
 
 type Props = {

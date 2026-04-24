@@ -1,6 +1,6 @@
 import ExplorePageSection from "@/components/page/sections/explore-page-section";
 import NavLayoutTemplate from "@/components/shared/nav-layout-template";
-import { getProfileAction } from "@/lib/actions/profile/get-profile";
+import { getProfileAction } from "@/lib/actions/user/get-profile";
 import { Verified } from "lucide-react";
 import React from "react";
 

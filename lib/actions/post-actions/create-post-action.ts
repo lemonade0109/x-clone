@@ -3,7 +3,7 @@
 import { auth } from "@/auth";
 import { db } from "@/db/db";
 import { revalidatePath } from "next/cache";
-import { uploadImageAction } from "../profile/upload-image";
+import { uploadImageAction } from "../user/upload-image";
 import renderError from "@/lib/utils";
 import { PostState } from "@/types";
 
