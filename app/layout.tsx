@@ -34,15 +34,15 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${geistMono.variable} antialiased min-h-screen bg-white text-black dark:bg-black dark:text-white`}
       >
-        <ThemeProvider>
-          <AuthSessionProvider>
-            <TooltipProvider>
+        <TooltipProvider>
+          <ThemeProvider>
+            <AuthSessionProvider>
               {auth}
               {children}
               <Toaster />
-            </TooltipProvider>
-          </AuthSessionProvider>
-        </ThemeProvider>
+            </AuthSessionProvider>
+          </ThemeProvider>
+        </TooltipProvider>
       </body>
     </html>
   );

@@ -7,23 +7,20 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import TooltipContainer from "@/components/ui/tooltip-container";
 import { toggleBookmarkAction } from "@/lib/actions/post-actions/bookmark-post-action";
 import { createCommentAction } from "@/lib/actions/post-actions/comment-post-action";
 import { toggleLikeAction } from "@/lib/actions/post-actions/like-post-action";
 import { toggleRepostAction } from "@/lib/actions/post-actions/repost-post-action";
 import React, { Fragment } from "react";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
-import { BiComment } from "react-icons/bi";
 import { AiOutlineRetweet } from "react-icons/ai";
 import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
 import { FiShare } from "react-icons/fi";
 import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
 import { PostActionBarProps } from "@/types";
 import { FaComment } from "react-icons/fa";
 import Link from "next/link";
-import { TooltipContainerV2 } from "@/components/ui/tooltip-container-v2";
+import TooltipContainer from "@/components/ui/tooltip-container";
 import Image from "next/image";
 import PostyourreplyButton from "./post-your-reply-button";
 
@@ -123,13 +120,13 @@ const PostActionBar: React.FC<PostActionBarProps> = ({
       onClick={(e) => e.stopPropagation()}
     >
       {/* Comment */}
-      <TooltipContainerV2 content="Reply" variant="blackShade">
+      <TooltipContainer content="Reply" side="bottom">
         <div className="flex items-center justify-center group">
           <Fragment>
             <Dialog open={isCommentOpen} onOpenChange={setIsCommentOpen}>
               <DialogTrigger asChild>
-                <div className="flex items-center justify-center group-hover:bg-twitter/30 rounded-full w-10 h-10">
-                  <FaComment className="w-6 h-6 text-gray-500 group-hover:text-twitter " />
+                <div className="flex items-center justify-center group-hover:bg-sky/30 rounded-full w-10 h-10">
+                  <FaComment className="w-6 h-6 text-gray-500 group-hover:text-sky-500 " />
                 </div>
               </DialogTrigger>
 
@@ -183,7 +180,7 @@ const PostActionBar: React.FC<PostActionBarProps> = ({
             </span>
           </Fragment>
         </div>
-      </TooltipContainerV2>
+      </TooltipContainer>
 
       {/* Repost */}
       <TooltipContainer content="Repost" side="bottom">

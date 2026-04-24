@@ -33,17 +33,23 @@ export default async function Homepage() {
         name={user?.name ?? ""}
         email={user?.email ?? ""}
         username={user?.username ?? ""}
-        image={user?.image ?? ""}
+        profileImage={user?.image ?? ""}
       />
 
-      <Suspense fallback={<div className="w-full p-4">Loading timeline...</div>}>
+      <Suspense
+        fallback={<div className="w-full p-4">Loading timeline...</div>}
+      >
         <HomeSection
           userImage={user?.image ?? ""}
           currentUserId={user?.id ?? null}
         />
       </Suspense>
 
-      <Suspense fallback={<div className="hidden lg:block w-[350px] p-4">Loading...</div>}>
+      <Suspense
+        fallback={
+          <div className="hidden lg:block w-[350px] p-4">Loading...</div>
+        }
+      >
         <TrendingSideBar />
       </Suspense>
 

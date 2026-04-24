@@ -13,10 +13,10 @@ export type UserProfile = {
   name: string;
   email?: string;
   username: string;
-  image: string;
+  profileImage: string;
 };
 
-const NavLayoutTemplate = ({ username, name, image }: UserProfile) => {
+const NavLayoutTemplate = ({ username, name, profileImage }: UserProfile) => {
   const pathname = usePathname();
 
   const navItems = [
@@ -107,7 +107,11 @@ const NavLayoutTemplate = ({ username, name, image }: UserProfile) => {
           </button>
         </div>
 
-        <ProfileDropdownMenu username={username} name={name} image={image} />
+        <ProfileDropdownMenu
+          username={username}
+          name={name}
+          profileImage={profileImage}
+        />
       </div>
     </aside>
   );

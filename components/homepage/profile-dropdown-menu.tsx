@@ -13,7 +13,7 @@ import { UserProfile } from "../shared/nav-layout-template";
 export default function ProfileDropdownMenu({
   username,
   name,
-  image,
+  profileImage,
 }: UserProfile) {
   const [mounted, setMounted] = React.useState(false);
 
@@ -29,8 +29,12 @@ export default function ProfileDropdownMenu({
         aria-hidden
       >
         <div className="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-200 dark:bg-zinc-700 font-semibold">
-          {image ? (
-            <img src={image} alt={name} className="h-10 w-10 rounded-full" />
+          {profileImage ? (
+            <img
+              src={profileImage}
+              alt={name}
+              className="h-10 w-10 rounded-full"
+            />
           ) : (
             name.charAt(0)
           )}
@@ -44,8 +48,12 @@ export default function ProfileDropdownMenu({
       <DropdownMenuTrigger asChild>
         <button className="mb-1 flex items-center gap-3 rounded-full px-3 py-3 text-left transition hover:bg-zinc-100 dark:hover:bg-zinc-800">
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-200 dark:bg-zinc-700 font-semibold">
-            {image ? (
-              <img src={image} alt={name} className="h-10 w-10 rounded-full" />
+            {profileImage ? (
+              <img
+                src={profileImage}
+                alt={name}
+                className="h-10 w-10 rounded-full"
+              />
             ) : (
               name.charAt(0)
             )}
