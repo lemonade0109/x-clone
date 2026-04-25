@@ -1,4 +1,4 @@
-import ProfilePageSection from "@/components/page/sections/profile-page-section";
+import ProfilePageSection from "@/components/page/sections/profile/profile-page-section";
 import NavLayoutTemplate from "@/components/shared/nav-layout-template";
 import TrendingSideBar from "@/components/shared/trending-sidebar";
 import { getProfileAction } from "@/lib/actions/user/get-profile";
