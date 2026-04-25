@@ -2,18 +2,26 @@ import ProfilePageSection from "@/components/page/sections/profile/profile-page-
 import NavLayoutTemplate from "@/components/shared/nav-layout-template";
 import TrendingSideBar from "@/components/shared/trending-sidebar";
 import { getProfileAction } from "@/lib/actions/user/get-profile";
+import { notFound } from "next/navigation";
+import { Suspense } from "react";
 
 export default async function ProfilePage() {
-  const userData = await getProfileAction();
+  const profile = await getProfileAction();
+  if (!profile) notFound();
+
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-7xl bg-white text-black">
       <NavLayoutTemplate
-        username={userData?.username ?? ""}
-        name={userData?.name ?? ""}
-        profileImage={userData?.image ?? ""}
+        username={profile.username ?? ""}
+        name={profile.name ?? ""}
+        profileImage={profile.image ?? ""}
       />
-      <ProfilePageSection profileId="Jubril" />
-      <TrendingSideBar />
+
+      <ProfilePageSection profileId={profile.username ?? ""} />
+
+      <Suspense fallback={null}>
+        <TrendingSideBar />
+      </Suspense>
     </main>
   );
 }

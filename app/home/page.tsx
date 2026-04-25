@@ -5,6 +5,7 @@ import { auth } from "@/auth";
 import { db } from "@/db/db";
 import OnboardingModal from "@/components/auth/multistep-signup-modal/onboarding-modal";
 import { Suspense } from "react";
+import { CgSpinner } from "react-icons/cg";
 
 export default async function Homepage() {
   const session = await auth();
@@ -36,18 +37,17 @@ export default async function Homepage() {
         profileImage={user?.image ?? ""}
       />
 
-      <Suspense
-        fallback={<div className="w-full p-4">Loading timeline...</div>}
-      >
-        <HomeSection
-          userImage={user?.image ?? ""}
-          currentUserId={user?.id ?? null}
-        />
-      </Suspense>
+      <HomeSection
+        userImage={user?.image ?? ""}
+        currentUserId={user?.id ?? null}
+      />
 
       <Suspense
         fallback={
-          <div className="hidden lg:block w-[350px] p-4">Loading...</div>
+          <CgSpinner
+            className="mx-auto mt-5 animate-spin text-2xl text-sky-500"
+            size={24}
+          />
         }
       >
         <TrendingSideBar />
