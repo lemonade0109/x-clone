@@ -8,28 +8,88 @@ import {
 } from "lucide-react";
 
 type ProfilePageSectionProps = {
-  profileId: string;
+  profile: {
+    followersCount: number;
+    followingCount: number;
+    postsCount: number;
+    isFollowing: boolean;
+    isOwner: boolean;
+    currentUserId: string | null;
+    name: string;
+    id: string;
+    username: string | null;
+    image: string | null;
+    bio: string | null;
+    website: string | null;
+    location: string | null;
+    coverImage: string | null;
+    verified: boolean;
+    createdAt: Date;
+    onboardingCompleted: boolean;
+    followers: {
+      id: string;
+      createdAt: Date;
+      followerId: string;
+      followingId: string;
+    }[];
+    _count: {
+      posts: number;
+      following: number;
+      followers: number;
+    };
+  };
+  posts: {
+    likeCount: number;
+    repostCount: number;
+    commentCount: number;
+    bookmarkCount: number;
+    isLiked: boolean;
+    isReposted: boolean;
+    isBookmarked: boolean;
+    id: string;
+    image: string | null;
+    createdAt: Date;
+    content: string;
+    authorId: string;
+    reposts: {
+      id: string;
+      createdAt: Date;
+      authorId: string;
+      postId: string;
+    }[];
+    likes: {
+      id: string;
+      createdAt: Date;
+      authorId: string;
+      postId: string;
+    }[];
+    bookmarks: {
+      id: string;
+      createdAt: Date;
+      authorId: string;
+      postId: string;
+    }[];
+    _count: {
+      comments: number;
+      reposts: number;
+      likes: number;
+      bookmarks: number;
+    };
+    author: {
+      name: string;
+      id: string;
+      username: string | null;
+      image: string | null;
+      bio: string | null;
+    };
+  }[];
 };
 
-const tabs = ["Posts", "Replies", "Highlights", "Articles", "Media", "Likes"];
-
-const posts = [
-  {
-    id: 1,
-    time: "2h",
-    text: "Building this X clone with Next.js + Tailwind. Focusing on clean rhythm and interaction polish.",
-    stats: { replies: "18", reposts: "27", likes: "304", views: "12K" },
-  },
-  {
-    id: 2,
-    time: "8h",
-    text: "Small UX updates ship big value: active states, spacing consistency, and predictable navigation patterns.",
-    stats: { replies: "9", reposts: "14", likes: "182", views: "8,921" },
-  },
-];
-
-const ProfilePageSection: React.FC<ProfilePageSectionProps> = ({ profileId }) => {
-  const handle = profileId.startsWith("@") ? profileId : `@${profileId}`;
+const ProfilePageSection: React.FC<ProfilePageSectionProps> = ({
+  profile,
+  posts,
+}) => {
+  const handle = profile.username ? `@${profile.username}` : "";
 
   return (
     <section className="min-h-screen w-full max-w-150 border-r border-zinc-200">
@@ -106,7 +166,7 @@ const ProfilePageSection: React.FC<ProfilePageSectionProps> = ({ profileId }) =>
         </div>
       </div>
 
-      <nav className="grid grid-cols-6 border-b border-zinc-200 text-[15px]">
+      {/* <nav className="grid grid-cols-6 border-b border-zinc-200 text-[15px]">
         {tabs.map((tab, index) => (
           <button
             key={tab}
@@ -121,7 +181,7 @@ const ProfilePageSection: React.FC<ProfilePageSectionProps> = ({ profileId }) =>
             ) : null}
           </button>
         ))}
-      </nav>
+      </nav> */}
 
       <div>
         {posts.map((post) => (
@@ -133,7 +193,7 @@ const ProfilePageSection: React.FC<ProfilePageSectionProps> = ({ profileId }) =>
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-zinc-300 font-semibold">
                 J
               </div>
-              <div className="min-w-0 flex-1">
+              {/* <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-1.5 text-[15px]">
                   <span className="truncate font-bold">Jubril</span>
                   <Verified className="h-4 w-4 fill-sky-500 text-white" />
@@ -150,7 +210,7 @@ const ProfilePageSection: React.FC<ProfilePageSectionProps> = ({ profileId }) =>
                   <span>{post.stats.likes}</span>
                   <span>{post.stats.views}</span>
                 </div>
-              </div>
+              </div> */}
             </div>
           </article>
         ))}
