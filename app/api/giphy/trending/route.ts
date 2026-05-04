@@ -21,6 +21,7 @@ export async function GET(req: NextRequest) {
     const text = await res.text();
 
     if (!res.ok) {
+      console.error(`[Giphy trending] ${res.status} ${res.statusText}:`, text);
       return NextResponse.json(
         { error: `Giphy error ${res.status}`, raw: text },
         { status: 502 },
