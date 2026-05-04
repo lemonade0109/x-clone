@@ -25,9 +25,11 @@ export const metadata: Metadata = {
 export default function RootLayout({
   auth,
   children,
+  modal,
 }: Readonly<{
   auth: React.ReactNode;
   children: React.ReactNode;
+  modal: React.ReactNode;
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
@@ -39,6 +41,7 @@ export default function RootLayout({
             <AuthSessionProvider>
               {auth}
               {children}
+              {modal}
               <Toaster />
             </AuthSessionProvider>
           </ThemeProvider>
