@@ -80,6 +80,41 @@ export type PostActionBarProps = {
   content: string;
 };
 
+export type ProfileUserInfo = {
+  followersCount: number;
+  followingCount: number;
+  postsCount: number;
+  isFollowing: boolean;
+  isOwner: boolean;
+  currentUserId: string | null;
+  name: string;
+  id: string;
+  username: string | null;
+  image: string | null;
+  bio: string | null;
+  website: string | null;
+  location: string | null;
+  coverImage: string | null;
+  verified: boolean;
+  createdAt: Date;
+  onboardingCompleted: boolean;
+};
+
+export type ProfileReply = {
+  id: string;
+  content: string;
+  createdAt: Date;
+  postId: string;
+  post: {
+    id: string;
+    author: {
+      username: string | null;
+    };
+  };
+};
+
+export type ProfileTab = "posts" | "replies" | "media" | "likes";
+
 type CurrentUser = {
   id: string;
 };

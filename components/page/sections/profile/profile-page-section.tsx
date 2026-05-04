@@ -9,88 +9,20 @@ import { FaCalendarDays } from "react-icons/fa6";
 import dayjs from "dayjs";
 import { CgSpinner } from "react-icons/cg";
 import AllPostsContainer from "@/components/homepage/post/all-posts-container";
+import { PostItem, ProfileReply, ProfileTab, ProfileUserInfo } from "@/types";
 
 type ProfilePageSectionProps = {
-  profile: {
-    followersCount: number;
-    followingCount: number;
-    postsCount: number;
-    isFollowing: boolean;
-    isOwner: boolean;
-    currentUserId: string | null;
-    name: string;
-    id: string;
-    username: string | null;
-    image: string | null;
-    bio: string | null;
-    website: string | null;
-    location: string | null;
-    coverImage: string | null;
-    verified: boolean;
-    createdAt: Date;
-    onboardingCompleted: boolean;
-    followers: {
-      id: string;
-      createdAt: Date;
-      followerId: string;
-      followingId: string;
-    }[];
-    _count: {
-      posts: number;
-      following: number;
-      followers: number;
-    };
-  };
-  posts: {
-    likeCount: number;
-    repostCount: number;
-    commentCount: number;
-    bookmarkCount: number;
-    isLiked: boolean;
-    isReposted: boolean;
-    isBookmarked: boolean;
-    id: string;
-    image: string | null;
-    createdAt: Date;
-    content: string;
-    authorId: string;
-    reposts: {
-      id: string;
-      createdAt: Date;
-      authorId: string;
-      postId: string;
-    }[];
-    likes: {
-      id: string;
-      createdAt: Date;
-      authorId: string;
-      postId: string;
-    }[];
-    bookmarks: {
-      id: string;
-      createdAt: Date;
-      authorId: string;
-      postId: string;
-    }[];
-    _count: {
-      comments: number;
-      reposts: number;
-      likes: number;
-      bookmarks: number;
-    };
-    author: {
-      name: string;
-      id: string;
-      username: string | null;
-      image: string | null;
-      bio: string | null;
-    };
-  }[];
+  profile: ProfileUserInfo;
+  posts: PostItem[];
+  replies: ProfileReply[];
+  activeTab: ProfileTab;
 };
 
 const ProfilePageSection: React.FC<ProfilePageSectionProps> = ({
   profile,
   posts,
+  replies,
+  activeTab,
 }) => {
   const handle = profile.username ? `@${profile.username}` : "";
 
@@ -206,7 +138,7 @@ const ProfilePageSection: React.FC<ProfilePageSectionProps> = ({
       </div>
 
       {/* Posts Tab */}
-      <ProfileTabs />
+      <ProfileTabs username={profile.username ?? ""} activeTab={activeTab} />
 
       {/* Posts */}
       <Suspense
@@ -217,7 +149,26 @@ const ProfilePageSection: React.FC<ProfilePageSectionProps> = ({
           />
         }
       >
-        {posts.length === 0 ? (
+        {activeTab === "replies" ? (
+          replies.length === 0 ? (
+            <div className="p-8 text-center text-zinc-500">No replies yet.</div>
+          ) : (
+            replies.map((reply) => (
+              <Link
+                key={reply.id}
+                href={`/${reply.post.author.username}/status/${reply.postId}`}
+                className="block border-b border-zinc-200 px-4 py-4 transition hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-950"
+              >
+                <p className="text-sm text-zinc-500">
+                  Replying to @{reply.post.author.username}
+                </p>
+                <p className="mt-1 whitespace-pre-wrap text-[15px]">
+                  {reply.content}
+                </p>
+              </Link>
+            ))
+          )
+        ) : posts.length === 0 ? (
           <div className="p-8 text-center text-zinc-500">No posts yet.</div>
         ) : (
           posts.map((post) => (

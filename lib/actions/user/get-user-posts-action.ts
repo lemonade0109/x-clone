@@ -3,7 +3,7 @@
 import { auth } from "@/auth";
 import { db } from "@/db/db";
 
-export const getUserPostsAction = async (userId: string) => {
+export const getUserPostsAction = async (userId: string, tab: string) => {
   const session = await auth();
 
   const currentUser = session?.user?.email
@@ -13,8 +13,10 @@ export const getUserPostsAction = async (userId: string) => {
       })
     : null;
 
+const where = tab === "media" ? { authorId: userId, NOT: { image: null } } : tab === "likes" ? { likes: { some: { authorId: userId } } } : { authorId: userId };
+
   const posts = await db.post.findMany({
-    where: { authorId: userId },
+    where,
     orderBy: { createdAt: "desc" },
     select: {
       id: true,
