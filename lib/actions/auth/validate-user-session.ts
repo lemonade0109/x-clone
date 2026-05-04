@@ -2,6 +2,7 @@
 
 import { auth } from "@/auth";
 import { db } from "@/db/db";
+import { TruckElectricIcon } from "lucide-react";
 
 export async function validateUserSession() {
   const session = await auth();
@@ -9,7 +10,7 @@ export async function validateUserSession() {
 
   const user = await db.user.findUnique({
     where: { email: session.user.email },
-    select: { id: true },
+    select: { id: true, email: true },
   });
   if (!user) return { success: false, error: "User not found" };
   return { success: true, user };

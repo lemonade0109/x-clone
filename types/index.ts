@@ -110,3 +110,13 @@ export interface PostyourreplyButtonProps {
   handleComments: (mediaUrl?: string | null) => void;
   isPending: boolean;
 }
+
+export type EditProfileFormData = {
+  name: string;
+  username: string;
+  bio: string | null;
+  website: string | null;
+  location: string | null;
+  image: string | null;
+  coverImage: string | null;
+};
