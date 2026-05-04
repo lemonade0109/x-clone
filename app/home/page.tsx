@@ -4,8 +4,6 @@ import TrendingSideBar from "@/components/shared/trending-sidebar";
 import { auth } from "@/auth";
 import { db } from "@/db/db";
 import OnboardingModal from "@/components/auth/multistep-signup-modal/onboarding-modal";
-import { Suspense } from "react";
-import { CgSpinner } from "react-icons/cg";
 
 export default async function Homepage() {
   const session = await auth();
@@ -42,16 +40,7 @@ export default async function Homepage() {
         currentUserId={user?.id ?? null}
       />
 
-      <Suspense
-        fallback={
-          <CgSpinner
-            className="mx-auto mt-5 animate-spin text-2xl text-sky-500"
-            size={24}
-          />
-        }
-      >
-        <TrendingSideBar />
-      </Suspense>
+      <TrendingSideBar />
 
       {showOnboarding ? (
         <OnboardingModal
