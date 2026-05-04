@@ -13,7 +13,7 @@ export default async function ProfilePage() {
   const posts = await getUserPostsAction(profile.id);
 
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-7xl bg-white text-black">
+    <main className="mx-auto flex min-h-screen w-full max-w-7xl">
       <NavLayoutTemplate
         username={profile.username ?? ""}
         name={profile.name ?? ""}
