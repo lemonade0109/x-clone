@@ -5,10 +5,11 @@ import React from "react";
 
 const EditProfileModalShell = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
+
   return (
     <Dialog open onOpenChange={(open) => !open && router.back()}>
-      <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto rounded-2xl">
-        <DialogTitle className="text-xl font-bold">Edit Profile</DialogTitle>
+      <DialogContent className="h-[90vh] !w-[95vw] !max-w-[540px] overflow-y-auto rounded-3xl bg-black p-0 text-white">
+        <DialogTitle className="sr-only">Edit profile</DialogTitle>
         {children}
       </DialogContent>
     </Dialog>

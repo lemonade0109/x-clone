@@ -1,11 +1,14 @@
 "use client";
 
-import FloatingInputLabel from "@/components/shared/floating-input-label";
 import { updateProfileAction } from "@/lib/actions/user/update-profile-action";
 import { EditProfileFormData } from "@/types";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "sonner";
+import Image from "next/image";
+import { IoCloseSharp } from "react-icons/io5";
+import { MdOutlineAddAPhoto } from "react-icons/md";
+import FloatingInputLabel from "@/components/shared/floating-input-label";
 
 const EditProfileForm: React.FC<{ initialData: EditProfileFormData }> = ({
   initialData,
@@ -45,115 +48,155 @@ const EditProfileForm: React.FC<{ initialData: EditProfileFormData }> = ({
       router.refresh();
     });
   };
+
   return (
-    <div className="space-y-4 py-2">
-      <FloatingInputLabel
-        label="Name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-      />
-      <FloatingInputLabel
-        label="Username"
-        value={username || ""}
-        onChange={(e) => setUsername(e.target.value)}
-      />
+    <div className="flex flex-col bg-black text-white">
+      {/* Top bar: sticky  */}
+      <div className="sticky top-0 z-30 flex items-center justify-between border-b border-zinc-800 bg-black/90 px-4 py-3 backdrop-blur">
+        <div className="flex items-center gap-6">
+          <button
+            type="button"
+            onClick={() => router.back()}
+            className="flex h-9 w-9 items-center justify-center rounded-full transition hover:bg-zinc-800"
+          >
+            <IoCloseSharp className="h-5 w-5 text-white" />
+          </button>
+          <h2 className="text-xl font-bold">Edit profile</h2>
+        </div>
 
-      <Field label="Bio">
-        <textarea
-          value={bio || ""}
-          onChange={(e) => setBio(e.target.value)}
-          placeholder="Bio"
-          className="peer h-32 w-full rounded-md border bg-transparent px-4 pt-6 pb-2 text-[15px] leading-6 text-black outline-none transition-all border-zinc-300 focus:border-[#1d9bf0] focus:ring-2 focus:ring-[#1d9bf0]/20"
-        />
-      </Field>
-
-      <FloatingInputLabel
-        label="Website"
-        value={website || ""}
-        onChange={(e) => setWebsite(e.target.value)}
-      />
-
-      <FloatingInputLabel
-        label="Location"
-        value={location || ""}
-        onChange={(e) => setLocation(e.target.value)}
-      />
-
-      <FloatingInputLabel
-        label="Profile Image URL"
-        value={image || ""}
-        onChange={(e) => setImage(e.target.value)}
-      />
-
-      <FloatingInputLabel
-        label="Cover Image URL"
-        value={coverImage || ""}
-        onChange={(e) => setCoverImage(e.target.value)}
-      />
-
-      <div className="flex justify-end pt-2">
         <button
+          type="button"
           onClick={onSave}
-          disabled={isPending}
-          className="rounded-md bg-black text-white hover:bg-gray-500 dark:bg-white px-4 py-2 dark:text-black dark:hover:bg-gray-200 disabled:opacity-50"
+          disabled={isPending || !name.trim()}
+          className="rounded-full bg-white px-5 py-1.5 text-sm font-bold text-black transition hover:bg-zinc-200 disabled:opacity-50"
         >
           {isPending ? "Saving..." : "Save"}
         </button>
       </div>
+
+      {/*  Cover photo  */}
+      <div className="relative h-52 w-full bg-zinc-800">
+        {coverImage && (
+          <Image src={coverImage} alt="Cover" fill className="object-cover" />
+        )}
+
+        {/* Cover overlay icons */}
+        <div className="absolute inset-0 flex items-center justify-center gap-4 bg-black/50">
+          <label
+            htmlFor="coverImageInput"
+            className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-black/60 text-white hover:bg-black/40 transition"
+            title="Change cover photo"
+          >
+            <MdOutlineAddAPhoto className="h-5 w-5" />
+          </label>
+
+          {coverImage && (
+            <button
+              type="button"
+              onClick={() => setCoverImage("")}
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-black/60 text-white hover:bg-black/40 transition"
+              title="Remove cover photo"
+            >
+              <IoCloseSharp className="h-5 w-5" />
+            </button>
+          )}
+        </div>
+
+        <input
+          id="coverImageInput"
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+            if (file) setCoverImage(URL.createObjectURL(file));
+          }}
+        />
+      </div>
+
+      {/*  Avatar  */}
+      <div className="relative ml-4 -mt-14 h-28 w-28">
+        <div className="relative h-28 w-28 overflow-hidden rounded-full border-4 border-black">
+          <Image
+            src={image || "/default-avatar.png"}
+            alt="Avatar"
+            fill
+            className="object-cover"
+          />
+        </div>
+
+        <label
+          htmlFor="avatarInput"
+          className="absolute inset-0 flex cursor-pointer items-center justify-center rounded-full bg-black/50 opacity-0 hover:opacity-100 transition-opacity"
+          title="Change avatar"
+        >
+          <MdOutlineAddAPhoto className="h-6 w-6 text-white" />
+        </label>
+
+        <input
+          id="avatarInput"
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+            if (file) setImage(URL.createObjectURL(file));
+          }}
+        />
+      </div>
+
+      {/* Fields */}
+      <div className="mt-6 space-y-5 px-4 pb-6">
+        {/* Name */}
+        <FloatingInputLabel
+          label="Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          id={"Name"}
+        />
+
+        {/* Bio */}
+        <div className="relative rounded-md border border-zinc-700 focus-within:border-[#1d9bf0] transition-colors">
+          <textarea
+            id="bio"
+            value={bio}
+            onChange={(e) => setBio(e.target.value)}
+            placeholder=" "
+            rows={3}
+            maxLength={160}
+            className="peer w-full resize-none bg-transparent px-3 pb-3 pt-7 text-[15px] text-white outline-none"
+          />
+          <label
+            htmlFor="bio"
+            className="pointer-events-none absolute left-3 text-zinc-500 transition-all
+            top-2 text-sm
+            peer-placeholder-shown:top-4 peer-placeholder-shown:text-[15px]
+            peer-focus:top-2 peer-focus:text-xs peer-focus:text-[#1d9bf0]"
+          >
+            Bio
+          </label>
+          <span className="absolute bottom-2 right-3 text-xs text-zinc-500">
+            {bio.length} / 160
+          </span>
+        </div>
+
+        {/* Location */}
+        <FloatingInputLabel
+          label="Location"
+          value={location}
+          onChange={(e) => setLocation(e.target.value)}
+          className=""
+        />
+
+        {/* Website */}
+        <FloatingInputLabel
+          label="Website"
+          value={website}
+          onChange={(e) => setWebsite(e.target.value)}
+        />
+      </div>
     </div>
-    // <div className="space-y-4 py-2">
-    //   <Field label="Name">
-    //     <input
-    //       value={name}
-    //       onChange={(e) => setName(e.target.value)}
-    //       placeholder="Name"
-    //       className="w-full rounded-md border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm text-zinc-50 placeholder:text-zinc-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-    //     />
-    //   </Field>
-
-    //   <Field label="Username">
-    //     <input
-    //       value={username}
-    //       onChange={(e) => setUsername(e.target.value)}
-    //       placeholder="Username"
-    //       className="w-full rounded-md border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm text-zinc-50 placeholder:text-zinc-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-    //     />
-    //   </Field>
-
-    //   <Field label="Bio">
-    //     <textarea
-    //       value={bio || ""}
-    //       onChange={(e) => setBio(e.target.value)}
-    //       placeholder="Bio"
-    //       className="w-full rounded-md border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm text-zinc-50 placeholder:text-zinc-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-    //     />
-    //   </Field>
-
-    //   <Field label="Website">
-    //     <input
-    //       value={website || ""}
-    //       onChange={(e) => setWebsite(e.target.value)}
-    //       placeholder="Website"
-    //       className="w-full rounded-md border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm text-zinc-50 placeholder:text-zinc-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-    //     />
-    //   </Field>
-    // </div>
   );
 };
 
 export default EditProfileForm;
-
-function Field({
-  label,
-  children,
-}: {
-  label: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="space-y-1">
-      <label className="text-sm font-medium text-zinc-50">{label}</label>
-      {children}
-    </div>
-  );
-}
