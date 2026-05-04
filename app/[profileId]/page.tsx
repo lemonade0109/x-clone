@@ -9,13 +9,10 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 export default async function ProfilePage({
-  params,
   searchParams,
 }: {
-  params: Promise<{ username: string }>;
   searchParams: Promise<{ tab?: string }>;
 }) {
-  const { username } = await params;
   const { tab } = await searchParams;
 
   const activeTab: ProfileTab =
