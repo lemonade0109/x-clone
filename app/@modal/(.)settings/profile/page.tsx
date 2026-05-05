@@ -3,20 +3,13 @@ import EditProfileModalShell from "@/components/page/sections/profile/edit-profi
 import { db } from "@/db/db";
 import { validateUserSession } from "@/lib/actions/auth/validate-user-session";
 import { redirect } from "next/navigation";
-import React from "react";
 
 export default async function InterceptedEditProfilePage() {
   const validUser = await validateUserSession();
 
-  if (!validUser.success) {
-    return {
-      success: false,
-      error: validUser.error,
-      message:
-        "Unauthorized. Please log in to access the profile editing page.",
-    };
+  if (!validUser.success || !validUser.user?.email) {
+    redirect("/home");
   }
-
   const user = await db.user.findUnique({
     where: { email: validUser.user?.email },
     select: {

@@ -7,13 +7,8 @@ import React from "react";
 export default async function EditProfilePage() {
   const validUser = await validateUserSession();
 
-  if (!validUser.success) {
-    return {
-      success: false,
-      error: validUser.error,
-      message:
-        "Unauthorized. Please log in to access the profile editing page.",
-    };
+  if (!validUser.success || !validUser.user?.email) {
+    redirect("/home");
   }
 
   const user = await db.user.findUnique({
