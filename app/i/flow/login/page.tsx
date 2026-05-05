@@ -1,6 +1,6 @@
 import SignInForm from "@/components/auth/signin-form";
 import Image from "next/image";
-import React from "react";
+import React, { Suspense } from "react";
 
 export default function SignInPage() {
   return (
@@ -17,7 +17,9 @@ export default function SignInPage() {
           <h1 className="text-5xl text-center font-bold">Sign in to X</h1>
         </div>
 
-        <SignInForm />
+        <Suspense fallback={null}>
+          <SignInForm />
+        </Suspense>
       </section>
     </main>
   );
