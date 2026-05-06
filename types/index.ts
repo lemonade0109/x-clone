@@ -170,3 +170,9 @@ export type CommentCardProps = {
     };
   };
 };
+
+export type PostDetailSectionProps = {
+  post: PostItem;
+  comments: CommentCardProps["comment"][];
+  currentUserId: string | null;
+};

@@ -102,7 +102,7 @@ export const getPostDetailAction = async (postId: string, username: string) => {
       isLiked: Array.isArray(post.likes) && post.likes.length > 0,
       isBookmarked: Array.isArray(post.bookmarks) && post.bookmarks.length > 0,
       isReposted: Array.isArray(post.reposts) && post.reposts.length > 0,
-      comments: post.comments,
     },
+    comments: post.comments,
   };
 };
