@@ -155,3 +155,18 @@ export type EditProfileFormData = {
   image: string | null;
   coverImage: string | null;
 };
+
+export type CommentCardProps = {
+  comment: {
+    id: string;
+    content: string;
+    createdAt: Date;
+    authorId: string;
+    author: {
+      id: string;
+      name: string;
+      username: string | null;
+      image: string | null;
+    };
+  };
+};
