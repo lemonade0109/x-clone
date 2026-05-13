@@ -24,17 +24,15 @@ function isRoute(pathname: string, routes: string[]) {
 export async function proxy(req: NextRequest) {
   const { pathname, search } = req.nextUrl;
 
-  //  Skip Next internals + API routes
-  if (pathname.startsWith("/_next")) return NextResponse.next();
-  if (pathname.startsWith("/api")) return NextResponse.next();
-
-  // Skip public static files (logo.png, images, fonts, etc.)
-  const isStaticFile =
-    /\.(png|jpg|jpeg|gif|svg|webp|ico|css|js|map|txt|xml|woff|woff2|ttf|eot)$/.test(
-      pathname,
-    );
-
-  if (isStaticFile) return NextResponse.next();
+  // Never run auth gating for API/Auth/Next internals/static
+  if (
+    pathname.startsWith("/api") ||
+    pathname.startsWith("/_next") ||
+    pathname === "/favicon.ico" ||
+    /\.[a-zA-Z0-9]+$/.test(pathname)
+  ) {
+    return NextResponse.next();
+  }
 
   const token = await getToken({
     req,
@@ -45,12 +43,10 @@ export async function proxy(req: NextRequest) {
   const isPublicRoute = isRoute(pathname, PUBLIC_ROUTES);
   const isAuthRoute = isRoute(pathname, AUTH_ROUTES);
 
-  // logged in user tries to access login/signup => redirect to home
   if (isLoggedIn && isAuthRoute) {
     return NextResponse.redirect(new URL("/home", req.url));
   }
 
-  // Protect private routes
   if (!isLoggedIn && !isPublicRoute && !isAuthRoute) {
     const loginUrl = new URL("/i/flow/login", req.url);
     loginUrl.searchParams.set("redirect_after_login", `${pathname}${search}`);
@@ -61,5 +57,6 @@ export async function proxy(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!api/auth|_next/static|_next/image|favicon.ico).*)"],
+  // Skip all API routes entirely (including /api/auth/*)
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 };
