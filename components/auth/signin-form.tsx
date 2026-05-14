@@ -67,16 +67,18 @@ const SignInForm: React.FC<SignInFormProps> = ({ onStepChange }) => {
     (step === 1 ? identifierText.length > 0 : passwordText.length > 0);
 
   return (
-    <div className="mx-auto mt-4 flex w-full px-15 flex-col gap-4 py-4">
+    <div className="mx-auto mt-4 flex w-full flex-col gap-4 px-15 py-4 text-zinc-900 dark:text-zinc-100">
       {step === 1 ? (
         <OAuthButtons callbackUrl={redirectAfterLogin} mode="signin" />
       ) : null}
 
       {step === 1 ? (
-        <div className="flex my-3 items-center">
-          <div className="flex-1 border border-gray-100" />
-          <span className="mx-2 text-lg">OR</span>
-          <div className="flex-1 border border-gray-100" />
+        <div className="my-3 flex items-center">
+          <div className="flex-1 border border-zinc-300 dark:border-zinc-700" />
+          <span className="mx-2 text-lg text-zinc-500 dark:text-zinc-400">
+            OR
+          </span>
+          <div className="flex-1 border border-zinc-300 dark:border-zinc-700" />
         </div>
       ) : null}
 
@@ -99,7 +101,7 @@ const SignInForm: React.FC<SignInFormProps> = ({ onStepChange }) => {
           readOnly={step === 2}
           disabled={step === 2}
           aria-disabled={step === 2}
-          className="read-only:bg-zinc-50 read-only:text-gray-500"
+          className="read-only:bg-zinc-100 read-only:text-zinc-500 dark:read-only:bg-zinc-900 dark:read-only:text-zinc-400"
           autoComplete="username"
           required
         />
@@ -118,7 +120,7 @@ const SignInForm: React.FC<SignInFormProps> = ({ onStepChange }) => {
             <button
               type="button"
               onClick={() => setShow((v) => !v)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-300"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200"
               aria-label={show ? "Hide password" : "Show password"}
             >
               {show ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -126,30 +128,35 @@ const SignInForm: React.FC<SignInFormProps> = ({ onStepChange }) => {
             <Button
               type="button"
               variant="link"
-              className="text-sm font-normal absolute right-0 top-full text-blue-500 hover:underline"
+              className="absolute right-0 top-full text-sm font-normal text-blue-600 hover:underline dark:text-blue-400"
             >
               Forgot password(todo)?
             </Button>
           </div>
         ) : null}
 
-        {error ? <p className="text-sm text-red-500">{error}</p> : null}
+        {error ? (
+          <p className="text-sm text-red-500 dark:text-red-400">{error}</p>
+        ) : null}
 
         <div className="mt-20 flex flex-col gap-2">
           <Button
             type="submit"
             disabled={!canSubmit}
             aria-disabled={!canSubmit}
-            className="rounded-full bg-black py-6 text-lg font-semibold text-white hover:bg-gray-800 hover:text-white disabled:pointer-events-none disabled:opacity-60"
+            className="rounded-full bg-black py-6 text-lg font-semibold text-white hover:bg-zinc-800 disabled:pointer-events-none disabled:opacity-60 dark:bg-white dark:text-black dark:hover:bg-zinc-200"
           >
             {pending ? "Please wait..." : step === 1 ? "Next" : "Log in"}
           </Button>
         </div>
       </form>
 
-      <p className="mt-0 text-start text-md text-gray-500">
+      <p className="mt-0 text-start text-md text-zinc-600 dark:text-zinc-400">
         Don't have an account?{" "}
-        <Link href="/i/flow/signup" className="text-blue-500 hover:underline">
+        <Link
+          href="/i/flow/signup"
+          className="text-blue-600 hover:underline dark:text-blue-400"
+        >
           Sign up
         </Link>
       </p>
