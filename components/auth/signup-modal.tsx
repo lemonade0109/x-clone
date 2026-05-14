@@ -6,7 +6,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
-import Image from "next/image";
 import { fullSignUpSchema } from "@/lib/validators";
 import { Step, SignUpData } from "@/types";
 import ModalStep1 from "./multistep-signup-modal/modal-step-1";
@@ -17,6 +16,7 @@ import { signIn } from "next-auth/react";
 import { requestCodeAction } from "@/lib/actions/auth/signup-actions/request-code-action";
 import { verifyRequestCodeAction } from "@/lib/actions/auth/signup-actions/verify-request-code";
 import { signUpAction } from "@/lib/actions/auth/signup-actions/signup-action";
+import { FaXTwitter } from "react-icons/fa6";
 
 type SignUpModalProps = {
   open: boolean;
@@ -101,7 +101,6 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ open, onOpenChange }) => {
 
       const values = form.getValues();
       const res = await signUpAction(values);
-      console.log("signUpAction result:", res);
 
       if (!res?.success) {
         setLoading(false);
@@ -115,8 +114,6 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ open, onOpenChange }) => {
         redirect: true,
         callbackUrl: "/home",
       });
-
-      return;
     }
   };
 
@@ -124,18 +121,15 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ open, onOpenChange }) => {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="w-[94vw]! max-w-180 sm:max-w-180! max-h-[90vh] rounded-2xl px-4 overflow-hidden">
         <div className="flex h-full max-h-[90vh] flex-col">
-          <div className="shrink-0 px-8 pt-4 pb-4">
-            <Image
-              alt="x image"
-              src="/image.jpg"
-              width={48}
-              height={48}
-              className="object-contain mx-auto"
+          <div className="shrink-0 px-8 py-4">
+            <FaXTwitter
+              className="mx-auto text-zinc-900 dark:text-zinc-100"
+              size={58}
             />
           </div>
 
           <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-11 pb-8">
-            <DialogTitle className="text-5xl text-start font-semibold mb-4">
+            <DialogTitle className="mb-4 text-start text-4xl font-semibold text-zinc-900 dark:text-zinc-100 sm:text-5xl">
               {step === 1 && "Create your account"}
               {step === 2 && "We sent you a code"}
               {step === 3 && "You'll need a password"}
@@ -153,19 +147,25 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ open, onOpenChange }) => {
                 {step === 3 && <ModalStep3 form={form} />}
 
                 {serverError ? (
-                  <p className="text-sm text-red-500">{serverError}</p>
+                  <p className="text-sm text-red-500 dark:text-red-400">
+                    {serverError}
+                  </p>
                 ) : null}
               </form>
             </Form>
           </div>
 
-          <div className="shrink-0 w-full max-w-lg mx-auto flex flex-col mb-8 p-5">
+          <div className="mx-auto mb-8 flex w-full max-w-lg shrink-0 flex-col p-5">
             <Button
               onClick={next}
               disabled={loading}
-              className="w-full rounded-full py-8 text-[15px] font-bold bg-black text-white hover:bg-gray-800 disabled:opacity-70"
+              className="w-full rounded-full bg-black py-8 text-[15px] font-bold text-white hover:bg-zinc-800 disabled:opacity-70 dark:bg-white dark:text-black dark:hover:bg-zinc-200"
             >
-              {step === 3 ? "Create account" : "Next"}
+              {loading
+                ? "Please wait..."
+                : step === 3
+                  ? "Create account"
+                  : "Next"}
             </Button>
           </div>
         </div>

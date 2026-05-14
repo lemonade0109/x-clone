@@ -81,7 +81,7 @@ const users = Array.from({ length: 40 }, (_, i) => {
     bio: bios[i % bios.length],
     location: locations[i % locations.length],
     website: `https://example.com/${username}`,
-    image: `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(name)}`,
+    image: `https://api.dicebear.com/9.x/initials/png?seed=${encodeURIComponent(name)}`,
     onboardingCompleted: true,
   };
 });
