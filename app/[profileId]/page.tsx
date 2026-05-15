@@ -30,23 +30,11 @@ export default async function ProfilePage({
       : Promise.resolve([]),
   ]);
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-7xl">
-      <NavLayoutTemplate
-        username={profile.username ?? ""}
-        name={profile.name ?? ""}
-        profileImage={profile.image ?? ""}
-      />
-
-      <ProfilePageSection
-        profile={profile}
-        posts={posts}
-        replies={replies}
-        activeTab={activeTab}
-      />
-
-      <Suspense fallback={null}>
-        <TrendingSideBar />
-      </Suspense>
-    </main>
+    <ProfilePageSection
+      profile={profile}
+      posts={posts}
+      replies={replies}
+      activeTab={activeTab}
+    />
   );
 }
