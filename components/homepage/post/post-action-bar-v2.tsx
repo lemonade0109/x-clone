@@ -37,6 +37,7 @@ const PostActionBar: React.FC<PostActionBarProps> = ({
   profileImage,
   authorName,
   content,
+  classname,
 }) => {
   const [liked, setLiked] = React.useState(isLiked);
   const [reposted, setReposted] = React.useState(isReposted);
@@ -116,7 +117,7 @@ const PostActionBar: React.FC<PostActionBarProps> = ({
 
   return (
     <div
-      className="flex items-center justify-between mt-3 px-2 max-w-md"
+      className={`flex items-center justify-between mt-3 px-2 ${classname ?? "max-w-md"}`}
       onClick={(e) => e.stopPropagation()}
     >
       {/* Comment */}
@@ -125,8 +126,8 @@ const PostActionBar: React.FC<PostActionBarProps> = ({
           <Fragment>
             <Dialog open={isCommentOpen} onOpenChange={setIsCommentOpen}>
               <DialogTrigger asChild>
-                <div className="flex items-center justify-center group-hover:bg-sky/30 rounded-full w-10 h-10">
-                  <FaRegComment className="w-5 h-5 text-gray-500 group-hover:text-sky-500 " />
+                <div className="flex items-center justify-center group-hover:bg-sky/30 rounded-full w-10 h-10 cursor-pointer">
+                  <FaRegComment className="w-5 h-5 text-gray-500 group-hover:text-sky-500" />
                 </div>
               </DialogTrigger>
 

@@ -3,9 +3,11 @@ import dayjs from "dayjs";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { GoArrowLeft } from "react-icons/go";
 import PostCommentCard from "./post-comment-card";
 import AllPostsContainer from "./all-posts-container";
+import { GoArrowLeft } from "react-icons/go";
+import MoreDetails from "@/components/ui/more-details";
+import PostActionBar from "./post-action-bar-v2";
 
 const PostDetailSection: React.FC<PostDetailSectionProps> = ({
   post,
@@ -26,26 +28,36 @@ const PostDetailSection: React.FC<PostDetailSectionProps> = ({
       </div>
 
       {/* Post author info */}
-      <div className="flex items-start gap-3 px-4 pt-4">
-        <Link href={`/${post.author.username}`} className="shrink-0">
-          <div className="relative h-12 w-12 overflow-hidden rounded-full">
-            <Image
-              src={post.author.image || "/default-profile.png"}
-              alt={`${post.author.name} avatar`}
-              fill
-              className="object-cover"
-            />
-          </div>
-        </Link>
-
-        <div>
-          <Link
-            href={`/${post.author.username}`}
-            className="font-bold hover:underline"
-          >
-            {post.author.name}
+      <div className="flex justify-between gap-3 px-4 pt-4">
+        <div className="flex items-center gap-3">
+          <Link href={`/${post.author.username}`} className="shrink-0">
+            <div className="relative h-12 w-12 overflow-hidden rounded-full">
+              <Image
+                src={post.author.image || "/default-profile.png"}
+                alt={`${post.author.name} avatar`}
+                fill
+                className="object-cover"
+              />
+            </div>
           </Link>
-          <p className="text-zinc-500">@{post.author.username}</p>
+
+          <div>
+            <Link
+              href={`/${post.author.username}`}
+              className="font-bold hover:underline"
+            >
+              {post.author.name}
+            </Link>
+            <p className="text-zinc-500">@{post.author.username}</p>
+          </div>
+        </div>
+
+        <div className="shrink-0">
+          <MoreDetails
+            postId={post.id}
+            authorId={post.authorId}
+            currentUserId={currentUserId ?? ""}
+          />
         </div>
       </div>
 
@@ -74,23 +86,25 @@ const PostDetailSection: React.FC<PostDetailSectionProps> = ({
         </p>
       </div>
 
-      {/* Stats row */}
-      <div className="flex gap-5 border-b border-zinc-200 px-4 py-3 text-sm dark:border-zinc-800">
-        <span>
-          <strong>{post.repostCount}</strong>{" "}
-          <span className="text-zinc-500">Reposts</span>
-        </span>
-        <span>
-          <strong>{post.likeCount}</strong>{" "}
-          <span className="text-zinc-500">Likes</span>
-        </span>
-        <span>
-          <strong>{post.bookmarkCount}</strong>{" "}
-          <span className="text-zinc-500">Bookmarks</span>
-        </span>
+      {/* Action bar */}
+      <div className="w-full border-b border-zinc-200 dark:border-zinc-800">
+        <PostActionBar
+          postId={post.id}
+          content={post.content || ""}
+          username={post.author.username || ""}
+          profileImage={post.author.image || ""}
+          authorName={post.author.name}
+          isLiked={post.isLiked}
+          isReposted={post.isReposted}
+          isBookmarked={post.isBookmarked}
+          likesCount={post.likeCount}
+          commentsCount={post.commentCount}
+          repostsCount={post.repostCount}
+          bookmarkCount={post.bookmarkCount}
+          classname="w-full px-4 py-1"
+        />
       </div>
 
-      {/* Action bar */}
       <div className="border-b border-zinc-200 dark:border-zinc-800">
         {currentUserId && (
           <AllPostsContainer

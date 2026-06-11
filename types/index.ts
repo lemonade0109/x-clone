@@ -78,6 +78,7 @@ export type PostActionBarProps = {
   profileImage: string;
   authorName: string;
   content: string;
+  classname?: string;
 };
 
 export type ProfileUserInfo = {
