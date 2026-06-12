@@ -22,7 +22,7 @@ import { FaRegComment } from "react-icons/fa6";
 import Link from "next/link";
 import TooltipContainer from "@/components/ui/tooltip-container";
 import Image from "next/image";
-import PostyourreplyButton from "./post-your-reply-button";
+import PostYourReplyButton from "./post-your-reply-button";
 
 const PostActionBar: React.FC<PostActionBarProps> = ({
   postId,
@@ -163,7 +163,7 @@ const PostActionBar: React.FC<PostActionBarProps> = ({
                   </DialogDescription>
                 </DialogHeader>
 
-                <PostyourreplyButton
+                <PostYourReplyButton
                   profileImage={profileImage}
                   username={username}
                   comments={comments}

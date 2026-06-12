@@ -1,3 +1,4 @@
+"use client";
 import { PostDetailSectionProps } from "@/types";
 import dayjs from "dayjs";
 import Image from "next/image";
@@ -8,12 +9,16 @@ import AllPostsContainer from "./all-posts-container";
 import { GoArrowLeft } from "react-icons/go";
 import MoreDetails from "@/components/ui/more-details";
 import PostActionBar from "./post-action-bar-v2";
+import { Button } from "@/components/ui/button";
+import PostYourReplyButton from "./post-your-reply-button";
 
 const PostDetailSection: React.FC<PostDetailSectionProps> = ({
   post,
   comments,
   currentUserId,
 }) => {
+  const [showReplyTab, setShowReplyTab] = React.useState<boolean>(false);
+
   return (
     <section className="min-h-screen w-full max-w-[600px] border-x border-zinc-200 dark:border-zinc-800">
       {/* Header */}
@@ -105,12 +110,46 @@ const PostDetailSection: React.FC<PostDetailSectionProps> = ({
         />
       </div>
 
-      <div className="border-b border-zinc-200 dark:border-zinc-800">
-        {currentUserId && (
-          <AllPostsContainer
-            post={post}
-            currentUser={{ id: currentUserId }}
-            // hideContent
+      <div>
+        {showReplyTab === false ? (
+          <div
+            onClick={() => setShowReplyTab(true)}
+            className="flex space-x-3 border-b border-gray-800"
+          >
+            <div className="flex items-center pl-2">
+              <div className="w-14 h-14 rounded-full relative">
+                <Image
+                  src={post.author.image || "/default-profile.png"}
+                  alt="profile image"
+                  fill
+                  className="rounded-full"
+                />
+              </div>
+            </div>
+
+            <div className="flex w-full py-6 ">
+              <textarea
+                placeholder="Post your reply"
+                className="bg-transparent w-full text-start text-xl mb-0 pb-0 border-none  outline-none tracking-wide placeholder:text-2xl"
+              />
+
+              <div className="flex pr-2">
+                <Button
+                  disabled={true}
+                  type="submit"
+                  className=" font-bold rounded-full  px-6 py-6 text-black text-lg "
+                >
+                  Reply
+                </Button>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <PostYourReplyButton
+            userName={post.author.username || ""}
+            postId={post.id}
+            profileImage={post.author.image || "/default-profile.png"}
+            setIsReplyModalOpen={setShowReplyTab}
           />
         )}
       </div>
