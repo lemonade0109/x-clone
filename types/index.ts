@@ -175,5 +175,6 @@ export type CommentCardProps = {
 export type PostDetailSectionProps = {
   post: PostItem;
   comments: CommentCardProps["comment"][];
+  commentsCount: number;
   currentUserId: string | null;
 };

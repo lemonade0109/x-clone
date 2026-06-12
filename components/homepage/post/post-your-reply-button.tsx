@@ -50,7 +50,7 @@ const PostYourReplyButton = (props: PostYourReplyButtonProps) => {
       </p>
 
       <div className="flex w-full px-3">
-        <div className="relative h-11 w-11 shrink-0 rounded-full overflow-hidden">
+        <div className="relative h-11 w-11 shrink-0 rounded-full overflow-hidden mr-2">
           <Image
             src={props.profileImage || "/default-profile.png"}
             alt="profile image"
@@ -60,6 +60,7 @@ const PostYourReplyButton = (props: PostYourReplyButtonProps) => {
         </div>
 
         <PostComposer
+          hideProfileImage
           value={replyText}
           onChange={setReplyText}
           placeholder="Post your reply"

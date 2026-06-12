@@ -15,9 +15,17 @@ import PostYourReplyButton from "./post-your-reply-button";
 const PostDetailSection: React.FC<PostDetailSectionProps> = ({
   post,
   comments,
+  commentsCount,
   currentUserId,
 }) => {
   const [showReplyTab, setShowReplyTab] = React.useState<boolean>(false);
+  const [commentTotal, setCommentTotal] = React.useState<number>(
+    commentsCount ?? 0,
+  );
+
+  React.useEffect(() => {
+    setCommentTotal(commentsCount ?? 0);
+  }, [commentsCount]);
 
   return (
     <section className="min-h-screen w-full max-w-[600px] border-x border-zinc-200 dark:border-zinc-800">
@@ -149,6 +157,7 @@ const PostDetailSection: React.FC<PostDetailSectionProps> = ({
             userName={post.author.username || ""}
             postId={post.id}
             profileImage={post.author.image || "/default-profile.png"}
+            onSuccess={() => setCommentTotal((prev) => prev + 1)}
             setIsReplyModalOpen={setShowReplyTab}
           />
         )}
@@ -156,11 +165,12 @@ const PostDetailSection: React.FC<PostDetailSectionProps> = ({
 
       {/* Comments */}
       <div>
-        {comments.length === 0 ? (
+        {commentTotal === 0 ? (
           <div className="p-8 text-center text-zinc-500">
             No replies yet. Be the first to reply!
           </div>
         ) : (
+          //TODO: Fix the comment prop bug
           comments.map((comment) => (
             <PostCommentCard key={comment.id} comment={comment} />
           ))

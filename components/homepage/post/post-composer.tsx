@@ -16,7 +16,7 @@ type PostComposerProps = {
   submitText?: string;
   submitType?: "submit" | "button";
   onSubmit?: () => void;
-
+  hideProfileImage?: boolean;
   error?: string;
   replyingTo?: string;
 
@@ -65,6 +65,7 @@ const PostComposer: React.FC<PostComposerProps> = ({
   submitType = "submit",
   onSubmit,
   error,
+  hideProfileImage = false,
   replyingTo,
   imageUrl,
   onRemoveImage,
@@ -75,17 +76,19 @@ const PostComposer: React.FC<PostComposerProps> = ({
 }) => {
   return (
     <div className="flex w-full gap-3">
-      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-zinc-200 dark:bg-zinc-700 font-semibold">
-        {userImage ? (
-          <img
-            src={userImage}
-            alt="User"
-            className="h-10 w-10 rounded-full object-cover"
-          />
-        ) : (
-          <span>U</span>
-        )}
-      </div>
+      {!hideProfileImage && (
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-zinc-200 dark:bg-zinc-700 font-semibold">
+          {userImage ? (
+            <img
+              src={userImage}
+              alt="User"
+              className="h-10 w-10 rounded-full object-cover"
+            />
+          ) : (
+            <span>U</span>
+          )}
+        </div>
+      )}
 
       <div className="flex flex-col w-full h-full space-y-5">
         {replyingTo && (
