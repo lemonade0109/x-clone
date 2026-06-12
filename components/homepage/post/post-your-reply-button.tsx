@@ -1,79 +1,76 @@
 "use client";
-import { useToast } from "@/hooks/use-toast";
-
-import { useAuth } from "@clerk/nextjs";
+import { createCommentAction } from "@/lib/actions/post-actions/comment-post-action";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React from "react";
-import { replyTweet } from "@/lib/actions/tweet/tweetActions";
-import UploadPost from "./uploadPost";
+import { toast } from "sonner";
+import PostComposer from "./post-composer";
 
 //TODO: Setup the reply component to match my current x post-detail-compenent.
 export interface PostYourReplyButtonProps {
   userName: string;
-  tweetId: string;
+  postId: string;
   profileImage: string;
   setIsReplyModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+  onSuccess?: () => void;
 }
 
 const PostYourReplyButton = (props: PostYourReplyButtonProps) => {
-  const { userId } = useAuth();
-  const { toast } = useToast();
-  const [isReplyPending, startTransition] = React.useTransition();
-  const [replyText, setReplyText] = React.useState<string>("");
+  const router = useRouter();
+  const [isPending, startTransition] = React.useTransition();
+  const [replyText, setReplyText] = React.useState("");
+
+  const handleReply = () => {
+    const content = replyText.trim();
+    if (!content) {
+      toast.error("Reply cannot be empty.");
+      return;
+    }
+
+    startTransition(async () => {
+      const result = await createCommentAction(props.postId, content);
+
+      if (!result?.success) {
+        toast.error(result?.error || "Something went wrong.");
+        return;
+      }
+
+      toast.success("Reply posted.");
+      setReplyText("");
+      props.setIsReplyModalOpen?.(false);
+      props.onSuccess?.();
+      router.refresh();
+    });
+  };
 
   return (
-    <div className="flex space-x-3">
-      <div className="flex items-center pl-2">
-        <div className="w-14 h-14 rounded-full relative">
+    <div className="flex flex-col w-full gap-3 px-4 py-2">
+      <p className="mb-3 ml-24 text-md text-zinc-500">
+        Replying to <span className="text-sky-500">@{props.userName}</span>
+      </p>
+
+      <div className="flex w-full px-3">
+        <div className="relative h-11 w-11 shrink-0 rounded-full overflow-hidden">
           <Image
-            src={props.profileImage}
+            src={props.profileImage || "/default-profile.png"}
             alt="profile image"
             fill
-            className="rounded-full"
+            className="object-cover"
           />
         </div>
-      </div>
 
-      <div className="flex flex-col w-full ">
-        <div className="flex mt-5 mb-10 gap-2 text-gray-500 pl-16 pr-4 ">
-          Replying to <span className="text-twitter"> @{props.userName} </span>
-        </div>
-
-        <UploadPost
-          autoFocus={true}
+        <PostComposer
           value={replyText}
-          onChange={(e) => setReplyText(e.target.value)}
+          onChange={setReplyText}
           placeholder="Post your reply"
-          disabled={isReplyPending}
-          onClick={() => {
-            if (userId) {
-              startTransition(() => {
-                replyTweet({
-                  replyText,
-                  tweetId: props.tweetId,
-                })
-                  .then(() => {
-                    if (props.setIsReplyModalOpen === undefined) return;
-                    props.setIsReplyModalOpen(false);
-                  })
-                  .catch(() => {
-                    toast({
-                      description: "Something went wrong",
-                    });
-                  });
-              });
-            } else {
-              toast({
-                description: "Please login to reply a tweet",
-              });
-            }
-          }}
-          buttonType="submit"
-          buttonText="Reply"
+          disabled={isPending || !replyText.trim()}
+          onSubmit={handleReply}
+          submitType="button"
+          submitText={isPending ? "Replying..." : "Reply"}
         />
       </div>
     </div>
   );
 };
 
-export default PostyourreplyButton;
+export default PostYourReplyButton;

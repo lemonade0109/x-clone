@@ -95,6 +95,7 @@ const PostComposer: React.FC<PostComposerProps> = ({
         )}
 
         <textarea
+          autoFocus
           value={value}
           name="content"
           onChange={(e) => onChange(e.target.value)}

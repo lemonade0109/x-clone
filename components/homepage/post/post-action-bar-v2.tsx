@@ -8,12 +8,10 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { toggleBookmarkAction } from "@/lib/actions/post-actions/bookmark-post-action";
-import { createCommentAction } from "@/lib/actions/post-actions/comment-post-action";
 import { toggleLikeAction } from "@/lib/actions/post-actions/like-post-action";
 import { toggleRepostAction } from "@/lib/actions/post-actions/repost-post-action";
 import React, { Fragment } from "react";
-import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
-import { AiOutlineRetweet } from "react-icons/ai";
+import { AiOutlineHeart, AiFillHeart, AiOutlineRetweet } from "react-icons/ai";
 import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
 import { FiShare } from "react-icons/fi";
 import { toast } from "sonner";
@@ -45,7 +43,7 @@ const PostActionBar: React.FC<PostActionBarProps> = ({
   const [likes, setLikes] = React.useState(likesCount);
   const [reposts, setReposts] = React.useState(repostsCount);
   const [bookmarks, setBookmarks] = React.useState(bookmarkCount);
-  const [comments, setComments] = React.useState("");
+  const [commentTotal, setCommentTotal] = React.useState(commentsCount ?? 0);
   const [isCommentOpen, setIsCommentOpen] = React.useState(false);
   const [isPending, startTransition] = React.useTransition();
 
@@ -95,23 +93,10 @@ const PostActionBar: React.FC<PostActionBarProps> = ({
     });
   };
 
-  const handleComment = (mediaUrl?: string | null) => {
-    if (!comments.trim() && !mediaUrl?.trim()) return;
-
-    startTransition(async () => {
-      const res = await createCommentAction(postId, comments, mediaUrl);
-      if (!res.success) {
-        toast.error(res.error || "Failed to comment.");
-        return;
-      }
-      toast.success("Comment posted!.");
-      setComments("");
-      setIsCommentOpen(false);
-    });
-  };
-
   const handleShare = () => {
-    navigator.clipboard.writeText(`${window.location.origin}/post/${postId}`);
+    navigator.clipboard.writeText(
+      `${window.location.origin}/${username}/status/${postId}`,
+    );
     toast.success("Link copied to clipboard!");
   };
 
@@ -122,36 +107,36 @@ const PostActionBar: React.FC<PostActionBarProps> = ({
     >
       {/* Comment */}
       <TooltipContainer content="Reply" side="bottom">
-        <div className="flex items-center justify-center group">
+        <div className="group flex items-center justify-center">
           <Fragment>
             <Dialog open={isCommentOpen} onOpenChange={setIsCommentOpen}>
               <DialogTrigger asChild>
-                <div className="flex items-center justify-center group-hover:bg-sky/30 rounded-full w-10 h-10 cursor-pointer">
-                  <FaRegComment className="w-5 h-5 text-gray-500 group-hover:text-sky-500" />
+                <div className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full group-hover:bg-sky/30">
+                  <FaRegComment className="h-5 w-5 text-gray-500 group-hover:text-sky-500" />
                 </div>
               </DialogTrigger>
 
-              <DialogContent className="flex flex-col max-w-3xl h-auto py-12 gap-24 lg:rounded-3xl">
+              <DialogContent className="flex h-auto max-w-3xl flex-col gap-10 py-8 lg:rounded-3xl">
                 <DialogHeader>
                   <DialogTitle className="flex items-center space-x-4">
-                    <div className="w-12 h-12  rounded-full relative">
+                    <div className="relative h-12 w-12 rounded-full">
                       <Image
-                        src={profileImage}
-                        alt={"Profile Image"}
+                        src={profileImage || "/default-profile.png"}
+                        alt="Profile Image"
                         fill
-                        className="rounded-full"
+                        className="rounded-full object-cover"
                       />
                     </div>
 
-                    <div className="flex justify-between ">
+                    <div className="flex justify-between">
                       <Link
                         href={`/${username}`}
                         className="flex items-center space-x-2"
                       >
-                        <h3 className="font-bold text-lg truncate">
+                        <h3 className="truncate text-lg font-bold">
                           {authorName}
                         </h3>
-                        <p className="text-gray-500 tracking-normal truncate">
+                        <p className="truncate tracking-normal text-gray-500">
                           @{username}
                         </p>
                       </Link>
@@ -159,25 +144,24 @@ const PostActionBar: React.FC<PostActionBarProps> = ({
                   </DialogTitle>
 
                   <DialogDescription className="max-w-sm pl-16">
-                    <span className="text-lg text-white">{content}</span>
+                    <span className="text-base text-zinc-800 dark:text-zinc-100">
+                      {content}
+                    </span>
                   </DialogDescription>
                 </DialogHeader>
 
                 <PostYourReplyButton
-                  profileImage={profileImage}
-                  username={username}
-                  comments={comments}
+                  profileImage={profileImage || "/default-profile.png"}
+                  userName={username}
                   postId={postId}
-                  setIsCommentOpen={setIsCommentOpen}
-                  setComments={setComments}
-                  handleComments={handleComment}
-                  isPending={isPending}
+                  setIsReplyModalOpen={setIsCommentOpen}
+                  onSuccess={() => setCommentTotal((c) => c + 1)}
                 />
               </DialogContent>
             </Dialog>
 
             <span className="text-gray-500 group-hover:text-sky-500">
-              {commentsCount ?? 0}
+              {commentTotal}
             </span>
           </Fragment>
         </div>
@@ -196,7 +180,7 @@ const PostActionBar: React.FC<PostActionBarProps> = ({
           >
             <AiOutlineRetweet className="h-5 w-5" />
           </span>
-          <span className={`text-sm${reposted ? "text-green-500" : ""}`}>
+          <span className={`text-sm ${reposted ? "text-green-500" : ""}`}>
             {reposts}
           </span>
         </button>
@@ -217,7 +201,7 @@ const PostActionBar: React.FC<PostActionBarProps> = ({
               <AiOutlineHeart className="h-5 w-5" />
             )}
           </span>
-          <span className={`text-sm${liked ? "text-pink-500" : ""}`}>
+          <span className={`text-sm ${liked ? "text-pink-500" : ""}`}>
             {likes}
           </span>
         </button>
@@ -238,7 +222,7 @@ const PostActionBar: React.FC<PostActionBarProps> = ({
               <BsBookmark className="h-5 w-5" />
             )}
           </span>
-          <span className={`text-sm${bookmarked ? "text-sky-500" : ""}`}>
+          <span className={`text-sm ${bookmarked ? "text-sky-500" : ""}`}>
             {bookmarks}
           </span>
         </button>
@@ -249,7 +233,7 @@ const PostActionBar: React.FC<PostActionBarProps> = ({
         <button
           type="button"
           onClick={handleShare}
-          className="flex h-9 w-9 items-center justify-center rounded-full  text-zinc-500 hover:bg-sky-500/15 hover:text-sky-500"
+          className="flex h-9 w-9 items-center justify-center rounded-full text-zinc-500 hover:bg-sky-500/15 hover:text-sky-500"
         >
           <FiShare className="h-5 w-5" />
         </button>
