@@ -23,6 +23,8 @@ const PostDetailSection: React.FC<PostDetailSectionProps> = ({
     commentsCount ?? 0,
   );
 
+  console.log(comments);
+
   React.useEffect(() => {
     setCommentTotal(commentsCount ?? 0);
   }, [commentsCount]);
