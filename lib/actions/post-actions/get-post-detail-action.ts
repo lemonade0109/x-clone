@@ -3,7 +3,10 @@
 import { auth } from "@/auth";
 import { db } from "@/db/db";
 
-export const getPostDetailAction = async (postId: string, username: string) => {
+export const getPostDetailAction = async (
+  postId: string,
+  profileId?: string,
+) => {
   const session = await auth();
 
   const currentUser = session?.user?.email
@@ -16,7 +19,7 @@ export const getPostDetailAction = async (postId: string, username: string) => {
   const post = await db.post.findFirst({
     where: {
       id: postId,
-      author: { username },
+      ...(profileId ? { author: { username: profileId } } : {}),
     },
     select: {
       id: true,
@@ -64,12 +67,13 @@ export const getPostDetailAction = async (postId: string, username: string) => {
               name: true,
               username: true,
               image: true,
+              bio: true,
             },
           },
           _count: {
             select: {
               likes: true,
-              comments: true,
+              replies: true,
               reposts: true,
               bookmarks: true,
             },
@@ -114,7 +118,7 @@ export const getPostDetailAction = async (postId: string, username: string) => {
     comments: post.comments.map((comment) => ({
       ...comment,
       likeCount: comment._count.likes,
-      commentCount: comment._count.comments,
+      commentCount: comment._count.replies,
       repostCount: comment._count.reposts,
       bookmarkCount: comment._count.bookmarks,
       isLiked: Array.isArray(comment.likes) && comment.likes.length > 0,

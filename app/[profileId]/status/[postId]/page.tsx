@@ -5,16 +5,19 @@ import { notFound } from "next/navigation";
 export default async function PostDetailPage({
   params,
 }: {
-  params: Promise<{ username: string; postId: string }>;
+  params: Promise<{ profileId: string; postId: string }>;
 }) {
-  const { username, postId } = await params;
+  const { profileId, postId } = await params;
+  console.log("profileId", profileId);
+  console.log("postId", postId);
 
-  const data = await getPostDetailAction(postId, username);
+  const data = await getPostDetailAction(postId, profileId);
 
   if (!data) {
     notFound();
   }
 
+  console.log("Post Detail Data:", data);
   return (
     <PostDetailSection
       post={data.post}

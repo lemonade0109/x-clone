@@ -4,7 +4,6 @@ import dayjs from "dayjs";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import PostCommentCard from "./post-comment-card";
 import AllPostsContainer from "./all-posts-container";
 import { GoArrowLeft } from "react-icons/go";
 import MoreDetails from "@/components/ui/more-details";
@@ -23,12 +22,11 @@ const PostDetailSection: React.FC<PostDetailSectionProps> = ({
     commentsCount ?? 0,
   );
 
-  console.log(comments);
-
   React.useEffect(() => {
     setCommentTotal(commentsCount ?? 0);
   }, [commentsCount]);
 
+  console.log(comments);
   return (
     <section className="min-h-screen w-full max-w-[600px] border-x border-zinc-200 dark:border-zinc-800">
       {/* Header */}
@@ -172,10 +170,44 @@ const PostDetailSection: React.FC<PostDetailSectionProps> = ({
             No replies yet. Be the first to reply!
           </div>
         ) : (
-          //TODO: Fix the comment prop bug
-          comments.map((comment) => (
-            <PostCommentCard key={comment.id} comment={comment} />
-          ))
+          <div>
+            {comments.map((comment) => (
+              <AllPostsContainer
+                key={comment.id}
+                post={{
+                  id: comment.id,
+                  content: comment.content ?? "",
+                  image: comment.image ?? null,
+                  createdAt: comment.createdAt,
+                  authorId: comment.authorId,
+                  author: {
+                    id: comment.author.id,
+                    name: comment.author.name ?? "",
+                    username: comment.author.username ?? null,
+                    image: comment.author.image ?? null,
+                    bio: comment.author.bio ?? null,
+                  },
+                  likeCount: comment.likeCount ?? 0,
+                  commentCount: comment.commentCount ?? 0,
+                  repostCount: comment.repostCount ?? 0,
+                  bookmarkCount: comment.bookmarkCount ?? 0,
+                  isLiked: comment.isLiked ?? false,
+                  isReposted: comment.isReposted ?? false,
+                  isBookmarked: comment.isBookmarked ?? false,
+                  reposts: [],
+                  likes: [],
+                  bookmarks: [],
+                  _count: {
+                    likes: comment.likeCount ?? 0,
+                    reposts: comment.repostCount ?? 0,
+                    comments: comment.commentCount ?? 0,
+                    bookmarks: comment.bookmarkCount ?? 0,
+                  },
+                }}
+                currentUser={{ id: currentUserId ?? "" }}
+              />
+            ))}
+          </div>
         )}
       </div>
     </section>

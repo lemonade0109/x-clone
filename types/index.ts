@@ -157,24 +157,45 @@ export type EditProfileFormData = {
   coverImage: string | null;
 };
 
-export type CommentCardProps = {
-  comment: {
+export type CommentItem = {
+  id: string;
+  content: string;
+  image: string | null;
+  createdAt: Date;
+  authorId: string;
+  author: {
     id: string;
-    content: string;
-    createdAt: Date;
-    authorId: string;
-    author: {
-      id: string;
-      name: string;
-      username: string | null;
-      image: string | null;
-    };
+    name: string;
+    username: string | null;
+    image: string | null;
+    bio: string | null;
   };
+  _count?: {
+    likes: number;
+    replies: number;
+    reposts: number;
+    bookmarks: number;
+  };
+  likes?: unknown[];
+  reposts?: unknown[];
+  bookmarks?: unknown[];
+  likeCount: number;
+  commentCount: number;
+  repostCount: number;
+  bookmarkCount: number;
+  isLiked: boolean;
+  isReposted: boolean;
+  isBookmarked: boolean;
+  profileImage: string | null;
+};
+
+export type CommentCardProps = {
+  comment: CommentItem;
 };
 
 export type PostDetailSectionProps = {
   post: PostItem;
-  comments: CommentCardProps["comment"][];
+  comments: CommentItem[];
   commentsCount: number;
   currentUserId: string | null;
 };
