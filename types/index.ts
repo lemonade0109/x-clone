@@ -1,4 +1,5 @@
 import { getAllPostsAction } from "@/lib/actions/post-actions/get-all-posts-action";
+import { getPopoverProfileAction } from "@/lib/actions/user/get-popover-profile-action";
 import { fullSignUpSchema } from "@/lib/validators";
 import z from "zod";
 
@@ -199,3 +200,7 @@ export type PostDetailSectionProps = {
   commentsCount: number;
   currentUserId: string | null;
 };
+
+export type PopoverProfileData = Awaited<
+  ReturnType<typeof getPopoverProfileAction>
+>;

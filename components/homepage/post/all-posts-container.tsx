@@ -56,6 +56,7 @@ const AllPostsContainer: React.FC<AllPostContainerProps> = ({
       {/* Avatar column */}
       <div className="shrink-0">
         <ProfilePopover
+          userId={post.author.id}
           name={post.author.name}
           userName={post.author.username || ""}
           profileImage={post.author.image || ""}
@@ -82,6 +83,7 @@ const AllPostsContainer: React.FC<AllPostContainerProps> = ({
         <div className="flex items-center justify-between gap-1">
           <div className="flex items-center gap-1 min-w-0">
             <ProfilePopover
+              userId={post.author.id}
               name={post.author.name}
               userName={post.author.username || ""}
               profileImage={post.author.image || ""}

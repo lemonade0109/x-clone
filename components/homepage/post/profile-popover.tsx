@@ -8,14 +8,33 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
+import { PopoverProfileData } from "@/types";
+import { getPopoverProfileAction } from "@/lib/actions/user/get-popover-profile-action";
 
+//TODO: Making the profilePopover component dynamic!.
 const ProfilePopover: React.FC<{
+  userId: string;
   name: string | undefined;
   userName: string | undefined;
   profileImage: string | undefined;
   bio: string | undefined;
   children: React.ReactNode;
-}> = ({ name, userName, profileImage, bio, children }) => {
+}> = ({ userId, name, userName, profileImage, bio, children }) => {
+  const [profileData, setProfileData] =
+    React.useState<PopoverProfileData | null>(null);
+  const [isPending, startTransition] = React.useTransition();
+  const hasFecthedRef = React.useRef(false);
+
+  const handleOpenChange = (open: boolean) => {
+    if (open && !hasFecthedRef.current) {
+      hasFecthedRef.current = true;
+      startTransition(async () => {
+        const data = await getPopoverProfileAction(userId);
+        setProfileData(data);
+      });
+    }
+  };
+
   return (
     <HoverCard openDelay={500} closeDelay={200}>
       <HoverCardTrigger asChild>{children}</HoverCardTrigger>
