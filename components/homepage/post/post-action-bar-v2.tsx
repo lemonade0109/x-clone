@@ -100,6 +100,10 @@ const PostActionBar: React.FC<PostActionBarProps> = ({
     toast.success("Link copied to clipboard!");
   };
 
+  React.useEffect(() => {
+    setCommentTotal(commentsCount ?? 0);
+  }, [commentsCount]);
+
   return (
     <div
       className={`flex items-center justify-between mt-3 px-2 ${classname ?? "max-w-md"}`}

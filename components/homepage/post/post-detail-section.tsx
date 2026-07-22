@@ -3,6 +3,7 @@ import { PostDetailSectionProps } from "@/types";
 import dayjs from "dayjs";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React from "react";
 import AllPostsContainer from "./all-posts-container";
 import { GoArrowLeft } from "react-icons/go";
@@ -17,26 +18,27 @@ const PostDetailSection: React.FC<PostDetailSectionProps> = ({
   commentsCount,
   currentUserId,
 }) => {
+  const router = useRouter();
   const [showReplyTab, setShowReplyTab] = React.useState<boolean>(false);
   const [commentTotal, setCommentTotal] = React.useState<number>(
     commentsCount ?? 0,
   );
 
   React.useEffect(() => {
-    setCommentTotal(commentsCount ?? 0);
+    setCommentTotal((prev) => Math.max(prev, commentsCount ?? 0));
   }, [commentsCount]);
 
-  console.log(comments);
   return (
     <section className="min-h-screen w-full max-w-[600px] border-x border-zinc-200 dark:border-zinc-800">
       {/* Header */}
       <div className="sticky top-0 z-10 flex items-center gap-6 bg-white/80 px-4 py-3 backdrop-blur dark:bg-black/80">
-        <Link
-          href={`/${post.author.username}`}
-          className="flex h-9 w-9 items-center justify-center rounded-full transition hover:bg-zinc-200 dark:hover:bg-zinc-800"
+        <Button
+          onClick={() => router.back()}
+          variant={"link"}
+          className="flex h-9 w-9 items-center justify-center rounded-full transition cursor-pointer hover:bg-zinc-200 dark:hover:bg-zinc-800"
         >
           <GoArrowLeft className="h-5 w-5" />
-        </Link>
+        </Button>
         <h1 className="text-xl font-bold">Post</h1>
       </div>
 
@@ -111,7 +113,7 @@ const PostDetailSection: React.FC<PostDetailSectionProps> = ({
           isReposted={post.isReposted}
           isBookmarked={post.isBookmarked}
           likesCount={post.likeCount}
-          commentsCount={post.commentCount}
+          commentsCount={commentTotal}
           repostsCount={post.repostCount}
           bookmarkCount={post.bookmarkCount}
           classname="w-full px-4 py-1"

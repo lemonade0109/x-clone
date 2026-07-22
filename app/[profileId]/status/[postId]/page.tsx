@@ -8,8 +8,6 @@ export default async function PostDetailPage({
   params: Promise<{ profileId: string; postId: string }>;
 }) {
   const { profileId, postId } = await params;
-  console.log("profileId", profileId);
-  console.log("postId", postId);
 
   const data = await getPostDetailAction(postId, profileId);
 
@@ -17,7 +15,6 @@ export default async function PostDetailPage({
     notFound();
   }
 
-  console.log("Post Detail Data:", data);
   return (
     <PostDetailSection
       post={data.post}
