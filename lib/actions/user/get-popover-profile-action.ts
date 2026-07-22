@@ -24,7 +24,7 @@ export const getPopoverProfileAction = async (userId: string) => {
       verified: true,
       _count: { select: { followers: true, following: true } },
       followers: currentUser
-        ? { where: { id: currentUser.id }, select: { id: true } }
+        ? { where: { followerId: currentUser.id }, select: { followerId: true } }
         : false,
     },
   });
