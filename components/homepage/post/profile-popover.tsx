@@ -10,6 +10,8 @@ import {
 } from "@/components/ui/hover-card";
 import { PopoverProfileData } from "@/types";
 import { getPopoverProfileAction } from "@/lib/actions/user/get-popover-profile-action";
+import { toggleFollowAction } from "@/lib/actions/user/follower-action";
+import { toast } from "sonner";
 
 //TODO: Making the profilePopover component dynamic!.
 const ProfilePopover: React.FC<{
@@ -23,6 +25,9 @@ const ProfilePopover: React.FC<{
   const [profileData, setProfileData] =
     React.useState<PopoverProfileData | null>(null);
   const [isPending, startTransition] = React.useTransition();
+  const [following, setFollowing] = React.useState<boolean>(false);
+  const [followPending, startFollowTransition] = React.useTransition();
+  const [followHovered, setFollowHovered] = React.useState<boolean>(false);
   const hasFecthedRef = React.useRef(false);
 
   const handleOpenChange = (open: boolean) => {
@@ -35,8 +40,28 @@ const ProfilePopover: React.FC<{
     }
   };
 
+  React.useEffect(() => {
+    if (profileData) {
+      setFollowing(profileData.isFollowing);
+    }
+  }, [profileData]);
+
+  const handleToggleFollow = () => {
+    const prev = following;
+    setFollowing(!prev);
+    startFollowTransition(async () => {
+      const res = await toggleFollowAction(userId);
+      if (!res.success) {
+        setFollowing(prev);
+        toast.error(
+          res.error ?? "Failed to update follow status. Please try again.",
+        );
+      }
+    });
+  };
+
   return (
-    <HoverCard openDelay={500} closeDelay={200}>
+    <HoverCard openDelay={500} closeDelay={200} onOpenChange={handleOpenChange}>
       <HoverCardTrigger asChild>{children}</HoverCardTrigger>
 
       <HoverCardContent className="h-[280px] w-[240px] overflow-hidden rounded-2xl bg-black p-0 shadow-lg shadow-white/30">
@@ -54,9 +79,21 @@ const ProfilePopover: React.FC<{
             </div>
 
             <div>
-              <Button className="h-8 rounded-full px-3 text-xs font-bold hover:bg-white/15">
-                Follow
-              </Button>
+              {profileData && !profileData.isOwner && (
+                <Button
+                  onClick={handleToggleFollow}
+                  disabled={followPending}
+                  onMouseEnter={() => setFollowHovered(true)}
+                  onMouseLeave={() => setFollowHovered(false)}
+                  className={`h-8 rounded-full px-3 text-xs font-bold ${following ? (followHovered ? "border border-red-400 bg-transparent text-black hover:bg-white/90" : "border border-gray-400 text-black hover:bg-white/90") : "border-none bg-white text-black hover:bg-white/90"}`}
+                >
+                  {following
+                    ? followHovered
+                      ? "Unfollow"
+                      : "Following"
+                    : "Follow"}
+                </Button>
+              )}
             </div>
           </div>
 
@@ -74,26 +111,57 @@ const ProfilePopover: React.FC<{
 
           <div className="flex items-center gap-3 text-xs">
             <p className="text-gray-500">
-              <span className="pr-1 font-bold text-white">14.4k</span>
+              <span className="pr-1 font-bold text-white">
+                {profileData?.followingCount ?? 0}
+              </span>
               Following
             </p>
             <p className="text-gray-500">
-              <span className="font-bold text-white">1004</span>
+              <span className="pr-1 font-bold text-white">
+                {profileData?.followersCount ?? 0}
+              </span>
               Followers
             </p>
           </div>
 
-          <div className="flex items-start gap-2">
-            <div className="relative h-7 w-12 shrink-0">
-              <div className="absolute left-0 top-0 z-20 h-7 w-7 rounded-full border border-red-400 bg-gray-500"></div>
-              <div className="absolute left-2.5 top-0 z-10 h-7 w-7 rounded-full border border-blue-400 bg-gray-500"></div>
-              <div className="absolute left-5 top-0 z-0 h-7 w-7 rounded-full border border-green-400 bg-gray-500"></div>
-            </div>
+          {profileData && profileData.mutuals.length > 0 && (
+            <div className="flex items-start gap-2">
+              <div
+                className="relative h-7 shrink-0"
+                style={{ width: `${16 + profileData.mutuals.length * 10}px` }}
+              >
+                {profileData.mutuals.map((mutual, i) => (
+                  <div
+                    key={mutual.id}
+                    className="absolute top-0 h-7 w-7 overflow-hidden rounded-full border border-black bg-gray-700"
+                    style={{
+                      left: `${i * 10}px`,
+                      zIndex: profileData.mutuals.length - i,
+                    }}
+                  >
+                    <Image
+                      src={mutual.image || "/default-profile.png"}
+                      alt={mutual.name}
+                      fill
+                      className="object-cover rounded-full"
+                    />
+                  </div>
+                ))}
+              </div>
 
-            <div className="min-w-0 flex-1 text-xs text-gray-500">
-              <p>Followed by {userName}, and 3 others you follow</p>
+              <div className="min-w-0 flex-1 text-xs text-gray-500">
+                <p>
+                  Followed by{" "}
+                  {profileData.mutuals
+                    .slice(0, 2)
+                    .map((mutual) => mutual.name)
+                    .join(", ")}
+                  {profileData.mutualsCount > 2 &&
+                    ` and ${profileData.mutualsCount - 2} others you follow`}
+                </p>
+              </div>
             </div>
-          </div>
+          )}
 
           <div className="mt-auto flex w-full cursor-pointer items-center justify-center rounded-full border border-gray-400 hover:bg-white/10">
             <button className="px-4 py-1.5 text-sm font-bold">
