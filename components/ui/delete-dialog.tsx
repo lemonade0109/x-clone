@@ -18,10 +18,12 @@ const DeleteDialog = ({
   postId,
   authorId,
   currentUserId,
+  className,
 }: {
   postId: string;
   authorId: string;
   currentUserId: string;
+  className?: string;
 }) => {
   const [isPending, startTransition] = React.useTransition();
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
@@ -50,8 +52,12 @@ const DeleteDialog = ({
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger>
-        <div className="flex text-2xl font-bold items-center space-x-3">
-          <MdDeleteOutline className="w-7 h-7 text-red-500" />
+        <div
+          className={`${className ?? "text-2xl"} flex font-bold items-center ${className ? "space-x-2" : "space-x-3"} cursor-pointer hover:bg-zinc-200 dark:hover:bg-zinc-800 rounded-full p-2`}
+        >
+          <MdDeleteOutline
+            className={`${className ? "w-4 h-4" : "w-7 h-7"} text-red-500`}
+          />
           <p className="text-red-500">Delete</p>
         </div>
       </DialogTrigger>

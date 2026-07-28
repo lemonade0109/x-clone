@@ -53,17 +53,23 @@ const PostDetailMoreDetails: React.FC<PostDetailMoreDetailsProps> = ({
       const res = await toggleFollowAction(authorId);
       if (!res.success) {
         setFollowing(prev);
-        toast.error(res.error ?? "Failed to update follow status. Please try again.");
+        toast.error(
+          res.error ?? "Failed to update follow status. Please try again.",
+        );
       } else {
         toast.success(
-        res.followed ? `You are now following @${authorUsername}` : `You have unfollowed @${authorUsername}`,
+          res.followed
+            ? `You are now following @${authorUsername}`
+            : `You have unfollowed @${authorUsername}`,
         );
       }
     });
   };
 
   const handleCopyLink = () => {
-    navigator.clipboard.writeText(`${window.location.origin}/${authorUsername}/status/${postId}`);
+    navigator.clipboard.writeText(
+      `${window.location.origin}/${authorUsername}/status/${postId}`,
+    );
     toast.success("Link copied to clipboard!");
   };
 
@@ -91,6 +97,7 @@ const PostDetailMoreDetails: React.FC<PostDetailMoreDetailsProps> = ({
           {isOwner ? (
             <li>
               <DeleteDialog
+                className="text-md"
                 authorId={authorId}
                 postId={postId}
                 currentUserId={currentUserId}
@@ -102,12 +109,12 @@ const PostDetailMoreDetails: React.FC<PostDetailMoreDetailsProps> = ({
                 type="button"
                 onClick={handleToggleFollow}
                 disabled={isPending || !followLoaded}
-                className="flex items-center space-x-3 text-md font-semibold disabled:opacity-50 cursor-pointer "
+                className="flex items-center space-x-2 text-md font-semibold disabled:opacity-50 cursor-pointer "
               >
                 {following ? (
-                  <FiUserMinus className="w-6 h-6" />
+                  <FiUserMinus className="w-4 h-4" />
                 ) : (
-                  <FiUserPlus className="w-6 h-6" />
+                  <FiUserPlus className="w-4 h-4" />
                 )}
                 <span>
                   {following ? "Unfollow" : "Follow"} @{authorUsername}
@@ -120,9 +127,9 @@ const PostDetailMoreDetails: React.FC<PostDetailMoreDetailsProps> = ({
             <button
               type="button"
               onClick={handleCopyLink}
-              className="flex items-center space-x-3 text-md font-semibold"
+              className="flex items-center space-x-2 text-md font-semibold"
             >
-              <FiLink className="w-6 h-6" />
+              <FiLink className="w-4 h-4" />
               <span>Copy link to post</span>
             </button>
           </li>
