@@ -11,6 +11,7 @@ import MoreDetails from "@/components/ui/more-details";
 import PostActionBar from "./post-action-bar-v2";
 import { Button } from "@/components/ui/button";
 import PostYourReplyButton from "./post-your-reply-button";
+import ProfilePopover from "./profile-popover";
 
 const PostDetailSection: React.FC<PostDetailSectionProps> = ({
   post,
@@ -43,8 +44,14 @@ const PostDetailSection: React.FC<PostDetailSectionProps> = ({
       </div>
 
       {/* Post author info */}
-      <div className="flex justify-between gap-3 px-4 pt-4">
-        <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 px-4 py-3">
+        <ProfilePopover
+          userId={post.author.id}
+          name={post.author.name}
+          userName={post.author.username || ""}
+          profileImage={post.author.image || ""}
+          bio={post.author.bio || ""}
+        >
           <Link href={`/${post.author.username}`} className="shrink-0">
             <div className="relative h-12 w-12 overflow-hidden rounded-full">
               <Image
@@ -55,24 +62,24 @@ const PostDetailSection: React.FC<PostDetailSectionProps> = ({
               />
             </div>
           </Link>
+        </ProfilePopover>
 
-          <div>
+        <div>
+          <ProfilePopover
+            userId={post.author.id}
+            name={post.author.name}
+            userName={post.author.username || ""}
+            profileImage={post.author.image || ""}
+            bio={post.author.bio || ""}
+          >
             <Link
               href={`/${post.author.username}`}
               className="font-bold hover:underline"
             >
               {post.author.name}
             </Link>
-            <p className="text-zinc-500">@{post.author.username}</p>
-          </div>
-        </div>
-
-        <div className="shrink-0">
-          <MoreDetails
-            postId={post.id}
-            authorId={post.authorId}
-            currentUserId={currentUserId ?? ""}
-          />
+          </ProfilePopover>
+          <p className="text-zinc-500">@{post.author.username}</p>
         </div>
       </div>
 
