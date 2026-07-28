@@ -7,11 +7,11 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import AllPostsContainer from "./all-posts-container";
 import { GoArrowLeft } from "react-icons/go";
-import MoreDetails from "@/components/ui/more-details";
 import PostActionBar from "./post-action-bar-v2";
 import { Button } from "@/components/ui/button";
 import PostYourReplyButton from "./post-your-reply-button";
 import ProfilePopover from "./profile-popover";
+import PostDetailMoreDetails from "./post-detail-more-details";
 
 const PostDetailSection: React.FC<PostDetailSectionProps> = ({
   post,
@@ -85,9 +85,10 @@ const PostDetailSection: React.FC<PostDetailSectionProps> = ({
         </div>
 
         <div className="shrink-0">
-          <MoreDetails
+          <PostDetailMoreDetails
             postId={post.id}
             authorId={post.author.id}
+            authorUsername={post.author.username || ""}
             currentUserId={currentUserId || ""}
           />
         </div>
