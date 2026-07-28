@@ -51,15 +51,20 @@ const PostDetailMoreDetails: React.FC<PostDetailMoreDetailsProps> = ({
     setFollowing(!prev);
     startTransition(async () => {
       const res = await toggleFollowAction(authorId);
-      if (!res) {
+      if (!res.success) {
         setFollowing(prev);
-        toast.error("Something went wrong. Please try again.");
+        toast.error(res.error ?? "Failed to update follow status. Please try again.");
       } else {
         toast.success(
-          `You are now ${!prev ? "following" : "unfollowing"} ${authorUsername}.`,
+        res.followed ? `You are now following @${authorUsername}` : `You have unfollowed @${authorUsername}`,
         );
       }
     });
+  };
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(`${window.location.origin}/${authorUsername}/status/${postId}`);
+    toast.success("Link copied to clipboard!");
   };
 
   return (
@@ -97,7 +102,7 @@ const PostDetailMoreDetails: React.FC<PostDetailMoreDetailsProps> = ({
                 type="button"
                 onClick={handleToggleFollow}
                 disabled={isPending || !followLoaded}
-                className="flex items-center space-x-3 text-xl font-semibold disabled:opacity-50"
+                className="flex items-center space-x-3 text-md font-semibold disabled:opacity-50 cursor-pointer "
               >
                 {following ? (
                   <FiUserMinus className="w-6 h-6" />
@@ -114,7 +119,8 @@ const PostDetailMoreDetails: React.FC<PostDetailMoreDetailsProps> = ({
           <li>
             <button
               type="button"
-              className="flex items-center space-x-3 text-xl font-semibold"
+              onClick={handleCopyLink}
+              className="flex items-center space-x-3 text-md font-semibold"
             >
               <FiLink className="w-6 h-6" />
               <span>Copy link to post</span>
