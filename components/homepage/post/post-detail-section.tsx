@@ -178,6 +178,7 @@ const PostDetailSection: React.FC<PostDetailSectionProps> = ({
             postId={post.id}
             profileImage={post.author.image || "/default-profile.png"}
             onSuccess={() => setCommentTotal((prev) => prev + 1)}
+            autoFocus={true}
             setIsReplyModalOpen={setShowReplyTab}
           />
         )}
