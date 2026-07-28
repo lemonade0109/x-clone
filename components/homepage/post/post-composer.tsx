@@ -53,7 +53,7 @@ function SubmitButton({
 }
 
 const PostComposer: React.FC<PostComposerProps> = ({
-  autoFocus = false,
+  autoFocus = true,
   userImage,
   value,
   onChange,
@@ -143,7 +143,7 @@ const PostComposer: React.FC<PostComposerProps> = ({
             </div>
           ) : (
             <SubmitButton
-              disabled={!value.trim() && !imageUrl}
+              disabled={disabled || (!value.trim() && !imageUrl)}
               pending={pending}
               submitType={submitType}
               onSubmit={onSubmit}
