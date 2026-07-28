@@ -44,27 +44,8 @@ const PostDetailSection: React.FC<PostDetailSectionProps> = ({
       </div>
 
       {/* Post author info */}
-      <div className="flex items-center gap-3 px-4 py-3">
-        <ProfilePopover
-          userId={post.author.id}
-          name={post.author.name}
-          userName={post.author.username || ""}
-          profileImage={post.author.image || ""}
-          bio={post.author.bio || ""}
-        >
-          <Link href={`/${post.author.username}`} className="shrink-0">
-            <div className="relative h-12 w-12 overflow-hidden rounded-full">
-              <Image
-                src={post.author.image || "/default-profile.png"}
-                alt={`${post.author.name} avatar`}
-                fill
-                className="object-cover"
-              />
-            </div>
-          </Link>
-        </ProfilePopover>
-
-        <div>
+      <div className="flex justify-between gap-3 px-4 py-3">
+        <div className="flex items-center gap-3">
           <ProfilePopover
             userId={post.author.id}
             name={post.author.name}
@@ -72,14 +53,43 @@ const PostDetailSection: React.FC<PostDetailSectionProps> = ({
             profileImage={post.author.image || ""}
             bio={post.author.bio || ""}
           >
-            <Link
-              href={`/${post.author.username}`}
-              className="font-bold hover:underline"
-            >
-              {post.author.name}
+            <Link href={`/${post.author.username}`} className="shrink-0">
+              <div className="relative h-12 w-12 overflow-hidden rounded-full">
+                <Image
+                  src={post.author.image || "/default-profile.png"}
+                  alt={`${post.author.name} avatar`}
+                  fill
+                  className="object-cover"
+                />
+              </div>
             </Link>
           </ProfilePopover>
-          <p className="text-zinc-500">@{post.author.username}</p>
+
+          <div>
+            <ProfilePopover
+              userId={post.author.id}
+              name={post.author.name}
+              userName={post.author.username || ""}
+              profileImage={post.author.image || ""}
+              bio={post.author.bio || ""}
+            >
+              <Link
+                href={`/${post.author.username}`}
+                className="font-bold hover:underline"
+              >
+                {post.author.name}
+              </Link>
+            </ProfilePopover>
+            <p className="text-zinc-500">@{post.author.username}</p>
+          </div>
+        </div>
+
+        <div className="shrink-0">
+          <MoreDetails
+            postId={post.id}
+            authorId={post.author.id}
+            currentUserId={currentUserId || ""}
+          />
         </div>
       </div>
 
