@@ -10,7 +10,6 @@ type PostComposerProps = {
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;
-
   pending?: boolean;
   disabled?: boolean;
   submitText?: string;
@@ -19,10 +18,9 @@ type PostComposerProps = {
   hideProfileImage?: boolean;
   error?: string;
   replyingTo?: string;
-
   imageUrl?: string | null;
+  autoFocus?: boolean;
   onRemoveImage?: () => void;
-
   addImageToPost?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onEmojiSelect?: (emoji: string) => void;
   onGifSelect?: (gifUrl: string) => void;
@@ -55,6 +53,7 @@ function SubmitButton({
 }
 
 const PostComposer: React.FC<PostComposerProps> = ({
+  autoFocus = false,
   userImage,
   value,
   onChange,
@@ -98,7 +97,7 @@ const PostComposer: React.FC<PostComposerProps> = ({
         )}
 
         <textarea
-          autoFocus
+          autoFocus={autoFocus}
           value={value}
           name="content"
           onChange={(e) => onChange(e.target.value)}

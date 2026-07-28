@@ -204,3 +204,12 @@ export type PostDetailSectionProps = {
 export type PopoverProfileData = Awaited<
   ReturnType<typeof getPopoverProfileAction>
 >;
+
+export interface PostYourReplyButtonProps {
+  userName: string;
+  postId: string;
+  profileImage: string;
+  autoFocus?: boolean;
+  setIsReplyModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+  onSuccess?: () => void;
+}

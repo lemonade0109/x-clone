@@ -3,17 +3,11 @@ import { createCommentAction } from "@/lib/actions/post-actions/comment-post-act
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
+import type { PostYourReplyButtonProps } from "@/types";
 import { toast } from "sonner";
 import PostComposer from "./post-composer";
 
 //TODO: Setup the reply component to match my current x post-detail-compenent.
-export interface PostYourReplyButtonProps {
-  userName: string;
-  postId: string;
-  profileImage: string;
-  setIsReplyModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
-  onSuccess?: () => void;
-}
 
 const PostYourReplyButton = (props: PostYourReplyButtonProps) => {
   const router = useRouter();
@@ -65,6 +59,7 @@ const PostYourReplyButton = (props: PostYourReplyButtonProps) => {
           onChange={setReplyText}
           placeholder="Post your reply"
           disabled={isPending || !replyText.trim()}
+          autoFocus={props.autoFocus}
           onSubmit={handleReply}
           submitType="button"
           submitText={isPending ? "Replying..." : "Reply"}
