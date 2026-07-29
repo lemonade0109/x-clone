@@ -9,6 +9,13 @@ export const getCurrentUserAction = async () => {
 
   return db.user.findUnique({
     where: { email: session.user.email },
-    select: { id: true, name: true, username: true, image: true },
+    select: {
+      id: true,
+      name: true,
+      username: true,
+      image: true,
+      onboardingCompleted: true,
+      email: true,
+    },
   });
 };

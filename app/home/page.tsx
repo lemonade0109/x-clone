@@ -1,26 +1,11 @@
 import HomeSection from "@/components/page/sections/home-section";
 import NavLayoutTemplate from "@/components/shared/nav-layout-template";
 import TrendingSideBar from "@/components/shared/trending-sidebar";
-import { auth } from "@/auth";
-import { db } from "@/db/db";
 import OnboardingModal from "@/components/auth/multistep-signup-modal/onboarding-modal";
+import { getCurrentUserAction } from "@/lib/actions/user/get-current-user-action";
 
 export default async function Homepage() {
-  const session = await auth();
-
-  const user = session?.user?.id
-    ? await db.user.findUnique({
-        where: { id: session.user.id },
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          username: true,
-          image: true,
-          onboardingCompleted: true,
-        },
-      })
-    : null;
+  const user = await getCurrentUserAction();
 
   const showOnboarding = !!user && !user.onboardingCompleted;
   const initialUsername = user?.username ?? null;
