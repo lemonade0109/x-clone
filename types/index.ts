@@ -80,6 +80,7 @@ export type PostActionBarProps = {
   authorName: string;
   content: string;
   classname?: string;
+  onCurrentUserLoad?: (image: string | null) => void;
 };
 
 export type ProfileUserInfo = {
@@ -199,6 +200,7 @@ export type PostDetailSectionProps = {
   comments: CommentItem[];
   commentsCount: number;
   currentUserId: string | null;
+  onCurrentUserLoad?: (image: string | null) => void;
 };
 
 export type PopoverProfileData = Awaited<
@@ -208,7 +210,8 @@ export type PopoverProfileData = Awaited<
 export interface PostYourReplyButtonProps {
   userName: string;
   postId: string;
-  profileImage: string;
+  hideAvatar?: boolean;
+  currentUserImage?: string | null;
   autoFocus?: boolean;
   setIsReplyModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
   onSuccess?: () => void;

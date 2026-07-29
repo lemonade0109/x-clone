@@ -21,6 +21,7 @@ import Link from "next/link";
 import TooltipContainer from "@/components/ui/tooltip-container";
 import Image from "next/image";
 import PostYourReplyButton from "./post-your-reply-button";
+import { getCurrentUserAction } from "@/lib/actions/user/get-current-user-action";
 
 const PostActionBar: React.FC<PostActionBarProps> = ({
   postId,
@@ -36,6 +37,7 @@ const PostActionBar: React.FC<PostActionBarProps> = ({
   authorName,
   content,
   classname,
+  onCurrentUserLoad,
 }) => {
   const [liked, setLiked] = React.useState(isLiked);
   const [reposted, setReposted] = React.useState(isReposted);
@@ -46,6 +48,21 @@ const PostActionBar: React.FC<PostActionBarProps> = ({
   const [commentTotal, setCommentTotal] = React.useState(commentsCount ?? 0);
   const [isCommentOpen, setIsCommentOpen] = React.useState(false);
   const [isPending, startTransition] = React.useTransition();
+  const [currentUserImage, setCurrentUserImage] = React.useState<string | null>(
+    null,
+  );
+
+  React.useEffect(() => {
+    let isMounted = true;
+    getCurrentUserAction().then((user) => {
+      if (!isMounted) return;
+      setCurrentUserImage(user?.image || null);
+      onCurrentUserLoad?.(user?.image || null);
+    });
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const handleLike = () => {
     startTransition(async () => {
@@ -155,7 +172,7 @@ const PostActionBar: React.FC<PostActionBarProps> = ({
                 </DialogHeader>
 
                 <PostYourReplyButton
-                  profileImage={profileImage || "/default-profile.png"}
+                  currentUserImage={currentUserImage || "/default-profile.png"}
                   userName={username}
                   postId={postId}
                   setIsReplyModalOpen={setIsCommentOpen}

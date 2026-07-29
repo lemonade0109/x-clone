@@ -12,18 +12,35 @@ import { Button } from "@/components/ui/button";
 import PostYourReplyButton from "./post-your-reply-button";
 import ProfilePopover from "./profile-popover";
 import PostDetailMoreDetails from "./post-detail-more-details";
+import { getCurrentUserAction } from "@/lib/actions/user/get-current-user-action";
 
 const PostDetailSection: React.FC<PostDetailSectionProps> = ({
   post,
   comments,
   commentsCount,
   currentUserId,
+  onCurrentUserLoad,
 }) => {
   const router = useRouter();
   const [showReplyTab, setShowReplyTab] = React.useState<boolean>(false);
   const [commentTotal, setCommentTotal] = React.useState<number>(
     commentsCount ?? 0,
   );
+  const [currentUserImage, setCurrentUserImage] = React.useState<string | null>(
+    null,
+  );
+
+  React.useEffect(() => {
+    let isMounted = true;
+    getCurrentUserAction().then((user) => {
+      if (!isMounted) return;
+      setCurrentUserImage(user?.image || null);
+      onCurrentUserLoad?.(user?.image || null);
+    });
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   React.useEffect(() => {
     setCommentTotal((prev) => Math.max(prev, commentsCount ?? 0));
@@ -145,9 +162,9 @@ const PostDetailSection: React.FC<PostDetailSectionProps> = ({
             className="flex space-x-3 border-b border-gray-800"
           >
             <div className="flex items-center pl-2">
-              <div className="w-14 h-14 rounded-full relative">
+              <div className="w-12 h-12 rounded-full relative">
                 <Image
-                  src={post.author.image || "/default-profile.png"}
+                  src={currentUserImage || "/default-profile.png"}
                   alt="profile image"
                   fill
                   className="rounded-full"
@@ -162,13 +179,13 @@ const PostDetailSection: React.FC<PostDetailSectionProps> = ({
               />
 
               <div className="flex pr-2">
-                <Button
+                <button
                   disabled={true}
                   type="submit"
-                  className=" font-bold rounded-full  px-6 py-6 text-black text-lg "
+                  className="h-9 min-w-18 rounded-full bg-black dark:bg-white px-4 text-[15px] font-bold text-white dark:text-black transition hover:bg-gray-800 dark:hover:bg-white/90 disabled:bg-gray-400 disabled:text-white/70 dark:disabled:bg-gray-500 dark:disabled:text-black/70"
                 >
                   Reply
-                </Button>
+                </button>
               </div>
             </div>
           </div>
@@ -176,7 +193,7 @@ const PostDetailSection: React.FC<PostDetailSectionProps> = ({
           <PostYourReplyButton
             userName={post.author.username || ""}
             postId={post.id}
-            profileImage={post.author.image || "/default-profile.png"}
+            currentUserImage={currentUserImage || "/default-profile.png"}
             onSuccess={() => setCommentTotal((prev) => prev + 1)}
             autoFocus={true}
             setIsReplyModalOpen={setShowReplyTab}

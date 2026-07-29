@@ -6,8 +6,7 @@ import React from "react";
 import type { PostYourReplyButtonProps } from "@/types";
 import { toast } from "sonner";
 import PostComposer from "./post-composer";
-
-//TODO: Setup the reply component to match my current x post-detail-compenent.
+import { getCurrentUserAction } from "@/lib/actions/user/get-current-user-action";
 
 const PostYourReplyButton = (props: PostYourReplyButtonProps) => {
   const router = useRouter();
@@ -39,19 +38,23 @@ const PostYourReplyButton = (props: PostYourReplyButtonProps) => {
 
   return (
     <div className="flex flex-col w-full gap-3 px-4 py-2">
-      <p className="mb-3 ml-24 text-md text-zinc-500">
-        Replying to <span className="text-sky-500">@{props.userName}</span>
-      </p>
+      {!props.hideAvatar && (
+        <p className="mb-3 ml-24 text-md text-zinc-500">
+          Replying to <span className="text-sky-500">@{props.userName}</span>
+        </p>
+      )}
 
       <div className="flex w-full px-3">
-        <div className="relative h-11 w-11 shrink-0 rounded-full overflow-hidden mr-2">
-          <Image
-            src={props.profileImage || "/default-profile.png"}
-            alt="profile image"
-            fill
-            className="object-cover"
-          />
-        </div>
+        {!props.hideAvatar && (
+          <div className="relative h-11 w-11 shrink-0 rounded-full overflow-hidden mr-2">
+            <Image
+              src={props.currentUserImage || "/default-profile.png"}
+              alt="profile image"
+              fill
+              className="object-cover"
+            />
+          </div>
+        )}
 
         <PostComposer
           hideProfileImage
