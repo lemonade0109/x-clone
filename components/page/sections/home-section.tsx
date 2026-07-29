@@ -1,5 +1,4 @@
 import React, { Suspense } from "react";
-import { Ellipsis, Image as ImageIcon, Verified } from "lucide-react";
 import CreatePostForm from "@/components/homepage/post/create-post-form";
 import AllPosts from "@/components/homepage/post/all-posts";
 import { CgSpinner } from "react-icons/cg";
@@ -46,7 +45,7 @@ const HomeSection: React.FC<HomeSectionProps> = ({
           />
         }
       >
-        <AllPosts currentUserId={currentUserId} />
+        <AllPosts currentUserId={currentUserId} currentUserImage={userImage} />
       </Suspense>
     </section>
   );

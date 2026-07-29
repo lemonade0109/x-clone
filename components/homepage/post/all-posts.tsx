@@ -1,9 +1,10 @@
 import { getAllPostsAction } from "@/lib/actions/post-actions/get-all-posts-action";
 import AllPostsContainer from "./all-posts-container";
 
-const AllPosts: React.FC<{ currentUserId: string | null }> = async ({
-  currentUserId,
-}) => {
+const AllPosts: React.FC<{
+  currentUserId: string | null;
+  currentUserImage?: string | null;
+}> = async ({ currentUserId, currentUserImage }) => {
   const posts = await getAllPostsAction({ currentUserId });
 
   if (!posts.length) {
@@ -18,7 +19,7 @@ const AllPosts: React.FC<{ currentUserId: string | null }> = async ({
         <AllPostsContainer
           key={post.id}
           post={post}
-          currentUser={{ id: currentUserId ?? "" }}
+          currentUser={{ id: currentUserId ?? "", image: currentUserImage }}
         />
       ))}
     </section>

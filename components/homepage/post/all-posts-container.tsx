@@ -44,6 +44,8 @@ const AllPostsContainer: React.FC<AllPostContainerProps> = ({
       setFormattedDate(formattedDate);
     };
 
+    updateDate();
+
     const intervalId = setInterval(updateDate, 1000);
 
     return () => clearInterval(intervalId);
@@ -151,6 +153,7 @@ const AllPostsContainer: React.FC<AllPostContainerProps> = ({
           content={post.content || ""}
           username={post.author.username || ""}
           profileImage={post.author.image || ""}
+          currentUserImage={currentUser?.image || ""}
           authorName={post.author.name}
           isLiked={post.isLiked}
           isReposted={post.isReposted}

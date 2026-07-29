@@ -53,5 +53,6 @@ export const getProfileAction = async () => {
     isFollowing: Array.isArray(user.followers) && user.followers.length > 0,
     isOwner: currentUser?.id === user.id,
     currentUserId: currentUser?.id ?? null,
+    currentUserImage: user.image ?? null,
   };
 };

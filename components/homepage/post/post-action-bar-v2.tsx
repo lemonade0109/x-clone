@@ -37,7 +37,7 @@ const PostActionBar: React.FC<PostActionBarProps> = ({
   authorName,
   content,
   classname,
-  onCurrentUserLoad,
+  currentUserImage,
 }) => {
   const [liked, setLiked] = React.useState(isLiked);
   const [reposted, setReposted] = React.useState(isReposted);
@@ -48,21 +48,6 @@ const PostActionBar: React.FC<PostActionBarProps> = ({
   const [commentTotal, setCommentTotal] = React.useState(commentsCount ?? 0);
   const [isCommentOpen, setIsCommentOpen] = React.useState(false);
   const [isPending, startTransition] = React.useTransition();
-  const [currentUserImage, setCurrentUserImage] = React.useState<string | null>(
-    null,
-  );
-
-  React.useEffect(() => {
-    let isMounted = true;
-    getCurrentUserAction().then((user) => {
-      if (!isMounted) return;
-      setCurrentUserImage(user?.image || null);
-      onCurrentUserLoad?.(user?.image || null);
-    });
-    return () => {
-      isMounted = false;
-    };
-  }, []);
 
   const handleLike = () => {
     startTransition(async () => {

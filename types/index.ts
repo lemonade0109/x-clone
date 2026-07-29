@@ -80,7 +80,7 @@ export type PostActionBarProps = {
   authorName: string;
   content: string;
   classname?: string;
-  onCurrentUserLoad?: (image: string | null) => void;
+  currentUserImage?: string | null;
 };
 
 export type ProfileUserInfo = {
@@ -120,11 +120,13 @@ export type ProfileTab = "posts" | "replies" | "media" | "likes";
 
 type CurrentUser = {
   id: string;
+  image?: string | null;
 };
 
 export type AllPostContainerProps = {
   post: PostItem;
   currentUser: CurrentUser;
+  onCurrentUserLoad?: (image: string | null) => void;
 };
 
 export type PostState = {

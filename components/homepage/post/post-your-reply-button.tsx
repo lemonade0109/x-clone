@@ -6,7 +6,6 @@ import React from "react";
 import type { PostYourReplyButtonProps } from "@/types";
 import { toast } from "sonner";
 import PostComposer from "./post-composer";
-import { getCurrentUserAction } from "@/lib/actions/user/get-current-user-action";
 
 const PostYourReplyButton = (props: PostYourReplyButtonProps) => {
   const router = useRouter();
