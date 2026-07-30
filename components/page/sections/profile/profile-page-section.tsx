@@ -55,7 +55,7 @@ const ProfilePageSection: React.FC<ProfilePageSectionProps> = ({
       <div className="relative flex items-end justify-between px-4 pb-3">
         <div className="absolute -top-16 left-4 h-32 w-32 rounded-full border-4 border-white dark:border-black">
           <Image
-            src={profile.image || "/default-profile.png"}
+            src={profile.image || "/image.jpg"}
             alt="Avatar"
             fill
             className="rounded-full object-cover"

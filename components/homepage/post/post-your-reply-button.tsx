@@ -47,7 +47,7 @@ const PostYourReplyButton = (props: PostYourReplyButtonProps) => {
         {!props.hideAvatar && (
           <div className="relative h-11 w-11 shrink-0 rounded-full overflow-hidden mr-2">
             <Image
-              src={props.currentUserImage || "/default-profile.png"}
+              src={props.currentUserImage || "/image.jpg"}
               alt="profile image"
               fill
               className="object-cover"

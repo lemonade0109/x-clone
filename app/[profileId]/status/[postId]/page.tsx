@@ -1,5 +1,6 @@
 import PostDetailSection from "@/components/homepage/post/post-detail-section";
 import { getPostDetailAction } from "@/lib/actions/post-actions/get-post-detail-action";
+import { getCurrentUserAction } from "@/lib/actions/user/get-current-user-action";
 import { notFound } from "next/navigation";
 
 export default async function PostDetailPage({
@@ -10,6 +11,7 @@ export default async function PostDetailPage({
   const { profileId, postId } = await params;
 
   const data = await getPostDetailAction(postId, profileId);
+  const user = await getCurrentUserAction();
 
   if (!data) {
     notFound();
@@ -21,6 +23,7 @@ export default async function PostDetailPage({
       comments={data.comments}
       commentsCount={data.post.commentCount}
       currentUserId={data.currentUserId}
+      currentUserImage={user?.image ?? null}
     />
   );
 }

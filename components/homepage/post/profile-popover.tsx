@@ -140,7 +140,7 @@ const ProfilePopover: React.FC<{
                     }}
                   >
                     <Image
-                      src={mutual.image || "/default-profile.png"}
+                      src={mutual.image || "/image.jpg"}
                       alt={mutual.name}
                       fill
                       className="object-cover rounded-full"

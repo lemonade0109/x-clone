@@ -19,28 +19,13 @@ const PostDetailSection: React.FC<PostDetailSectionProps> = ({
   comments,
   commentsCount,
   currentUserId,
-  onCurrentUserLoad,
+  currentUserImage,
 }) => {
   const router = useRouter();
   const [showReplyTab, setShowReplyTab] = React.useState<boolean>(false);
   const [commentTotal, setCommentTotal] = React.useState<number>(
     commentsCount ?? 0,
   );
-  const [currentUserImage, setCurrentUserImage] = React.useState<string | null>(
-    null,
-  );
-
-  React.useEffect(() => {
-    let isMounted = true;
-    getCurrentUserAction().then((user) => {
-      if (!isMounted) return;
-      setCurrentUserImage(user?.image || null);
-      onCurrentUserLoad?.(user?.image || null);
-    });
-    return () => {
-      isMounted = false;
-    };
-  }, []);
 
   React.useEffect(() => {
     setCommentTotal((prev) => Math.max(prev, commentsCount ?? 0));
@@ -73,7 +58,7 @@ const PostDetailSection: React.FC<PostDetailSectionProps> = ({
             <Link href={`/${post.author.username}`} className="shrink-0">
               <div className="relative h-12 w-12 overflow-hidden rounded-full">
                 <Image
-                  src={post.author.image || "/default-profile.png"}
+                  src={post.author.image || "/image.jpg"}
                   alt={`${post.author.name} avatar`}
                   fill
                   className="object-cover"
@@ -164,7 +149,7 @@ const PostDetailSection: React.FC<PostDetailSectionProps> = ({
             <div className="flex items-center pl-2">
               <div className="w-12 h-12 rounded-full relative">
                 <Image
-                  src={currentUserImage || "/default-profile.png"}
+                  src={currentUserImage || "/image.jpg"}
                   alt="profile image"
                   fill
                   className="rounded-full"
@@ -193,7 +178,7 @@ const PostDetailSection: React.FC<PostDetailSectionProps> = ({
           <PostYourReplyButton
             userName={post.author.username || ""}
             postId={post.id}
-            currentUserImage={currentUserImage || "/default-profile.png"}
+            currentUserImage={currentUserImage || ""}
             onSuccess={() => setCommentTotal((prev) => prev + 1)}
             autoFocus={true}
             setIsReplyModalOpen={setShowReplyTab}
@@ -242,7 +227,10 @@ const PostDetailSection: React.FC<PostDetailSectionProps> = ({
                     bookmarks: comment.bookmarkCount ?? 0,
                   },
                 }}
-                currentUser={{ id: currentUserId ?? "" }}
+                currentUser={{
+                  id: currentUserId ?? "",
+                  image: currentUserImage ?? "",
+                }}
               />
             ))}
           </div>

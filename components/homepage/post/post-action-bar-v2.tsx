@@ -127,7 +127,7 @@ const PostActionBar: React.FC<PostActionBarProps> = ({
                   <DialogTitle className="flex items-center space-x-4">
                     <div className="relative h-12 w-12 rounded-full">
                       <Image
-                        src={profileImage || "/default-profile.png"}
+                        src={profileImage || "/image.jpg"}
                         alt="Profile Image"
                         fill
                         className="rounded-full object-cover"
@@ -157,7 +157,7 @@ const PostActionBar: React.FC<PostActionBarProps> = ({
                 </DialogHeader>
 
                 <PostYourReplyButton
-                  currentUserImage={currentUserImage || "/default-profile.png"}
+                  currentUserImage={currentUserImage || "/image.jpg"}
                   userName={username}
                   postId={postId}
                   setIsReplyModalOpen={setIsCommentOpen}

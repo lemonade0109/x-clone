@@ -126,7 +126,6 @@ type CurrentUser = {
 export type AllPostContainerProps = {
   post: PostItem;
   currentUser: CurrentUser;
-  onCurrentUserLoad?: (image: string | null) => void;
 };
 
 export type PostState = {
@@ -202,7 +201,7 @@ export type PostDetailSectionProps = {
   comments: CommentItem[];
   commentsCount: number;
   currentUserId: string | null;
-  onCurrentUserLoad?: (image: string | null) => void;
+  currentUserImage?: string | null;
 };
 
 export type PopoverProfileData = Awaited<
