@@ -137,6 +137,7 @@ const PostDetailSection: React.FC<PostDetailSectionProps> = ({
           repostsCount={post.repostCount}
           bookmarkCount={post.bookmarkCount}
           classname="w-full px-4 py-1"
+          currentUserImage={currentUserImage || ""}
         />
       </div>
 
