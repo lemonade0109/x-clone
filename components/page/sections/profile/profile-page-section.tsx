@@ -41,14 +41,12 @@ const ProfilePageSection: React.FC<ProfilePageSectionProps> = ({
 
       {/* Cover Image */}
       <div className="relative h-48 w-full bg-zinc-300">
-        {profile.coverImage && (
-          <Image
-            src={profile.coverImage}
-            alt="Cover Image"
-            fill
-            className="object-cover"
-          />
-        )}
+        <Image
+          src={profile.coverImage ?? "/cover.jpg"}
+          alt="Cover Image"
+          fill
+          className="object-cover"
+        />
       </div>
 
       {/*  Avatar + Follow Button */}
