@@ -1,3 +1,4 @@
+"use client";
 import { toggleFollowAction } from "@/lib/actions/user/follower-action";
 import React from "react";
 import { toast } from "sonner";

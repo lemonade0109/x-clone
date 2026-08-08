@@ -16,6 +16,7 @@ export const getSuggestedUsersAction = async () => {
       id: true,
       name: true,
       username: true,
+      bio: true,
       image: true,
       verified: true,
     },
