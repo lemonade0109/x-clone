@@ -132,7 +132,8 @@ const AllPostsContainer: React.FC<AllPostContainerProps> = ({
 
           {post.image && (
             <Link
-              href={`/${post.author.username || ""}/status/${post.id}/photo/1`}
+              href={`/#`}
+              // href={`/${post.author.username || ""}/status/${post.id}/photo/1`}
               className="block w-full h-72 relative rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-800"
               onClick={(e) => e.stopPropagation()}
             >

@@ -5,6 +5,7 @@ import React, { Suspense } from "react";
 import SearchBar from "./search-bar";
 import { getSuggestedUsersAction } from "@/lib/actions/user/get-suggested-users-action";
 import { CgSpinner } from "react-icons/cg";
+import FollowButton from "../page/sections/profile/follow-button";
 
 const trends = [
   {
@@ -126,9 +127,13 @@ const TrendingSideBar = async () => {
                       </p>
                     </div>
                   </Link>
-                  <button className="ml-3 flex-shrink-0 rounded-full bg-black dark:bg-white px-4 py-1.5 text-sm font-bold dark:text-black transition hover:bg-zinc-800 dark:hover:bg-white/80">
-                    Follow
-                  </button>
+
+                  <FollowButton
+                    targetUserId={user.id}
+                    isFollowing={
+                      (user as { isFollowing?: boolean }).isFollowing ?? false
+                    }
+                  />
                 </div>
               ))
             )}
