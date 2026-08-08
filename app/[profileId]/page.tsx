@@ -9,16 +9,19 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 export default async function ProfilePage({
+  params,
   searchParams,
 }: {
+  params: Promise<{ profileId: string }>;
   searchParams: Promise<{ tab?: string }>;
 }) {
   const { tab } = await searchParams;
+  const { profileId } = await params;
 
   const activeTab: ProfileTab =
     tab === "replies" || tab === "media" || tab === "likes" ? tab : "posts";
 
-  const profile = await getProfileAction();
+  const profile = await getProfileAction(profileId);
   if (!profile) notFound();
 
   const [posts, replies] = await Promise.all([

@@ -30,8 +30,6 @@ const trends = [
 const TrendingSideBar = async () => {
   const suggestedUsers = await getSuggestedUsersAction();
 
-  console.log(suggestedUsers);
-
   return (
     <aside className="sticky top-0 hidden h-screen min-w-[320px] flex-col px-4 py-2 lg:flex">
       <div className="flex flex-col gap-4 overflow-y-auto scrollbar-hide">

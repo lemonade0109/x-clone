@@ -3,7 +3,7 @@
 import { auth } from "@/auth";
 import { db } from "@/db/db";
 
-export const getProfileAction = async () => {
+export const getProfileAction = async (profileId?: string) => {
   const session = await auth();
 
   const currentUser = session?.user?.email
@@ -13,33 +13,40 @@ export const getProfileAction = async () => {
       })
     : null;
 
+  const isObjectId = !!profileId && /^[a-fA-F0-9]{24}$/.test(profileId);
+
   const user = await db.user.findUnique({
-    where: { id: currentUser?.id },
+    where: profileId
+      ? isObjectId
+        ? { id: profileId }
+        : { username: profileId }
+      : { id: currentUser?.id ?? "" },
     select: {
       id: true,
       name: true,
       username: true,
-      bio: true,
       image: true,
+      bio: true,
       coverImage: true,
       createdAt: true,
-      location: true,
-      website: true,
       verified: true,
+      website: true,
+      location: true,
+      dateOfBirth: true,
       onboardingCompleted: true,
-      _count: {
-        select: {
-          followers: true,
-          following: true,
-          posts: true,
-        },
-      },
-      followers: currentUser
+      followers: currentUser?.id
         ? {
             where: { followerId: currentUser.id },
-            select: { followerId: true },
+            select: { id: true },
           }
         : false,
+      _count: {
+        select: {
+          posts: true,
+          followers: true,
+          following: true,
+        },
+      },
     },
   });
 
