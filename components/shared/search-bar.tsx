@@ -3,10 +3,97 @@
 import { Search } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
+import type { QuickUser, RecentSearch } from "@/types";
+import { searchUserAction } from "@/lib/actions/user/search-user-action";
+
+const RECENT_SEARCHES_KEY = "recentSearches";
+const MAX_RECENT = 8;
 
 const SearchBar = () => {
   const router = useRouter();
+  const containedRef = React.useRef<HTMLDivElement>(null);
+
   const [query, setQuery] = React.useState("");
+  const [isOpen, setIsOpen] = React.useState(false);
+  const [isPending, startTransition] = React.useTransition();
+  const [results, setResults] = React.useState<QuickUser[]>([]);
+  const [recentSearches, setRecentSearches] = React.useState<RecentSearch[]>(
+    [],
+  );
+
+  // Load Recent Searches On Mount
+  React.useEffect(() => {
+    try {
+      const saved = JSON.parse(
+        localStorage.getItem(RECENT_SEARCHES_KEY) || "[]",
+      );
+      if (Array.isArray(saved)) {
+        setRecentSearches(saved);
+      }
+    } catch (error) {
+      console.error("Failed to load recent searches:", error);
+    }
+  }, []);
+
+  // Close dropdown when clicking outside
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        containedRef.current &&
+        !containedRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  // Debounced live search
+  React.useEffect(() => {
+    const trimmed = query.trim();
+    if (!trimmed) {
+      setResults([]);
+      return;
+    }
+
+    const timeout = setTimeout(() => {
+      startTransition(async () => {
+        const users = await searchUserAction(trimmed);
+        setResults(users);
+      });
+    }, 300);
+    return () => clearTimeout(timeout);
+  }, [query]);
+
+  const persistRecentSearches = (list: RecentSearch[]) => {
+    setRecentSearches(list);
+    localStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(list));
+  };
+
+  const addRecentSearch = (entry: RecentSearch) => {
+    const isDuplicate = (item: RecentSearch) =>
+      entry.type === "query"
+        ? item.type === "query" &&
+          item.text.toLowerCase() === entry.text.toLowerCase()
+        : item.type === "user" && item.id === entry.id;
+
+    const next = [
+      entry,
+      ...recentSearches.filter((item) => !isDuplicate(item)),
+    ].slice(0, MAX_RECENT);
+    persistRecentSearches(next);
+  };
+
+  const removeRecentSearch = (index: number) => {
+    persistRecentSearches(recentSearches.filter((_, i) => i !== index));
+  };
+
+  const clearRecentSearches = () => {
+    persistRecentSearches([]);
+  };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && query.trim()) {
