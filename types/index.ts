@@ -217,3 +217,18 @@ export interface PostYourReplyButtonProps {
   setIsReplyModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
   onSuccess?: () => void;
 }
+
+export type QuickSearchUser = {
+  id: string;
+  name: string;
+  username: string | null;
+  image: string | null;
+  verified: boolean;
+};
+
+export type SearchUserResult = QuickSearchUser & {
+  bio: string | null;
+  isFollowing: boolean;
+};
+
+export type SearchTab = "top" | "latest" | "people" | "media";

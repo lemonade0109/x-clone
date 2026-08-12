@@ -1,7 +1,7 @@
 import { Ellipsis, BadgeCheck } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import React, { Suspense } from "react";
+import { Suspense } from "react";
 import SearchBar from "./search-bar";
 import { getSuggestedUsersAction } from "@/lib/actions/user/get-suggested-users-action";
 import { CgSpinner } from "react-icons/cg";
