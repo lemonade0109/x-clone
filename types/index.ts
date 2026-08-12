@@ -1,5 +1,6 @@
 import { getAllPostsAction } from "@/lib/actions/post-actions/get-all-posts-action";
 import { getPopoverProfileAction } from "@/lib/actions/user/get-popover-profile-action";
+import { searchUserAction } from "@/lib/actions/user/search-user-action";
 import { fullSignUpSchema } from "@/lib/validators";
 import z from "zod";
 
@@ -232,3 +233,15 @@ export type SearchUserResult = QuickSearchUser & {
 };
 
 export type SearchTab = "top" | "latest" | "people" | "media";
+
+export type QuickUser = Awaited<ReturnType<typeof searchUserAction>>[number];
+
+export type RecentSearch =
+  | { type: "query"; text: string }
+  | {
+      type: "user";
+      id: string;
+      image: string | null;
+      name: string;
+      username: string | null;
+    };
