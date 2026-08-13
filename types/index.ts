@@ -234,7 +234,14 @@ export type SearchUserResult = QuickSearchUser & {
 
 export type SearchTab = "top" | "latest" | "people" | "media";
 
-export type QuickUser = Awaited<ReturnType<typeof searchUserAction>>[number];
+export type QuickUser = {
+  id: string;
+  name: string;
+  username: string | null;
+  image: string | null;
+  bio?: string | null;
+  verified?: boolean;
+};
 
 export type RecentSearch =
   | { type: "query"; text: string }
@@ -244,4 +251,6 @@ export type RecentSearch =
       image: string | null;
       name: string;
       username: string | null;
+      bio?: string | null;
+      verified?: boolean;
     };

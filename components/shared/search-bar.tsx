@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import type { QuickUser, RecentSearch } from "@/types";
 import { searchUserAction } from "@/lib/actions/user/search-user-action";
+import Image from "next/image";
 
 const RECENT_SEARCHES_KEY = "recentSearches";
 const MAX_RECENT = 8;
@@ -155,6 +156,68 @@ const SearchBar = () => {
           </button>
         ) : null}
       </div>
+
+      {showRecent || showResults ? (
+        <div className="absolute top-full left-0 z-30 mt-2 max-h-[70vh] w-full overflow-y-auto rounded-2xl border border-zinc-200 bg-white shadow-lg dark:border-zinc-800 dark:bg-black">
+          <div>
+            <div className="flex items-center justify-between px-4 pt-3 pb-1">
+              <h3 className="text-xl font-extrabold">Recent</h3>
+              <button
+                type="button"
+                onClick={clearRecentSearches}
+                className="text-sm font-bold text-sky-500 hover:underline"
+              >
+                Clear all
+              </button>
+            </div>
+            {recentSearches.map((entry, index) => (
+              <div
+                key={index}
+                className="group flex items-center justify-between px-4 py-2.5 transition hover:bg-zinc-100 dark:hover:bg-zinc-900"
+              >
+                <button
+                  type="button"
+                  onClick={() =>
+                    entry.type === "query"
+                      ? goToExplore(entry.text)
+                      : goToUserProfile(entry)
+                  }
+                  className="flex min-w-0 flex-1 items-center gap-3 text-left"
+                >
+                  {entry.type === "user" ? (
+                    <div className="relative h-9 w-9 flex-shrink-0">
+                      {entry.image ? (
+                        <Image
+                          src={entry.image}
+                          alt={entry.name}
+                          fill
+                          className="rounded-full object-cover"
+                        />
+                      ) : (
+                        <div className="flex h-9 w-9 items-center justify-center rounded-full bg-zinc-300 text-xs font-bold text-zinc-600 dark:bg-zinc-600 dark:text-zinc-300">
+                          {entry.name?.[0]?.toUpperCase() ?? "?"}
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <span className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-zinc-100  dark:bg-zinc-800 ">
+                      <Search className="h-4 w-4" />
+                    </span>
+                  )}
+                  <span className="min-w-0 truncate text-[15px]">
+                    {entry.type === "query" ? entry.text : entry.name}
+                  </span>
+                  {entry.type === "user" ? (
+                    <span className="truncate text-sm text-zinc-500 dark:text-zinc-400">
+                      @{entry.username}
+                    </span>
+                  ) : null}
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 };
