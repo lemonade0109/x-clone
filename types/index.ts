@@ -1,6 +1,6 @@
 import { getAllPostsAction } from "@/lib/actions/post-actions/get-all-posts-action";
 import { getPopoverProfileAction } from "@/lib/actions/user/get-popover-profile-action";
-import { searchUserAction } from "@/lib/actions/user/search-user-action";
+import { searchUserAction } from "@/lib/actions/search/search-user-action";
 import { fullSignUpSchema } from "@/lib/validators";
 import z from "zod";
 

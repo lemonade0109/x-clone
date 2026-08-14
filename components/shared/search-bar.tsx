@@ -4,8 +4,8 @@ import { BadgeCheck, Loader2, Search, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
 import type { QuickUser, RecentSearch } from "@/types";
-import { searchUserAction } from "@/lib/actions/user/search-user-action";
 import Image from "next/image";
+import { searchUserAction } from "@/lib/actions/search/search-user-action";
 
 const RECENT_SEARCHES_KEY = "recentSearches";
 const MAX_RECENT = 8;
@@ -23,6 +23,7 @@ const SearchBar = () => {
   const [recentSearches, setRecentSearches] = React.useState<RecentSearch[]>(
     [],
   );
+  const [selectedIndex, setSelectedIndex] = React.useState(-1);
 
   React.useEffect(() => {
     try {
@@ -121,9 +122,44 @@ const SearchBar = () => {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && query.trim()) {
-      goToExplore(query);
-    } else if (e.key === "Escape") {
+    if (!isOpen) return;
+
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      if (activeTab === "people") {
+        setSelectedIndex((prev) =>
+          prev < visibleResults.length - 1 ? prev + 1 : prev,
+        );
+      }
+      return;
+    }
+
+    if (e.key === "ArrowUp") {
+      e.preventDefault();
+      if (activeTab === "people") {
+        setSelectedIndex((prev) => (prev > 0 ? prev - 1 : 0));
+      }
+      return;
+    }
+
+    if (e.key === "Enter") {
+      e.preventDefault();
+
+      if (
+        activeTab === "people" &&
+        selectedIndex >= 0 &&
+        visibleResults[selectedIndex]
+      ) {
+        goToUserProfile(visibleResults[selectedIndex]);
+        return;
+      }
+
+      if (trimmedQuery) {
+        goToExplore(trimmedQuery);
+      }
+    }
+
+    if (e.key === "Escape") {
       setIsOpen(false);
       (e.target as HTMLInputElement).blur();
     }
@@ -134,6 +170,12 @@ const SearchBar = () => {
   const showResults = isOpen && !!trimmedQuery;
 
   const tabs: SearchTab[] = ["people", "posts", "topics"];
+
+  const visibleResults = results.slice(0, 5);
+
+  React.useEffect(() => {
+    setSelectedIndex(-1);
+  }, [query, activeTab]);
 
   const renderPeople = () => {
     if (isPending) {
@@ -152,12 +194,17 @@ const SearchBar = () => {
       );
     }
 
-    return results.map((user) => (
+    return results.map((user, index) => (
       <button
         key={user.id}
         type="button"
+        onMouseDown={(e) => e.preventDefault()}
         onClick={() => goToUserProfile(user)}
-        className="flex w-full items-center gap-3 px-4 py-2.5 text-left transition hover:bg-zinc-100 dark:hover:bg-zinc-900"
+        className={`flex w-full items-center gap-3 px-4 py-2.5 text-left transition ${
+          selectedIndex === index
+            ? "bg-zinc-100 dark:bg-zinc-900"
+            : "hover:bg-zinc-100 dark:hover:bg-zinc-900"
+        }`}
       >
         <div className="relative h-9 w-9 flex-shrink-0">
           {user.image ? (
@@ -342,7 +389,58 @@ const SearchBar = () => {
               </div>
 
               <div className="py-2">
-                {activeTab === "people" && renderPeople()}
+                {activeTab === "people" &&
+                  (isPending ? (
+                    <div className="flex justify-center py-4">
+                      <Loader2 className="h-5 w-5 animate-spin text-sky-500" />
+                    </div>
+                  ) : !results.length ? (
+                    <div className="px-4 py-3 text-sm text-zinc-500">
+                      No people found for “{trimmedQuery}”
+                    </div>
+                  ) : (
+                    results.map((user, index) => (
+                      <button
+                        key={user.id}
+                        type="button"
+                        onMouseDown={(e) => e.preventDefault()}
+                        onClick={() => goToUserProfile(user)}
+                        className={`flex w-full items-center gap-3 px-4 py-2.5 text-left transition ${
+                          selectedIndex === index
+                            ? "bg-zinc-100 dark:bg-zinc-900"
+                            : "hover:bg-zinc-100 dark:hover:bg-zinc-900"
+                        }`}
+                      >
+                        <div className="relative h-9 w-9 flex-shrink-0">
+                          {user.image ? (
+                            <Image
+                              src={user.image}
+                              alt={user.name}
+                              fill
+                              className="rounded-full object-cover"
+                            />
+                          ) : (
+                            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-zinc-300 text-xs font-bold text-zinc-600 dark:bg-zinc-600 dark:text-zinc-300">
+                              {user.name?.[0]?.toUpperCase() ?? "?"}
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="min-w-0 leading-tight">
+                          <p className="flex items-center gap-1 truncate text-[15px] font-bold text-zinc-900 dark:text-white">
+                            {user.name}
+                            {user.verified ? (
+                              <BadgeCheck className="h-4 w-4 flex-shrink-0 fill-sky-500 text-white" />
+                            ) : null}
+                          </p>
+                          <p className="truncate text-sm text-zinc-500">
+                            @{user.username ?? ""}
+                          </p>
+                        </div>
+                      </button>
+                    ))
+                  ))}
+
                 {activeTab === "posts" && renderPosts()}
                 {activeTab === "topics" && renderTopics()}
               </div>
