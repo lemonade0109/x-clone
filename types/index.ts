@@ -267,3 +267,12 @@ export type PostSearchResult = {
     image: string | null;
   };
 };
+
+export type SuggestedUser = {
+  id: string;
+  name: string;
+  username: string | null;
+  image: string | null;
+  bio: string | null;
+  verified: boolean;
+};
