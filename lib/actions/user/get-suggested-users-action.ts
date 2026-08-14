@@ -5,22 +5,39 @@ import { db } from "@/db/db";
 
 export const getSuggestedUsersAction = async () => {
   const session = await auth();
-  const userId = session?.user?.id;
+
+  if (!session?.user.email) return [];
+
+  const currentUser = await db.user.findUnique({
+    where: { email: session.user.email },
+    select: { id: true },
+  });
+
+  if (!currentUser) return [];
+
+  const followed = await db.follow.findMany({
+    where: { followerId: currentUser.id },
+    select: { followingId: true },
+  });
+
+  const followedIds = followed.map((f) => f.followingId);
 
   return await db.user.findMany({
     where: {
-      id: { not: userId ?? "" },
-      onboardingCompleted: true,
+      AND: [
+        { id: { not: currentUser.id } },
+        ...(followedIds.length > 0 ? [{ id: { notIn: followedIds } }] : []),
+        { onboardingComplete: true },
+      ],
     },
     select: {
       id: true,
       name: true,
       username: true,
-      bio: true,
       image: true,
+      bio: true,
       verified: true,
     },
-    take: 3,
-    orderBy: { createdAt: "desc" },
+    take: 5,
   });
 };
