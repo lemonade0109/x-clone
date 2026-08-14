@@ -3,9 +3,10 @@
 import { BadgeCheck, Loader2, Search, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
-import type { QuickUser, RecentSearch } from "@/types";
+import type { PostSearchResult, QuickUser, RecentSearch } from "@/types";
 import Image from "next/image";
 import { searchUserAction } from "@/lib/actions/search/search-user-action";
+import { searchPostAction } from "@/lib/actions/search/search-post-action";
 
 const RECENT_SEARCHES_KEY = "recentSearches";
 const MAX_RECENT = 8;
@@ -24,6 +25,7 @@ const SearchBar = () => {
     [],
   );
   const [selectedIndex, setSelectedIndex] = React.useState(-1);
+  const [postResults, setPostResults] = React.useState<PostSearchResult[]>([]);
 
   React.useEffect(() => {
     try {
@@ -57,13 +59,18 @@ const SearchBar = () => {
 
     if (!trimmed) {
       setResults([]);
+      setPostResults([]);
       return;
     }
 
     const timeout = setTimeout(() => {
       startTransition(async () => {
-        const users = await searchUserAction(trimmed);
+        const [users, posts] = await Promise.all([
+          searchUserAction(trimmed),
+          searchPostAction(trimmed),
+        ]);
         setResults(users);
+        setPostResults(posts);
       });
     }, 250);
 
@@ -121,16 +128,30 @@ const SearchBar = () => {
     router.push(`/${user.username ?? ""}`);
   };
 
+  const goToPost = (post: PostSearchResult) => {
+    const username = post.author.username ?? post.author.id;
+    setIsOpen(false);
+    router.push(`/${username}/status/${post.id}`);
+  };
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (!isOpen) return;
 
     if (e.key === "ArrowDown") {
       e.preventDefault();
+
       if (activeTab === "people") {
         setSelectedIndex((prev) =>
           prev < visibleResults.length - 1 ? prev + 1 : prev,
         );
       }
+
+      if (activeTab === "posts") {
+        setSelectedIndex((prev) =>
+          prev < postResults.length - 1 ? prev + 1 : prev,
+        );
+      }
+
       return;
     }
 
@@ -139,6 +160,11 @@ const SearchBar = () => {
       if (activeTab === "people") {
         setSelectedIndex((prev) => (prev > 0 ? prev - 1 : 0));
       }
+
+      if (activeTab === "posts") {
+        setSelectedIndex((prev) => (prev > 0 ? prev - 1 : 0));
+      }
+
       return;
     }
 
@@ -151,6 +177,15 @@ const SearchBar = () => {
         visibleResults[selectedIndex]
       ) {
         goToUserProfile(visibleResults[selectedIndex]);
+        return;
+      }
+
+      if (
+        activeTab === "posts" &&
+        selectedIndex >= 0 &&
+        postResults[selectedIndex]
+      ) {
+        goToPost(postResults[selectedIndex]);
         return;
       }
 
@@ -236,19 +271,62 @@ const SearchBar = () => {
     ));
   };
 
-  const renderPosts = () => (
-    <button
-      type="button"
-      onClick={() => goToExplore(trimmedQuery)}
-      className="flex w-full items-center gap-3 px-4 py-3 text-left transition hover:bg-zinc-100 dark:hover:bg-zinc-900"
-    >
-      <Search className="h-5 w-5 text-zinc-500" />
-      <span className="text-[15px]">
-        Search posts for &quot;
-        <span className="font-semibold">{trimmedQuery}</span>&quot;
-      </span>
-    </button>
-  );
+  const renderPosts = () => {
+    if (isPending) {
+      return (
+        <div className="flex justify-center py-4">
+          <Loader2 className="h-5 w-5 animate-spin text-sky-500" />
+        </div>
+      );
+    }
+
+    if (!postResults.length) {
+      return (
+        <div className="px-4 py-3 text-sm text-zinc-500">
+          No posts found for “{trimmedQuery}”
+        </div>
+      );
+    }
+    return postResults.map((post, index) => (
+      <button
+        key={post.id}
+        type="button"
+        onMouseDown={(e) => e.preventDefault()}
+        onClick={() => goToPost(post)}
+        className={`flex w-full items-center gap-3 px-4 py-2.5 text-left transition ${
+          selectedIndex === index
+            ? "bg-zinc-100 dark:bg-zinc-900"
+            : "hover:bg-zinc-100 dark:hover:bg-zinc-900"
+        }`}
+      >
+        <div className="relative h-10 w-10 flex-shrink-0 overflow-hidden rounded-full">
+          {post.author.image ? (
+            <Image
+              src={post.author.image}
+              alt={post.author.name ?? "Author"}
+              fill
+              className="object-cover"
+            />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center bg-zinc-300 text-xs font-bold text-zinc-600 dark:bg-zinc-600 dark:text-zinc-300">
+              {(post.author.name ?? post.author.username ?? "?")
+                .charAt(0)
+                .toUpperCase()}
+            </div>
+          )}
+        </div>
+
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-[15px] font-bold text-zinc-900 dark:text-white">
+            {post.author.name ?? post.author.username}
+          </p>
+          <p className="line-clamp-2 text-sm text-zinc-600 dark:text-zinc-400">
+            {post.content}
+          </p>
+        </div>
+      </button>
+    ));
+  };
 
   const renderTopics = () => (
     <button
@@ -389,58 +467,7 @@ const SearchBar = () => {
               </div>
 
               <div className="py-2">
-                {activeTab === "people" &&
-                  (isPending ? (
-                    <div className="flex justify-center py-4">
-                      <Loader2 className="h-5 w-5 animate-spin text-sky-500" />
-                    </div>
-                  ) : !results.length ? (
-                    <div className="px-4 py-3 text-sm text-zinc-500">
-                      No people found for “{trimmedQuery}”
-                    </div>
-                  ) : (
-                    results.map((user, index) => (
-                      <button
-                        key={user.id}
-                        type="button"
-                        onMouseDown={(e) => e.preventDefault()}
-                        onClick={() => goToUserProfile(user)}
-                        className={`flex w-full items-center gap-3 px-4 py-2.5 text-left transition ${
-                          selectedIndex === index
-                            ? "bg-zinc-100 dark:bg-zinc-900"
-                            : "hover:bg-zinc-100 dark:hover:bg-zinc-900"
-                        }`}
-                      >
-                        <div className="relative h-9 w-9 flex-shrink-0">
-                          {user.image ? (
-                            <Image
-                              src={user.image}
-                              alt={user.name}
-                              fill
-                              className="rounded-full object-cover"
-                            />
-                          ) : (
-                            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-zinc-300 text-xs font-bold text-zinc-600 dark:bg-zinc-600 dark:text-zinc-300">
-                              {user.name?.[0]?.toUpperCase() ?? "?"}
-                            </div>
-                          )}
-                        </div>
-
-                        <div className="min-w-0 leading-tight">
-                          <p className="flex items-center gap-1 truncate text-[15px] font-bold text-zinc-900 dark:text-white">
-                            {user.name}
-                            {user.verified ? (
-                              <BadgeCheck className="h-4 w-4 flex-shrink-0 fill-sky-500 text-white" />
-                            ) : null}
-                          </p>
-                          <p className="truncate text-sm text-zinc-500">
-                            @{user.username ?? ""}
-                          </p>
-                        </div>
-                      </button>
-                    ))
-                  ))}
-
+                {activeTab === "people" && renderPeople()}
                 {activeTab === "posts" && renderPosts()}
                 {activeTab === "topics" && renderTopics()}
               </div>

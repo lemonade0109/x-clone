@@ -254,3 +254,16 @@ export type RecentSearch =
       bio?: string | null;
       verified?: boolean;
     };
+
+export type PostSearchResult = {
+  id: string;
+  content: string;
+  image: string | null;
+  createdAt: Date;
+  author: {
+    id: string;
+    name: string;
+    username: string | null;
+    image: string | null;
+  };
+};
