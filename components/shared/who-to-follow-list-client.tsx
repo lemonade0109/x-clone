@@ -1,6 +1,5 @@
 "use client";
 
-import { getSuggestedUsersAction } from "@/lib/actions/user/get-suggested-users-action";
 import { SuggestedUser } from "@/types";
 import React from "react";
 import Image from "next/image";
@@ -9,18 +8,12 @@ import { BadgeCheck } from "lucide-react";
 import ProfilePopover from "../homepage/post/profile-popover";
 import FollowButton from "../page/sections/profile/follow-button";
 
-const WhoToFollowListClient = () => {
-  const [users, setUsers] = React.useState<SuggestedUser[]>([]);
-
-  const loadUsers = async () => {
-    const data = await getSuggestedUsersAction();
-
-    setUsers(data);
-  };
-
-  React.useEffect(() => {
-    loadUsers();
-  }, []);
+const WhoToFollowListClient = ({
+  initialUsers,
+}: {
+  initialUsers: SuggestedUser[];
+}) => {
+  const [users, setUsers] = React.useState<SuggestedUser[]>(initialUsers);
 
   const handleFollowSuccess = (userId: string) => {
     setUsers((prevUser) => prevUser.filter((user) => user.id !== userId));

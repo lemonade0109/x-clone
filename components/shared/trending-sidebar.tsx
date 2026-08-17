@@ -2,9 +2,9 @@ import { Ellipsis } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
 import SearchBar from "./search-bar";
-import { getSuggestedUsersAction } from "@/lib/actions/user/get-suggested-users-action";
 import { CgSpinner } from "react-icons/cg";
-import WhoToFollowListClient ./who-to-follow-list-clientw-list-client";
+import WhoToFollowList from "./who-to-follow-list";
+import WhoToFollowSkeleton from "./who-to-follow-skeleton";
 
 const trends = [
   {
@@ -26,8 +26,6 @@ const trends = [
 ];
 
 const TrendingSideBar = async () => {
-  const suggestedUsers = await getSuggestedUsersAction();
-
   return (
     <aside className="sticky top-0 hidden h-screen min-w-[320px] flex-col px-4 py-2 lg:flex">
       <div className="flex flex-col gap-4 overflow-y-auto scrollbar-hide">
@@ -77,7 +75,7 @@ const TrendingSideBar = async () => {
           <Suspense
             fallback={
               <CgSpinner
-                className="mx-auto mt-5 animate-spin text-xl text-sky-500"
+                className="mx-auto my-5 animate-spin text-xl text-sky-500"
                 size={24}
               />
             }
@@ -86,7 +84,9 @@ const TrendingSideBar = async () => {
               Who to follow
             </h2>
 
-            <WhoToFollowListClient />
+            <Suspense fallback={<WhoToFollowSkeleton />}>
+              <WhoToFollowList />
+            </Suspense>
 
             <Link
               href="/explore"
