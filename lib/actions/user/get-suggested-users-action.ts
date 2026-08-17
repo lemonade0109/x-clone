@@ -27,7 +27,7 @@ export const getSuggestedUsersAction = async () => {
       AND: [
         { id: { not: currentUser.id } },
         ...(followedIds.length > 0 ? [{ id: { notIn: followedIds } }] : []),
-        { onboardingComplete: true },
+        { onboardingCompleted: true },
       ],
     },
     select: {

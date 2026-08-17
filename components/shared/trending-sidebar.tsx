@@ -43,7 +43,7 @@ const TrendingSideBar = async () => {
           <Suspense
             fallback={
               <CgSpinner
-                className="mx-auto mt-5 animate-spin text-2xl text-sky-500"
+                className="mx-auto mt-5 animate-spin text-xl text-sky-500"
                 size={24}
               />
             }
@@ -79,7 +79,7 @@ const TrendingSideBar = async () => {
           <Suspense
             fallback={
               <CgSpinner
-                className="mx-auto mt-5 animate-spin text-2xl text-sky-500"
+                className="mx-auto mt-5 animate-spin text-xl text-sky-500"
                 size={24}
               />
             }
