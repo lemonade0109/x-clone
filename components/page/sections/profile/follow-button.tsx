@@ -6,7 +6,8 @@ import { toast } from "sonner";
 const FollowButton: React.FC<{
   targetUserId: string;
   isFollowing: boolean;
-}> = ({ targetUserId, isFollowing }) => {
+  onSuccess?: () => void;
+}> = ({ targetUserId, isFollowing, onSuccess }) => {
   const [following, setFollowing] = React.useState(isFollowing);
   const [isPending, startTransition] = React.useTransition();
   const [hovered, setHovered] = React.useState(false);
@@ -22,6 +23,8 @@ const FollowButton: React.FC<{
         toast.error(res.error ?? "Failed");
       } else {
         toast.success(res.followed ? "Following!" : "Unfollowed.");
+
+        onSuccess?.();
       }
     });
   };
