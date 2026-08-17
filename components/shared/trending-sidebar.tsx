@@ -4,7 +4,7 @@ import { Suspense } from "react";
 import SearchBar from "./search-bar";
 import { getSuggestedUsersAction } from "@/lib/actions/user/get-suggested-users-action";
 import { CgSpinner } from "react-icons/cg";
-import WhoToFollowList from "./who-to-follow-list";
+import WhoToFollowListClient ./who-to-follow-list-clientw-list-client";
 
 const trends = [
   {
@@ -86,7 +86,7 @@ const TrendingSideBar = async () => {
               Who to follow
             </h2>
 
-            <WhoToFollowList />
+            <WhoToFollowListClient />
 
             <Link
               href="/explore"

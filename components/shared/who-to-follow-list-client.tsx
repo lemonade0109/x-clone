@@ -9,7 +9,7 @@ import { BadgeCheck } from "lucide-react";
 import ProfilePopover from "../homepage/post/profile-popover";
 import FollowButton from "../page/sections/profile/follow-button";
 
-const WhoToFollowList = () => {
+const WhoToFollowListClient = () => {
   const [users, setUsers] = React.useState<SuggestedUser[]>([]);
 
   const loadUsers = async () => {
@@ -92,4 +92,4 @@ const WhoToFollowList = () => {
   );
 };
 
-export default WhoToFollowList;
+export default WhoToFollowListClient;
