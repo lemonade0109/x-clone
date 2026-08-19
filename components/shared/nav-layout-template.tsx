@@ -71,6 +71,13 @@ const NavLayoutTemplate = ({ username, name, profileImage }: UserProfile) => {
             href="/home"
             className="mb-2 inline-flex h-12 w-12 items-center justify-center rounded-full  transition hover:bg-zinc-100 dark:hover:bg-zinc-800"
           >
+            {/* <Image
+              alt="x image"
+              src="/image.jpg"
+              width={58}
+              height={58}
+              className="object-contain mx-auto"
+            /> */}
             <FaXTwitter className="w-7 h-7" />
           </Link>
 

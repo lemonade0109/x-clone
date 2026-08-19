@@ -89,7 +89,7 @@ const TrendingSideBar = async () => {
             </Suspense>
 
             <Link
-              href="/explore"
+              href="/#"
               className="block rounded-b-2xl px-4 py-3 text-sm text-sky-500 transition hover:bg-zinc-200 dark:hover:bg-zinc-800/30"
             >
               Show more

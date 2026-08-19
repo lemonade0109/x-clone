@@ -62,7 +62,7 @@ export type CreatePostState = {
 
 export type Props = {
   onPosted?: () => void;
-  userImage?: string;
+  userImage?: string | null;
 };
 
 export type PostItem = Awaited<ReturnType<typeof getAllPostsAction>>[number];
@@ -77,7 +77,7 @@ export type PostActionBarProps = {
   isReposted: boolean;
   isBookmarked: boolean;
   username: string;
-  profileImage: string;
+  profileImage: string | null;
   authorName: string;
   content: string;
   classname?: string;
@@ -143,7 +143,7 @@ export type PostState = {
 export interface PostyourreplyButtonProps {
   username: string;
   postId: string;
-  profileImage: string;
+  profileImage: string | null;
   setIsCommentOpen?: React.Dispatch<React.SetStateAction<boolean>>;
   comments: string;
   setComments: React.Dispatch<React.SetStateAction<string>>;

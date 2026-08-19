@@ -6,7 +6,7 @@ import { CgSpinner } from "react-icons/cg";
 import { IoCloseSharp } from "react-icons/io5";
 
 type PostComposerProps = {
-  userImage?: string;
+  userImage?: string | null;
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;

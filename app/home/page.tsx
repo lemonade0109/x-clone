@@ -15,13 +15,12 @@ export default async function Homepage() {
     <main className="mx-auto flex min-h-screen w-full max-w-7xl">
       <NavLayoutTemplate
         name={user?.name ?? ""}
-        email={user?.email ?? ""}
         username={user?.username ?? ""}
         profileImage={user?.image ?? null}
       />
 
       <HomeSection
-        userImage={user?.image ?? ""}
+        userImage={user?.image ?? null}
         currentUserId={user?.id ?? null}
       />
 

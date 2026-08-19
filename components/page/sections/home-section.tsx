@@ -4,7 +4,7 @@ import AllPosts from "@/components/homepage/post/all-posts";
 import { CgSpinner } from "react-icons/cg";
 
 interface HomeSectionProps {
-  userImage: string;
+  userImage: string | null;
   currentUserId: string | null;
 }
 const tabs = ["For you", "Following"];

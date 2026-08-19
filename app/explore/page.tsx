@@ -6,6 +6,7 @@ import { CgSpinner } from "react-icons/cg";
 import WhoToFollowList from "@/components/shared/who-to-follow-list";
 import WhoToFollowSkeleton from "@/components/shared/who-to-follow-skeleton";
 import { getCurrentUserAction } from "@/lib/actions/user/get-current-user-action";
+import Link from "next/link";
 
 const news = [
   {
@@ -85,6 +86,13 @@ const ExplorePageSideBar = () => {
             <Suspense fallback={<WhoToFollowSkeleton />}>
               <WhoToFollowList />
             </Suspense>
+
+            <Link
+              href="/#"
+              className="block rounded-b-2xl px-4 py-3 text-sm text-sky-500 transition hover:bg-zinc-200 dark:hover:bg-zinc-800/30"
+            >
+              Show more
+            </Link>
           </Suspense>
         </section>
       </div>

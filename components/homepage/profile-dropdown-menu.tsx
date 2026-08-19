@@ -29,16 +29,19 @@ export default function ProfileDropdownMenu({
         className="mb-1 flex items-center gap-3 rounded-full px-3 py-3 text-left"
         aria-hidden
       >
-        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-200 dark:bg-zinc-700 font-semibold">
+        <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-700">
           {profileImage ? (
             <Image
               src={profileImage}
-              alt={name}
+              alt={`${name}'s profile image`}
               fill
-              className="object-cover rounded-full"
+              sizes="40px"
+              className="object-cover"
             />
           ) : (
-            name.charAt(0)
+            <div className="flex h-full w-full items-center justify-center rounded-full bg-zinc-300 font-bold">
+              {name?.charAt(0).toUpperCase() || "?"}
+            </div>
           )}
         </div>
       </button>
@@ -49,16 +52,19 @@ export default function ProfileDropdownMenu({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <button className="mb-1 flex items-center gap-3 rounded-full px-3 py-3 text-left transition hover:bg-zinc-100 dark:hover:bg-zinc-800">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-200 dark:bg-zinc-700 font-semibold">
+          <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-700">
             {profileImage ? (
               <Image
                 src={profileImage}
-                alt={name}
+                alt={`${name}'s profile image`}
                 fill
-                className="object-cover rounded-full"
+                sizes="40px"
+                className="object-cover"
               />
             ) : (
-              name.charAt(0)
+              <div className="flex h-full w-full items-center justify-center rounded-full bg-zinc-300 font-bold">
+                {name?.charAt(0).toUpperCase() || "?"}
+              </div>
             )}
           </div>
           <div className="hidden leading-tight xl:block">
