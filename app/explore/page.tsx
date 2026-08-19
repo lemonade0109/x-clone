@@ -1,8 +1,9 @@
 import ExplorePageSection from "@/components/page/sections/explore-page-section";
 import NavLayoutTemplate from "@/components/shared/nav-layout-template";
 import { getProfileAction } from "@/lib/actions/user/get-profile";
-import { Verified } from "lucide-react";
-import React from "react";
+import { Suspense } from "react";
+import WhoToFollowList from "@/components/shared/who-to-follow-list";
+import WhoToFollowSkeleton from "@/components/shared/who-to-follow-skeleton";
 
 const news = [
   {
@@ -66,34 +67,10 @@ const ExplorePageSideBar = () => {
 
         <section className="rounded-2xl bg-zinc-100 py-3">
           <h2 className="px-4 pb-2 text-xl font-extrabold">Who to follow</h2>
-          {[
-            { name: "Vercel", handle: "@vercel", verified: true },
-            { name: "TypeScript", handle: "@typescript", verified: false },
-            { name: "Next.js", handle: "@nextjs", verified: true },
-          ].map((person) => (
-            <div
-              key={person.handle}
-              className="flex items-center justify-between px-4 py-3 transition hover:bg-zinc-200/70"
-            >
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-300 text-sm font-bold">
-                  {person.name[0]}
-                </div>
-                <div className="leading-tight">
-                  <p className="flex items-center gap-1 text-sm font-bold">
-                    {person.name}
-                    {person.verified ? (
-                      <Verified className="h-4 w-4 fill-sky-500 text-white" />
-                    ) : null}
-                  </p>
-                  <p className="text-sm text-zinc-500">{person.handle}</p>
-                </div>
-              </div>
-              <button className="rounded-full bg-black px-4 py-1.5 text-sm font-bold text-white transition hover:bg-zinc-800">
-                Follow
-              </button>
-            </div>
-          ))}
+
+          <Suspense fallback={<WhoToFollowSkeleton />}>
+            <WhoToFollowList />
+          </Suspense>
         </section>
       </div>
     </aside>
