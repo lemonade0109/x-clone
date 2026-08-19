@@ -17,7 +17,7 @@ export default async function Homepage() {
         name={user?.name ?? ""}
         email={user?.email ?? ""}
         username={user?.username ?? ""}
-        profileImage={user?.image ?? ""}
+        profileImage={user?.image ?? null}
       />
 
       <HomeSection

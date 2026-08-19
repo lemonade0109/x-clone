@@ -34,7 +34,7 @@ export default async function Layout({
           name={user.name ?? ""}
           email={user.email ?? ""}
           username={user.username ?? ""}
-          profileImage={user.image ?? ""}
+          profileImage={user.image ?? null}
         />
       )}
 

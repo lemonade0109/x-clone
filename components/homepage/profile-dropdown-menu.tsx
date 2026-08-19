@@ -9,6 +9,7 @@ import {
 import { Ellipsis } from "lucide-react";
 import Link from "next/link";
 import { UserProfile } from "../shared/nav-layout-template";
+import Image from "next/image";
 
 export default function ProfileDropdownMenu({
   username,
@@ -30,10 +31,11 @@ export default function ProfileDropdownMenu({
       >
         <div className="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-200 dark:bg-zinc-700 font-semibold">
           {profileImage ? (
-            <img
+            <Image
               src={profileImage}
               alt={name}
-              className="h-10 w-10 rounded-full"
+              fill
+              className="object-cover rounded-full"
             />
           ) : (
             name.charAt(0)
@@ -49,10 +51,11 @@ export default function ProfileDropdownMenu({
         <button className="mb-1 flex items-center gap-3 rounded-full px-3 py-3 text-left transition hover:bg-zinc-100 dark:hover:bg-zinc-800">
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-200 dark:bg-zinc-700 font-semibold">
             {profileImage ? (
-              <img
+              <Image
                 src={profileImage}
                 alt={name}
-                className="h-10 w-10 rounded-full"
+                fill
+                className="object-cover rounded-full"
               />
             ) : (
               name.charAt(0)
