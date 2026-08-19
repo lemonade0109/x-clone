@@ -17,6 +17,7 @@ export default function ProfileDropdownMenu({
   profileImage,
 }: UserProfile) {
   const [mounted, setMounted] = React.useState(false);
+  console.log("profileImage", profileImage);
 
   React.useEffect(() => {
     setMounted(true);

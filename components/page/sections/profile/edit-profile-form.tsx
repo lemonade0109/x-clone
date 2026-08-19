@@ -9,6 +9,25 @@ import Image from "next/image";
 import { IoCloseSharp } from "react-icons/io5";
 import { MdOutlineAddAPhoto } from "react-icons/md";
 import FloatingInputLabel from "@/components/shared/floating-input-label";
+import { uploadImageAction } from "@/lib/actions/user/upload-image";
+
+const fileToBase64 = (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      if (typeof reader.result === "string") {
+        resolve(reader.result);
+      } else {
+        reject(new Error("Unable to read image."));
+      }
+    };
+    reader.onerror = () => {
+      reject(new Error("Unable to read image."));
+    };
+    reader.readAsDataURL(file);
+  });
+};
 
 const EditProfileForm: React.FC<{ initialData: EditProfileFormData }> = ({
   initialData,
@@ -26,26 +45,62 @@ const EditProfileForm: React.FC<{ initialData: EditProfileFormData }> = ({
     initialData.coverImage || "",
   );
 
+  const [imageFile, setImageFile] = React.useState<File | null>(null);
+  const [coverImageFile, setCoverImageFile] = React.useState<File | null>(null);
+
   const onSave = () => {
     startTransition(async () => {
-      const res = await updateProfileAction({
-        name,
-        username,
-        bio,
-        website,
-        location,
-        image,
-        coverImage,
-      });
+      let uploadedImage = image;
+      let uploadedCoverImage = coverImage;
 
-      if (!res.success) {
-        toast.error(res.toast?.message || "Failed to update profile.");
-        return;
+      try {
+        if (imageFile) {
+          const base64Image = await fileToBase64(imageFile);
+          const result = await uploadImageAction(base64Image, "avatars");
+
+          if (!result.url) {
+            toast.error(result.error ?? "Failed to upload profile image.");
+            return;
+          }
+
+          uploadedImage = result.url;
+        }
+
+        if (coverImageFile) {
+          const base64CoverImage = await fileToBase64(coverImageFile);
+          const result = await uploadImageAction(base64CoverImage, "posts");
+
+          if (!result.url) {
+            toast.error(result.error ?? "Failed to upload cover image.");
+            return;
+          }
+          uploadedCoverImage = result.url;
+        }
+
+        const result = await updateProfileAction({
+          name,
+          username,
+          bio,
+          website,
+          location,
+          image: uploadedImage.startsWith("blob:") ? "" : uploadedImage,
+          coverImage: uploadedCoverImage.startsWith("blob:")
+            ? ""
+            : uploadedCoverImage,
+        });
+
+        if (result.success) {
+          toast.success(
+            result.toast?.message ?? "Profile updated successfully!",
+          );
+          router.back();
+          router.refresh();
+        } else {
+          toast.error(result.toast?.message ?? "Failed to update profile.");
+        }
+      } catch (error) {
+        toast.error("Something went wrong while uploading the image.");
       }
-
-      toast.success(res.toast?.message || "Profile updated successfully.");
-      router.back();
-      router.refresh();
     });
   };
 
@@ -109,7 +164,10 @@ const EditProfileForm: React.FC<{ initialData: EditProfileFormData }> = ({
           className="hidden"
           onChange={(e) => {
             const file = e.target.files?.[0];
-            if (file) setCoverImage(URL.createObjectURL(file));
+            if (file) {
+              setCoverImageFile(file);
+              setCoverImage(URL.createObjectURL(file));
+            }
           }}
         />
       </div>
@@ -140,7 +198,10 @@ const EditProfileForm: React.FC<{ initialData: EditProfileFormData }> = ({
           className="hidden"
           onChange={(e) => {
             const file = e.target.files?.[0];
-            if (file) setImage(URL.createObjectURL(file));
+            if (file) {
+              setImageFile(file);
+              setImage(URL.createObjectURL(file));
+            }
           }}
         />
       </div>
