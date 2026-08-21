@@ -51,26 +51,26 @@ const ExplorePageSideBar = () => {
       <div className="sticky top-2 space-y-4">
         <div className="border border-zinc-200 dark:border-zinc-800 my-4" />
 
-        <section className="rounded-2xl bg-zinc-100 py-3">
+        <section className="rounded-2xl border border-zinc-200 dark:border-zinc-800 py-3">
           <h2 className="px-4 pb-2 text-xl font-extrabold">
             What&apos;s happening
           </h2>
           {news.map((item) => (
             <button
               key={item.title}
-              className="w-full px-4 py-3 text-left transition hover:bg-zinc-200/70"
+              className="w-full px-4 py-3 text-left transition hover:bg-zinc-200/70 dark:hover:bg-zinc-800/30"
             >
               <p className="text-xs text-zinc-500">
                 {item.source} · {item.time}
               </p>
-              <p className="mt-0.5 text-[15px] font-bold text-zinc-900">
+              <p className="mt-0.5 text-[15px] font-bold text-zinc-900 dark:text-zinc-100">
                 {item.title}
               </p>
             </button>
           ))}
         </section>
 
-        <section className="rounded-2xl border border-zinc-200 dark:border-zinc-800 ">
+        <section className="rounded-2xl border border-zinc-200 dark:border-zinc-800">
           <Suspense
             fallback={
               <CgSpinner

@@ -49,8 +49,10 @@ const ExplorePageSection: React.FC = () => {
           {tabs.map((tab, index) => (
             <button
               key={tab}
-              className={`relative py-4 font-medium transition hover:bg-zinc-100 dark:hover:bg-zinc-800 ${
-                index === 0 ? "text-black dark:text-white font-semibold" : "text-zinc-500"
+              className={`relative py-4 font-medium transition hover:bg-zinc-200/70 dark:hover:bg-zinc-800/30 ${
+                index === 0
+                  ? "text-black dark:text-white font-semibold"
+                  : "text-zinc-500"
               }`}
             >
               {tab}
@@ -62,7 +64,7 @@ const ExplorePageSection: React.FC = () => {
         </div>
       </header>
 
-      <article className="cursor-pointer border-b border-zinc-200 dark:border-zinc-800 transition hover:bg-zinc-50 dark:hover:bg-zinc-900">
+      <article className="cursor-pointer border-b border-zinc-200 dark:border-zinc-800 transition hover:bg-zinc-200/70 dark:hover:bg-zinc-800/30">
         <div className="relative h-52 w-full bg-[linear-gradient(135deg,#0f172a_0%,#1d4ed8_55%,#38bdf8_100%)]">
           <div className="absolute inset-0 bg-black/20" />
           <div className="absolute right-4 bottom-4 left-4 text-white">
@@ -79,7 +81,7 @@ const ExplorePageSection: React.FC = () => {
         {trends.map((trend) => (
           <button
             key={trend.topic}
-            className="flex w-full items-start justify-between border-b border-zinc-200 dark:border-zinc-800 px-4 py-3 text-left transition hover:bg-zinc-50 dark:hover:bg-zinc-900"
+            className="flex w-full items-start justify-between border-b border-zinc-200 dark:border-zinc-800 px-4 py-3 text-left transition hover:bg-zinc-200/70 dark:hover:bg-zinc-800/30"
           >
             <div>
               <p className="text-xs text-zinc-500">{trend.category}</p>
