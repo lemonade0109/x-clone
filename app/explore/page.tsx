@@ -1,4 +1,4 @@
-import ExplorePageSection from "@/components/page/sections/explore-page-section";
+import ExplorePageSection from "@/components/page/sections/explore/explore-page-section";
 import NavLayoutTemplate from "@/components/shared/nav-layout-template";
 import { Suspense } from "react";
 import { CgSpinner } from "react-icons/cg";
