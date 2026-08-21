@@ -1,11 +1,12 @@
 import ExplorePageSection from "@/components/page/sections/explore/explore-page-section";
 import NavLayoutTemplate from "@/components/shared/nav-layout-template";
 import { Suspense } from "react";
-import { CgSpinner } from "react-icons/cg";
 import WhoToFollowList from "@/components/shared/who-to-follow-list";
 import WhoToFollowSkeleton from "@/components/shared/who-to-follow-skeleton";
 import { getCurrentUserAction } from "@/lib/actions/user/get-current-user-action";
 import Link from "next/link";
+import ExploreTrendingTopics from "@/components/shared/explore-trending-topics";
+import ExploreTrendingTopicsSkeleton from "@/components/shared/explore-trending-topics-skeleton";
 
 const news = [
   {
@@ -48,51 +49,27 @@ const ExplorePageSideBar = () => {
   return (
     <aside className="sticky top-0 hidden h-screen min-w-82.5 flex-1 px-8 py-2 lg:block">
       <div className="sticky top-2 space-y-4">
-        <div className="border border-zinc-200 dark:border-zinc-800 my-4" />
+        <div className="my-4 border border-zinc-200 dark:border-zinc-800" />
 
-        <section className="rounded-2xl border border-zinc-200 dark:border-zinc-800 py-3">
-          <h2 className="px-4 pb-2 text-xl font-extrabold">
-            What&apos;s happening
-          </h2>
-          {news.map((item) => (
-            <button
-              key={item.title}
-              className="w-full px-4 py-3 text-left transition hover:bg-zinc-200/70 dark:hover:bg-zinc-800/30"
-            >
-              <p className="text-xs text-zinc-500">
-                {item.source} · {item.time}
-              </p>
-              <p className="mt-0.5 text-[15px] font-bold text-zinc-900 dark:text-zinc-100">
-                {item.title}
-              </p>
-            </button>
-          ))}
-        </section>
+        <Suspense fallback={<ExploreTrendingTopicsSkeleton />}>
+          <ExploreTrendingTopics />
+        </Suspense>
 
         <section className="rounded-2xl border border-zinc-200 dark:border-zinc-800">
-          <Suspense
-            fallback={
-              <CgSpinner
-                className="mx-auto my-5 animate-spin text-xl text-sky-500"
-                size={24}
-              />
-            }
-          >
-            <h2 className="px-4 pt-3 pb-1 text-xl font-extrabold">
-              Who to follow
-            </h2>
+          <h2 className="px-4 pb-1 pt-3 text-xl font-extrabold">
+            Who to follow
+          </h2>
 
-            <Suspense fallback={<WhoToFollowSkeleton />}>
-              <WhoToFollowList />
-            </Suspense>
-
-            <Link
-              href="/#"
-              className="block rounded-b-2xl px-4 py-3 text-sm text-sky-500 transition hover:bg-zinc-200 dark:hover:bg-zinc-800/30"
-            >
-              Show more
-            </Link>
+          <Suspense fallback={<WhoToFollowSkeleton />}>
+            <WhoToFollowList />
           </Suspense>
+
+          <Link
+            href="/#"
+            className="block rounded-b-2xl px-4 py-3 text-sm text-sky-500 transition hover:bg-zinc-200 dark:hover:bg-zinc-800/30"
+          >
+            Show more
+          </Link>
         </section>
       </div>
     </aside>
