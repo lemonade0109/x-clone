@@ -1,6 +1,5 @@
 import ExplorePageSection from "@/components/page/sections/explore-page-section";
 import NavLayoutTemplate from "@/components/shared/nav-layout-template";
-import { getProfileAction } from "@/lib/actions/user/get-profile";
 import { Suspense } from "react";
 import { CgSpinner } from "react-icons/cg";
 import WhoToFollowList from "@/components/shared/who-to-follow-list";
@@ -28,7 +27,7 @@ const news = [
 
 export default async function ExplorePage() {
   const user = await getCurrentUserAction();
-  console.log(user?.image);
+
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-7xl ">
       <NavLayoutTemplate
