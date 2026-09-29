@@ -7,6 +7,7 @@ import { getCurrentUserAction } from "@/lib/actions/user/get-current-user-action
 import Link from "next/link";
 import ExploreTrendingTopics from "@/components/shared/explore-trending-topics";
 import ExploreTrendingTopicsSkeleton from "@/components/shared/explore-trending-topics-skeleton";
+import { getTrendingTopicsAction } from "@/lib/actions/explore/trending-topics-action";
 
 const news = [
   {
@@ -28,6 +29,7 @@ const news = [
 
 export default async function ExplorePage() {
   const user = await getCurrentUserAction();
+  const topics = await getTrendingTopicsAction();
 
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-7xl ">
@@ -38,7 +40,7 @@ export default async function ExplorePage() {
         profileImage={user?.image ?? null}
       />
 
-      <ExplorePageSection />
+      <ExplorePageSection topics={topics} />
 
       <ExplorePageSideBar />
     </main>
