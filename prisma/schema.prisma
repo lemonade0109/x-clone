@@ -107,6 +107,7 @@ model Post {
   bookmarks Bookmark[]
 
   @@index([authorId, createdAt(sort: Desc)])
+  @@index([createdAt(sort: Desc)])
 }
 
 model Comment {
