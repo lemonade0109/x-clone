@@ -279,5 +279,5 @@ export type SuggestedUser = {
 export type TrendingTopic = {
   tag: string;
   postCount: number;
-  category: string;
+  category: "Trending" | "Popular" | "Topic";
 };

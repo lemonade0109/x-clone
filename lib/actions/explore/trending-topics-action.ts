@@ -26,7 +26,7 @@ export const getTrendingTopicsAction = async (): Promise<TrendingTopic[]> => {
   const counts = new Map<string, number>();
 
   for (const post of posts) {
-    const matches = post.content.match(/#([a-zA-Z0-9_]+)/g) ?? [];
+    const matches = post.content.match(/#([a-zA-Z][a-zA-Z0-9_]x)/g) ?? [];
     for (const raw of matches) {
       const tag = raw.slice(1).toLowerCase();
       if (!tag) continue;
