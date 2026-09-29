@@ -50,16 +50,17 @@ const ExplorePageSection: React.FC<Props> = ({ topics }) => {
         <article className="cursor-pointer border-b border-zinc-200 dark:border-zinc-800 transition hover:bg-zinc-200/70 dark:hover:bg-zinc-800/30">
           <div className="relative h-52 w-full bg-[linear-gradient(135deg,#0f172a_0%,#1d4ed8_55%,#38bdf8_100%)]">
             <div className="absolute inset-0 bg-black/20" />
-
-            <p className="absolute bottom-4 left-4 text-sm font-medium text-white">
-              {hero.category} • Trending
-            </p>
-            <h2 className="mt-1 text-3xl font-extrabold tracking-tight text-white">
-              #{hero.tag}
-            </h2>
-            <p className="mt-1 text-sm text-white/90">
-              {hero.postCount.toLocaleString()} posts
-            </p>
+            <div className="absolute bottom-4 left-4 right-4">
+              <p className="text-sm font-medium text-white/90">
+                {hero.category} • Trending
+              </p>
+              <h2 className="mt-1 text-3xl font-extrabold tracking-tight text-white">
+                #{hero.tag}
+              </h2>
+              <p className="mt-1 text-sm text-white/90">
+                {hero.postCount.toLocaleString()} posts
+              </p>
+            </div>
           </div>
         </article>
       )}
