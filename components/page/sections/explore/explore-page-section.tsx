@@ -14,6 +14,11 @@ const ExplorePageSection: React.FC<Props> = ({ topics }) => {
   const [activeTab, setActiveTab] = React.useState(0);
   const [hero, ...trends] = topics;
 
+  const heroLabel =
+    hero.category === "Trending"
+      ? hero.category
+      : `${hero.category} • Trending`;
+
   return (
     <section className="min-h-screen w-full max-w-150 border-r border-zinc-200 dark:border-zinc-800">
       <header className="sticky top-0 z-20 border-b border-zinc-200 dark:border-zinc-800 bg-white/90 dark:bg-black/90 px-4 py-2 backdrop-blur-md">
@@ -51,9 +56,7 @@ const ExplorePageSection: React.FC<Props> = ({ topics }) => {
           <div className="relative h-52 w-full bg-[linear-gradient(135deg,#0f172a_0%,#1d4ed8_55%,#38bdf8_100%)]">
             <div className="absolute inset-0 bg-black/20" />
             <div className="absolute bottom-4 left-4 right-4">
-              <p className="text-sm font-medium text-white/90">
-                {hero.category} • Trending
-              </p>
+              <p className="text-sm font-medium text-white/90">{heroLabel}</p>
               <h2 className="mt-1 text-3xl font-extrabold tracking-tight text-white">
                 #{hero.tag}
               </h2>
