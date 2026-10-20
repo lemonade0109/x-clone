@@ -3,12 +3,17 @@ import BookmarkPageSection from "@/components/page/sections/bookmark-page-sectio
 import TrendingSideBar from "@/components/shared/trending-sidebar";
 import React from "react";
 import { getProfileAction } from "@/lib/actions/user/get-profile";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Bookmarks / X",
+};
 
 export default async function BookmarkPage() {
   const userData = await getProfileAction();
 
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-7xl bg-white text-black">
+    <main className="mx-auto flex min-h-screen w-full max-w-7xl">
       <NavLayoutTemplate
         username={userData?.username ?? ""}
         name={userData?.name ?? ""}

@@ -1,4 +1,4 @@
-import { getAllPostsAction } from "@/lib/actions/post-actions/get-all-posts-action";
+// Post and interaction types
 import { getPopoverProfileAction } from "@/lib/actions/user/get-popover-profile-action";
 import { fullSignUpSchema } from "@/lib/validators";
 import z from "zod";
@@ -64,7 +64,36 @@ export type Props = {
   userImage?: string | null;
 };
 
-export type PostItem = Awaited<ReturnType<typeof getAllPostsAction>>[number];
+export type PostItem = {
+  id: string;
+  content: string;
+  image: string | null;
+  authorId: string;
+  createdAt: Date;
+  author: {
+    id: string;
+    name: string;
+    username: string | null;
+    image: string | null;
+    bio: string | null;
+  };
+  likeCount: number;
+  repostCount: number;
+  commentCount: number;
+  bookmarkCount: number;
+  isLiked: boolean;
+  isReposted: boolean;
+  isBookmarked: boolean;
+  likes?: { id: string }[];
+  reposts?: { id: string }[];
+  bookmarks?: { id: string }[];
+  _count?: {
+    likes?: number;
+    reposts?: number;
+    comments?: number;
+    bookmarks?: number;
+  };
+};
 
 export type PostActionBarProps = {
   postId: string;
