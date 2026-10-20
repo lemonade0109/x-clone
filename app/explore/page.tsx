@@ -8,31 +8,20 @@ import Link from "next/link";
 import ExploreTrendingTopics from "@/components/shared/explore-trending-topics";
 import ExploreTrendingTopicsSkeleton from "@/components/shared/explore-trending-topics-skeleton";
 import { getTrendingTopicsAction } from "@/lib/actions/explore/trending-topics-action";
+import { getExplorePostsAction } from "@/lib/actions/explore/explore-posts-action";
 
-const news = [
-  {
-    title: "Open-source AI tooling keeps accelerating",
-    source: "TechWire",
-    time: "2h",
-  },
-  {
-    title: "React ecosystem doubles down on performance",
-    source: "Frontend Daily",
-    time: "4h",
-  },
-  {
-    title: "New creator programs launched this week",
-    source: "Startup Hub",
-    time: "7h",
-  },
-];
-
-export default async function ExplorePage() {
+export default async function ExplorePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ q?: string }>;
+}) {
+  const { q } = await searchParams;
   const user = await getCurrentUserAction();
   const topics = await getTrendingTopicsAction();
+  const searchPosts = q ? await getExplorePostsAction(q, user?.id) : [];
 
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-7xl ">
+    <main className="mx-auto flex min-h-screen w-full max-w-7xl">
       <NavLayoutTemplate
         name={user?.name ?? ""}
         email={user?.email ?? ""}
@@ -40,7 +29,12 @@ export default async function ExplorePage() {
         profileImage={user?.image ?? null}
       />
 
-      <ExplorePageSection topics={topics} />
+      <ExplorePageSection
+        topics={topics}
+        query={q ?? ""}
+        posts={searchPosts}
+        currentUser={user ? { id: user.id, image: user.image } : null}
+      />
 
       <ExplorePageSideBar />
     </main>
